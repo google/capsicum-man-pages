@@ -1,0 +1,153 @@
+.\"
+.\" Copyright (c) 2014 Google, Inc.
+.\" Copyright (c) 2009-2010, 2012-2013 Robert N. M. Watson
+.\" All rights reserved.
+.\"
+.\" This software was developed at the University of Cambridge Computer
+.\" Laboratory with support from a grant from Google, Inc.
+.\"
+.\" This software was developed by SRI International and the University of
+.\" Cambridge Computer Laboratory under DARPA/AFRL contract (FA8750-10-C-0237)
+.\" ("CTSRD"), as part of the DARPA CRASH research programme.
+.\"
+.\" %%%LICENSE_START(BSD_2_CLAUSE)
+.\" Redistribution and use in source and binary forms, with or without
+.\" modification, are permitted provided that the following conditions
+.\" are met:
+.\" 1. Redistributions of source code must retain the above copyright
+.\"    notice, this list of conditions and the following disclaimer.
+.\" 2. Redistributions in binary form must reproduce the above copyright
+.\"    notice, this list of conditions and the following disclaimer in the
+.\"    documentation and/or other materials provided with the distribution.
+.\"
+.\" THIS SOFTWARE IS PROVIDED BY THE AUTHOR AND CONTRIBUTORS ``AS IS'' AND
+.\" ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+.\" IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+.\" ARE DISCLAIMED.  IN NO EVENT SHALL THE AUTHOR OR CONTRIBUTORS BE LIABLE
+.\" FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+.\" DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
+.\" OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+.\" HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+.\" LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
+.\" OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+.\" SUCH DAMAGE.
+.\" %%%LICENSE_END
+.\"
+.TH PDFORK 3 2014-05-07 "Linux" "Linux Programmer's Manual"
+.SH NAME
+pdfork, pdgetpid, pdkill, pdwait4 \- functions to manage process descriptors
+.SH SYNOPSIS
+.nf
+.B #include <sys/capsicum.h>
+.sp
+.BI "int pdfork(int *" fdp ", int " flags ")"
+.BI "int pdgetpid(int " fd ", pid_t *" pidp ")"
+.BI "int pdkill(int " fd ", int " signum ")"
+.BI "int pdwait4(int " fd ", int *" status ", int " options ", struct rusage *" rusage ")"
+.SH DESCRIPTION
+Process descriptors are special file descriptors that represent processes,
+and are created using
+.B pdfork(),
+a variant of
+.BR fork (2)
+which, if successful, returns a process descriptor in the integer pointed to
+by
+.IR fdp .
+Processes created via
+.BR pdfork()
+will not cause
+.B SIGCHLD
+on termination.
+.B pdfork()
+can accept values for
+.I flags
+of:
+.TP
+.B PD_DAEMON
+Instead of the default terminate-on-close behaviour, allow the process to
+live until it terminates or is explicitly killed with
+.BR pdkill (2)
+or
+.BR kill (2).
+.PP
+.BR pdgetpid ()
+queries the process ID (PID) in the process descriptor
+.IR fd .
+.PP
+.BR pdkill ()
+is functionally identical to
+.BR kill (2),
+except that it accepts a process descriptor,
+.IR fd ,
+rather than a PID.
+.PP
+.BR pdwait4 ()
+behaves identically to
+.BR wait4 (2),
+but operates with respect to a process descriptor argument rather than a PID.
+.PP
+The following system calls also have effects specific to process descriptors:
+.TP
+.BR fstat (2)
+queries status of a process descriptor; currently only the
+.IR st_mode ,
+.IR st_birthtime ,
+.IR st_atime ,
+.IR st_ctime
+and
+.IR st_mtime
+fields are defined.
+If the owner read, write, and execute bits are set then the
+process represented by the process descriptor is still alive.
+.PP
+.BR poll (2)
+and
+.BR select (2)
+allow waiting for process state transitions; currently only
+.B POLLHUP
+is defined, and will be raised when the process dies.
+.PP
+.BR close (2)
+will close the process descriptor; if the process is still alive and this is
+the last reference to the process descriptor, the process will be terminated
+with the signal
+.B SIGKILL
+unless
+.B PD_DAEMON
+is set.
+.SH RETURN VALUES
+.BR pdfork ()
+returns a PID, 0 or -1, as
+.BR fork (2)
+does.
+.PP
+.BR pdgetpid ()
+and
+.BR pdkill ()
+return 0 on success and -1 on failure.
+.PP
+.BR pdwait4 ()
+returns a PID on success and -1 on failure.
+.SH ERRORS
+These functions may return the same error numbers as their PID-based equivalents
+(e.g.
+.BR pdfork ()
+may return the same error numbers as
+.BR fork (2)),
+with the following additions:
+.TP
+.B ENOTCAPABLE
+The process descriptor being operated on has insufficient rights (e.g. lacks
+.B CAP_PDKILL
+for
+.BR pdkill ) .
+.SH VERSION
+Process descriptor support was added to the kernel in version 4.???.
+.SH SEE ALSO
+.BR close (2),
+.BR fork (2),
+.BR fstat (2),
+.BR kill (2),
+.BR poll (2),
+.BR wait4 (2),
+.BR capsicum (7)
