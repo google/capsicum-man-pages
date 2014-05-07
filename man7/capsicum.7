@@ -1,0 +1,96 @@
+.\"
+.\" Copyright (c) 2014 Google, Inc.
+.\" Copyright (c) 2011, 2013 Robert N. M. Watson
+.\" Copyright (c) 2011 Jonathan Anderson
+.\" All rights reserved.
+.\"
+.\" %%%LICENSE_START(BSD_2_CLAUSE)
+.\" Redistribution and use in source and binary forms, with or without
+.\" modification, are permitted provided that the following conditions
+.\" are met:
+.\" 1. Redistributions of source code must retain the above copyright
+.\"    notice, this list of conditions and the following disclaimer.
+.\" 2. Redistributions in binary form must reproduce the above copyright
+.\"    notice, this list of conditions and the following disclaimer in the
+.\"    documentation and/or other materials provided with the distribution.
+.\"
+.\" THIS SOFTWARE IS PROVIDED BY THE AUTHOR AND CONTRIBUTORS ``AS IS'' AND
+.\" ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+.\" IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+.\" ARE DISCLAIMED.  IN NO EVENT SHALL THE AUTHOR OR CONTRIBUTORS BE LIABLE
+.\" FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+.\" DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
+.\" OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+.\" HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+.\" LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
+.\" OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+.\" SUCH DAMAGE.
+.\" %%%LICENSE_END
+.\"
+.TH CAPSICUM 7 2014-05-07 "Linux" "Linux Programmer's Manual"
+.SH NAME
+capsicum \- lightweight OS capability and sandbox framework
+.SH SYNOPSIS
+.B #include <sys/capsicum.h>
+.SH DESCRIPTION
+Capsicum is a lightweight OS capability and sandbox framework implementing a hybrid
+capability system model.
+Capsicum can be used for application and library compartmentalisation, the
+decomposition of larger bodies of software into isolated (sandboxed)
+components in order to implement security policies and limit the impact of
+software vulnerabilities.
+.PP
+Capsicum provides three core kernel mechanisms,
+.IR "Capsicum capabilities",
+.I "capability mode"
+and
+.IR "process descriptors",
+each described below.
+
+.SS Capsicum Capabilities
+A
+.I Capsicum capability
+is a file descriptor that has been limited so that only
+certain operations can be performed on it.
+For example, a file descriptor returned by
+.BR open (2)
+may be refined using
+.BR cap_rights_limit (2)
+so that only
+.BR read (2)
+and
+.BR write (2)
+can be called on it, but not
+.BR fchmod (2).
+The complete list of the capability rights can be found in the
+.BR rights (7)
+manual page.
+
+.SS Capability Mode
+Capsicum capability mode is a process mode, entered by invoking
+.BR cap_enter (3),
+in which access to global OS namespaces (such as the file system and PID
+namespaces) is restricted; only explicitly delegated rights, referenced by
+memory mappings or file descriptors, may be used.
+Once set, the flag is inherited by future children processes, and may not be
+cleared.
+
+.SS Process Descriptors
+.I Process descriptors
+are file descriptors representing processes, allowing parent processes to manage
+child processes without requiring access to the PID namespace, and are described in
+greater detail in
+.BR pdfork (2).
+.SH VERSIONS
+Capsicum support is available in the kernel since version 3.???.
+.SH SEE ALSO
+.BR cap_enter (3),
+.BR cap_getmode (3) ,
+.BR cap_rights_get (2),
+.BR cap_rights_limit (2) ,
+.BR pdfork (2),
+.BR pdgetpid (2),
+.BR pdkill (2),
+.BR pdwait4 (2),
+.BR rights (7)
+
