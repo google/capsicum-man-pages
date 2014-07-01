@@ -74,18 +74,20 @@ primary right, the returned
 .I nioctls
 value will be zero.
 .PP
-The
+If the
 .I ioctls
-argument (if non-NULL) should point at memory that can hold up to
+argument is non-NULL, the caller should specify the size of the
+provided buffer as the initial value of the
 .I nioctls
-values.
-The system call populates the provided buffer with up to
-.I nioctls
-elements, but always returns the total number of
+argument (as a count of the number of
 .BR ioctl (2)
-commands allowed for the given file descriptor in
-.I nioctls
-as described above.
+command values the buffer can hold).
+On successful completion of the system call, the
+.I ioctls
+buffer is filled with the
+.BR ioctl (2)
+command values, up to maximum of the initial value of
+.BR nioctls .
 .PP
 If all
 .BR ioctl (2)
