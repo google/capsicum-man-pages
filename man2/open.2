@@ -743,7 +743,7 @@ escape the original directory; for example, a
 .I pathname
 of "subdir/../filename" would be rejected.
 Path components that are symbolic links to absolute paths, or that are
-relative paths containing a ".." component, are cause the 
+relative paths containing a ".." component, will also cause the
 .BR open ()
 operation to fail with the error
 .BR EACCES.
