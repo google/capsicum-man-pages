@@ -22,7 +22,7 @@
 .\" Formatted or processed versions of this manual, if unaccompanied by
 .\" the source, must acknowledge the copyright and authors of this work.
 .\" %%%LICENSE_END
-.TH FANOTIFY 7 2014-04-24 "Linux" "Linux Programmer's Manual"
+.TH FANOTIFY 7 2014-05-21 "Linux" "Linux Programmer's Manual"
 .SH NAME
 fanotify \- monitoring filesystem events
 .SH DESCRIPTION
@@ -164,7 +164,7 @@ so that multiple events can be retrieved by a single
 The return value of
 .BR read (2)
 is the number of bytes placed in the buffer,
-or \-1 in case of an error.
+or \-1 in case of an error (but see BUGS).
 
 The fields of the
 .I fanotify_event_metadata
@@ -309,13 +309,31 @@ against the length of the metadata structure and the
 field of the first metadata structure in the buffer.
 .TP
 .B FAN_EVENT_NEXT(meta, len)
-This macro sets the pointer
-.I meta
-to the next metadata structure using the length indicated in the
+This macro uses the length indicated in the
 .I event_len
-field of the metadata structure and reduces the remaining length of the
-buffer
-.IR len .
+field of the metadata structure pointed to by
+.IR meta
+to calculate the address of the next metadata structure that follows
+.IR meta .
+.I len
+is the number of bytes of metadata that currently remain in the buffer.
+The macro returns a pointer to the next metadata structure that follows
+.IR meta ,
+and reduces
+.I len
+by the number of bytes in the the metadata structure that
+has been skipped over (i.e., it subtracts
+.IR meta\->event_len
+from
+.IR len ).
+.PP
+In addition, there is:
+.TP
+.B FAN_EVENT_METADATA_LEN
+This macro returns the size (in bytes) of the structure
+.IR fanotify_event_metadata .
+This is the minimum size (and currently the only size) of any event metadata.
+.\"
 .SS Monitoring an fanotify file descriptor for events
 When an fanotify event occurs, the fanotify file descriptor indicates as
 readable when passed to
@@ -468,7 +486,7 @@ The event queue can overflow.
 In this case, events are lost.
 .SH BUGS
 As of Linux 3.15,
-the following bug exists:
+the following bugs exist:
 .IP * 3
 .\" FIXME: A patch was proposed.
 When an event is generated,
@@ -478,6 +496,16 @@ before passing a file descriptor for that file.
 This poses a security risk, when the
 .B CAP_SYS_ADMIN
 capability is set for programs executed by unprivileged users.
+.IP *
+If a call to
+.BR read (2)
+processes multiple events from the fanotify queue and an error occurs,
+the return value will be the total length of the events successfully
+copied to the user-space buffer before the error occurred.
+The return value will not be \-1, and
+.I errno
+will not be set.
+Thus, the reading application has no way to detect the error.
 .SH EXAMPLE
 The following program demonstrates the usage of the fanotify API.
 It marks the mount point passed as a command-line argument
@@ -528,7 +556,7 @@ static void
 handle_events(int fd)
 {
     const struct fanotify_event_metadata *metadata;
-    char buf[4096];
+    struct fanotify_event_metadata buf[200];
     ssize_t len;
     char path[PATH_MAX];
     ssize_t path_len;
@@ -554,7 +582,7 @@ handle_events(int fd)
 
         /* Point to the first event in the buffer */
 
-        metadata = (struct fanotify_event_metadata *) buf;
+        metadata = buf;
 
         /* Loop over all events in the buffer */
 
@@ -584,7 +612,7 @@ handle_events(int fd)
                     response.fd = metadata\->fd;
                     response.response = FAN_ALLOW;
                     write(fd, &response,
-                            sizeof(struct fanotify_response));
+                          sizeof(struct fanotify_response));
                 }
 
                 /* Handle closing of writable file event */

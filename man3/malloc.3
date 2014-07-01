@@ -30,7 +30,7 @@
 .\" FIXME: Review http://austingroupbugs.net/view.php?id=374
 .\"	to see what changes are req	uired on this page.
 .\"
-.TH MALLOC 3  2013-12-12 "GNU" "Linux Programmer's Manual"
+.TH MALLOC 3  2014-05-21 "GNU" "Linux Programmer's Manual"
 .SH NAME
 malloc, free, calloc, realloc \- allocate and free dynamic memory
 .SH SYNOPSIS
@@ -253,12 +253,11 @@ or
 are almost always related to heap corruption, such as overflowing
 an allocated chunk or freeing the same pointer twice.
 .PP
-Recent versions of Linux libc (later than 5.4.23) and glibc (2.x)
-include a
+The
 .BR malloc ()
-implementation which is tunable via environment variables.
-For details, see
-.BR mallopt (3).
+implementation is tunable via environment variables; see
+.BR mallopt (3)
+for details.
 .SH SEE ALSO
 .\" http://g.oswego.edu/dl/html/malloc.html
 .\" A Memory Allocator - by Doug Lea

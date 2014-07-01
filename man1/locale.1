@@ -22,7 +22,7 @@
 .\" the source, must acknowledge the copyright and authors of this work.
 .\" %%%LICENSE_END
 .\"
-.TH LOCALE 1 2014-03-10 "Linux" "Linux Programmer's Manual"
+.TH LOCALE 1 2014-05-28 "Linux" "Linux User Manual"
 .SH NAME
 locale \- get locale-specific information
 .SH SYNOPSIS
@@ -123,8 +123,15 @@ Display a short usage message and exit.
 .TP
 .BR \-V ", " \-\-version
 Display the program version and exit.
+.SH FILES
+.TP
+.I /usr/lib/locale/locale-archive
+Usual default locale archive location.
+.TP
+.I /usr/share/i18n/locales
+Usual default path for locale definition files.
 .SH CONFORMING TO
-POSIX.1-2001, POSIX.1-2008
+POSIX.1-2001, POSIX.1-2008.
 .SH EXAMPLE
 .nf
 $ \fBlocale\fP
@@ -153,20 +160,45 @@ $ \fBlocale \-ck date_fmt\fP
 LC_TIME
 date_fmt="%a %b %e %H:%M:%S %Z %Y"
 
-$ \fBlocale LC_MESSAGES\fP
-^[yY].*
-^[nN].*
-Yes
-No
+$ \fBlocale LC_TELEPHONE\fP
++%c (%a) %l
+(%a) %l
+11
+1
 UTF\-8
 
-$ \fBlocale \-k LC_MESSAGES\fP
-yesexpr="^[yY].*"
-noexpr="^[nN].*"
-yesstr="Yes"
-nostr="No"
-messages\-codeset="UTF\-8"
+$ \fBlocale \-k LC_TELEPHONE\fP
+tel_int_fmt="+%c (%a) %l"
+tel_dom_fmt="(%a) %l"
+int_select="11"
+int_prefix="1"
+telephone\-codeset="UTF\-8"
+.fi
+
+The following example compiles a custom locale from the
+.I ./wrk
+directory with the
+.BR localedef (1)
+utility under the
+.I $HOME/.locale
+directory, then tests the result with the
+.BR date (1)
+command, and then sets the environment variables
+.B LOCPATH
+and
+.B LANG
+in the shell profile file so that the custom locale will be used in the
+subsequent user sessions:
+
+.nf
+$ \fBmkdir -p $HOME/.locale\fP
+$ \fBI18NPATH=./wrk/ localedef -f UTF-8 -i fi_SE $HOME/.locale/fi_SE.UTF-8\fP
+$ \fBLOCPATH=$HOME/.locale LC_ALL=fi_SE.UTF-8 date\fP
+$ \fBecho "export LOCPATH=\\$HOME/.locale" >> $HOME/.bashrc\fP
+$ \fBecho "export LANG=fi_SE.UTF-8" >> $HOME/.bashrc\fP
 .fi
 .SH SEE ALSO
+.BR localedef (1),
+.BR charmap (5),
 .BR locale (5),
 .BR locale (7)

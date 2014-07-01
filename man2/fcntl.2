@@ -1,8 +1,9 @@
 '\" t
 .\" This manpage is Copyright (C) 1992 Drew Eckhardt;
-.\"                 and Copyright (C) 1993 Michael Haardt, Ian Jackson;
-.\"                 and Copyright (C) 1998 Jamie Lokier;
-.\"                 and Copyright (C) 2002-2010 Michael Kerrisk.
+.\" and Copyright (C) 1993 Michael Haardt, Ian Jackson;
+.\" and Copyright (C) 1998 Jamie Lokier;
+.\" and Copyright (C) 2002-2010, 2014 Michael Kerrisk;
+.\" and Copyright (C) 2014 Jeff Layton
 .\"
 .\" %%%LICENSE_START(VERBATIM)
 .\" Permission is granted to make and distribute verbatim copies of this
@@ -58,7 +59,7 @@
 .\" 2010-06-17, Michael Kerrisk
 .\"	Document F_SETPIPE_SZ and F_GETPIPE_SZ.
 .\"
-.TH FCNTL 2 2014-04-20 "Linux" "Linux Programmer's Manual"
+.TH FCNTL 2 2014-06-13 "Linux" "Linux Programmer's Manual"
 .SH NAME
 fcntl \- manipulate file descriptor
 .SH SYNOPSIS
@@ -88,6 +89,17 @@ and we identify the argument using the name
 or
 .I void
 is specified if the argument is not required.
+
+Certain of the operations below are supported only since a particular
+Linux kernel version.
+The preferred method of checking whether the host kernel supports
+a particular operation is to invoke
+.BR fcntl ()
+with the desired
+.IR cmd
+value and then test whether the call failed with
+.BR EINVAL ,
+indicating that the kernel does not recognize this value.
 .SS Duplicating a file descriptor
 .TP
 .BR F_DUPFD " (\fIint\fP)"
@@ -205,13 +217,18 @@ It is not possible to change the
 and
 .BR O_SYNC
 flags; see BUGS, below.
-.SS Advisory locking
+.SS Advisory record locking
+Linux implements traditional ("process-associated") UNIX record locks,
+as standardized by POSIX.
+For a Linux-specific alternative with better semantics,
+see the discussion of open file description locks below.
+
 .BR F_SETLK ,
 .BR F_SETLKW ,
 and
 .BR F_GETLK
 are used to acquire, release, and test for the existence of record
-locks (also known as file-segment or file-region locks).
+locks (also known as byte-range, file-segment, or file-region locks).
 The third argument,
 .IR lock ,
 is a pointer to a structure that has at least the following fields
@@ -228,7 +245,7 @@ struct flock {
     off_t l_start;   /* Starting offset for lock */
     off_t l_len;     /* Number of bytes to lock */
     pid_t l_pid;     /* PID of process blocking our lock
-                        (F_GETLK only) */
+                        (set by F_GETLK and F_OFD_GETLK) */
     ...
 };
 .fi
@@ -329,6 +346,8 @@ to
 .B EACCES
 or
 .BR EAGAIN .
+(The error returned in this case differs across implementations,
+so POSIX requires a portable application to check for both errors.)
 .TP
 .BR F_SETLKW " (\fIstruct flock *\fP)"
 As for
@@ -357,18 +376,22 @@ in the
 field of
 .I lock
 and leaves the other fields of the structure unchanged.
+
 If one or more incompatible locks would prevent
 this lock being placed, then
 .BR fcntl ()
-returns details about one of these locks in the
+returns details about one of those locks in the
 .IR l_type ", " l_whence ", " l_start ", and " l_len
 fields of
-.I lock
-and sets
+.IR lock .
+If the conflicting lock is a traditional (process-associated) record lock,
+then the
 .I l_pid
-to be the PID of the process holding that lock.
-Note that the information returned by
-.BR F_GETLK
+field is set to the PID of the process holding that lock.
+If the conflicting lock is an open file description lock, then
+.I l_pid
+is set to \-1.
+Note that the returned information
 may already be out of date by the time the caller inspects it.
 .P
 In order to place a read lock,
@@ -378,23 +401,33 @@ In order to place a write lock,
 .I fd
 must be open for writing.
 To place both types of lock, open a file read-write.
-.P
+
+When placing locks with
+.BR F_SETLKW ,
+the kernel detects
+.IR deadlocks ,
+whereby two or more processes have their
+lock requests mutually blocked by locks held by the other processes.
+For example, suppose process A holds a write lock on byte 100 of a file,
+and process B holds a write lock on byte 200.
+If each process then attempts to lock the byte already
+locked by the other process using
+.BR F_SETLKW ,
+then, without deadlock detection,
+both processes would remain blocked indefinitely.
+When the kernel detects such deadlocks,
+it causes one of the blocking lock requests to immediately fail with the error
+.BR EDEADLK ;
+an application that encounters such an error should release
+some of its locks to allow other applications to proceed before
+attempting regain the locks that it requires.
+Circular deadlocks involving more than two processes are also detected.
+Note, however, that there are limitations to the kernel's
+deadlock-detection algorithm; see BUGS.
+
 As well as being removed by an explicit
 .BR F_UNLCK ,
-record locks are automatically released when the process
-terminates or if it closes
-.I any
-file descriptor referring to a file on which locks are held.
-.\" (Additional file descriptors referring to the same file
-.\" may have been obtained by calls to
-.\" .BR open "(2), " dup "(2), " dup2 "(2), or " fcntl ().)
-This is bad: it means that a process can lose the locks on
-a file like
-.I /etc/passwd
-or
-.I /etc/mtab
-when for some reason a library function decides to open, read
-and close it.
+record locks are automatically released when the process terminates.
 .P
 Record locks are not inherited by a child created via
 .BR fork (2),
@@ -409,14 +442,168 @@ should be avoided; use
 and
 .BR write (2)
 instead.
-.SS Mandatory locking
-(Non-POSIX.)
-The above record locks may be either advisory or mandatory,
-and are advisory by default.
 
+The record locks described above are associated with the process
+(unlike the open file description locks described below).
+This has some unfortunate consequences:
+.IP * 3
+If a process closes
+.I any
+file descriptor referring to a file,
+then all of the process's locks on that file are released,
+regardless of the file descriptor(s) on which the locks were obtained.
+.\" (Additional file descriptors referring to the same file
+.\" may have been obtained by calls to
+.\" .BR open "(2), " dup "(2), " dup2 "(2), or " fcntl ().)
+This is bad: it means that a process can lose its locks on
+a file such as
+.I /etc/passwd
+or
+.I /etc/mtab
+when for some reason a library function decides to open, read,
+and close the same file.
+.IP *
+The threads in a process share locks.
+In other words,
+a multithreaded program can't use record locking to ensure
+that threads don't simultaneously access the same region of a file.
+.PP
+Open file description locks solve both of these problems.
+.SS Open file description locks (non-POSIX)
+Open file description locks are advisory byte-range locks whose operation is
+in most respects identical to the traditional record locks described above.
+This lock type is Linux-specific,
+and available since Linux 3.15.
+For an explanation of open file descriptions, see
+.BR open (2)
+
+The principal difference between the two lock types
+is that whereas traditional record locks
+are associated with a process,
+open file description locks are associated with the
+open file description on which they are acquired,
+much like locks acquired with
+.BR flock (2).
+Consequently (and unlike traditional advisory record locks),
+open file description locks are inherited across
+.BR fork (2)
+(and
+.BR clone (2)
+with
+.BR CLONE_FILES ),
+and are only automatically released on the last close
+of the open file description,
+instead of being released on any close of the file.
+.PP
+Open file description locks always conflict with traditional record locks,
+even when they are acquired by the same process on the same file descriptor.
+
+Open file description locks placed via the same open file description
+(i.e., via the same file descriptor,
+or via a duplicate of the file descriptor created by
+.BR fork (2),
+.BR dup (2),
+.BR fcntl (2)
+.BR F_DUPFD ,
+and so on) are always compatible:
+if a new lock is placed on an already locked region,
+then the existing lock is converted to the new lock type.
+(Such conversions may result in splitting, shrinking, or coalescing with
+an existing lock as discussed above.)
+
+On the other hand, open file description locks may conflict with
+each other when they are acquired via different open file descriptions.
+Thus, the threads in a multithreaded program can use
+open file description locks to synchronize access to a file region
+by having each thread perform its own
+.BR open (2)
+on the file and applying locks via the resulting file descriptor.
+.PP
+As with traditional advisory locks, the third argument to
+.BR fcntl (),
+.IR lock ,
+is a pointer to an
+.IR flock
+structure.
+By contrast with traditional record locks, the
+.I l_pid
+field of that structure must be set to zero
+when using the commands described below.
+
+The commands for working with open file description locks are analogous
+to those used with traditional locks:
+.TP
+.BR F_OFD_SETLK " (\fIstruct flock *\fP)"
+Acquire an open file description lock (when
+.I l_type
+is
+.B F_RDLCK
+or
+.BR F_WRLCK )
+or release an open file description lock (when
+.I l_type
+is
+.BR F_UNLCK )
+on the bytes specified by the
+.IR l_whence ", " l_start ", and " l_len
+fields of
+.IR lock .
+If a conflicting lock is held by another process,
+this call returns \-1 and sets
+.I errno
+to
+.BR EAGAIN .
+.TP
+.BR F_OFD_SETLKW " (\fIstruct flock *\fP)"
+As for
+.BR F_OFD_SETLK ,
+but if a conflicting lock is held on the file, then wait for that lock to be
+released.
+If a signal is caught while waiting, then the call is interrupted
+and (after the signal handler has returned) returns immediately
+(with return value \-1 and
+.I errno
+set to
+.BR EINTR ;
+see
+.BR signal (7)).
+.TP
+.BR F_OFD_GETLK " (\fIstruct flock *\fP)"
+On input to this call,
+.I lock
+describes an open file description lock we would like to place on the file.
+If the lock could be placed,
+.BR fcntl ()
+does not actually place it, but returns
+.B F_UNLCK
+in the
+.I l_type
+field of
+.I lock
+and leaves the other fields of the structure unchanged.
+If one or more incompatible locks would prevent this lock being placed,
+then details about one of these locks are returned via
+.IR lock ,
+as described above for
+.BR F_GETLK .
+.PP
+In the current implementation,
+.\" commit 57b65325fe34ec4c917bc4e555144b4a94d9e1f7
+no deadlock detection is performed for open file description locks.
+(This contrasts with process-associated record locks,
+for which the kernel does perform deadlock detection.)
+.\"
+.SS Mandatory locking
+.IR Warning :
+the Linux implementation of mandatory locking is unreliable.
+See BUGS below.
+
+By default, both traditional (process-associated) and open file description
+record locks are advisory.
 Advisory locks are not enforced and are useful only between
 cooperating processes.
 
+Both lock types can also be mandatory.
 Mandatory locks are enforced for all processes.
 If a process tries to perform an incompatible access (e.g.,
 .BR read (2)
@@ -429,7 +616,7 @@ flag is enabled for its open file description.
 If the
 .B O_NONBLOCK
 flag is not enabled, then
-system call is blocked until the lock is removed
+the system call is blocked until the lock is removed
 or converted to a mode that is compatible with the access.
 If the
 .B O_NONBLOCK
@@ -453,8 +640,9 @@ permission bit (see
 and
 .BR chmod (2)).
 
-The Linux implementation of mandatory locking is unreliable.
-See BUGS below.
+Mandatory locking is not specified by POSIX.
+Some other systems also support mandatory locking,
+although the details of how to enable it vary across systems.
 .SS Managing signals
 .BR F_GETOWN ,
 .BR F_SETOWN ,
@@ -1152,6 +1340,11 @@ Most likely when locking a remote file (e.g., locking over
 NFS), but can sometimes happen locally.
 .TP
 .B EINVAL
+The value specified in
+.I cmd
+is not recognized by this kernel.
+.TP
+.B EINVAL
 For
 .BR F_DUPFD ,
 .I arg
@@ -1160,6 +1353,17 @@ For
 .BR F_SETSIG ,
 .I arg
 is not an allowable signal number.
+.TP
+.B EINVAL
+.I cmd
+is
+.BR F_OFD_SETLK ,
+.BR F_OFD_SETLKW ,
+or
+.BR F_OFD_GETLK ,
+and
+.I l_pid
+was not specified as zero.
 .TP
 .B EMFILE
 For
@@ -1192,11 +1396,11 @@ are specified in POSIX.1-2001.
 and
 .B F_SETOWN
 are specified in POSIX.1-2001.
-(To get their definitions, define
+(To get their definitions, define either
 .BR _BSD_SOURCE ,
 or
 .BR _XOPEN_SOURCE
-with the value 500 or greater, or define
+with the value 500 or greater, or
 .BR _POSIX_C_SOURCE
 with the value 200809L or greater.)
 
@@ -1224,7 +1428,21 @@ are Linux-specific.
 macro to obtain these definitions.)
 .\" .PP
 .\" SVr4 documents additional EIO, ENOLINK and EOVERFLOW error conditions.
+
+.BR F_OFD_SETLK ,
+.BR F_OFD_SETLKW ,
+and
+.BR F_OFD_GETLK
+are Linux-specific,
+but work is being done to have them included in the next version of POSIX.1.
+.\" FIXME Presumably, glibc will require _GNU_SOURCE
 .SH NOTES
+The errors returned by
+.BR dup2 (2)
+are different from those returned by
+.BR F_DUPFD .
+.\"
+.SS File locking
 The original Linux
 .BR fcntl ()
 system call was not designed to handle large file offsets
@@ -1250,7 +1468,7 @@ The errors returned by
 .BR dup2 (2)
 are different from those returned by
 .BR F_DUPFD .
-
+.SS Record locks
 Since kernel 2.0, there is no interaction between the types of lock
 placed by
 .BR flock (2)
@@ -1263,10 +1481,74 @@ such as, for example,
 .IR l_sysid .
 .\" e.g., Solaris 8 documents this field in fcntl(2), and Irix 6.5
 .\" documents it in fcntl(5).  mtk, May 2007
+.\" Also, FreeBSD documents it (Apr 2014).
 Clearly,
 .I l_pid
 alone is not going to be very useful if the process holding the lock
 may live on a different machine.
+
+The original Linux
+.BR fcntl ()
+system call was not designed to handle large file offsets
+(in the
+.I flock
+structure).
+Consequently, an
+.BR fcntl64 ()
+system call was added in Linux 2.4.
+The newer system call employs a different structure for file locking,
+.IR flock64 ,
+and corresponding commands,
+.BR F_GETLK64 ,
+.BR F_SETLK64 ,
+and
+.BR F_SETLKW64 .
+However, these details can be ignored by applications using glibc, whose
+.BR fcntl ()
+wrapper function transparently employs the more recent system call
+where it is available.
+.SS Record locking and NFS
+Before Linux 3.12, if an NFSv4 client
+loses contact with the server for a period of time
+(defined as more than 90 seconds with no communication),
+.\"
+.\" Neil Brown: With NFSv3 the failure mode is the reverse.  If
+.\"     the server loses contact with a client then any lock stays in place
+.\"     indefinitely ("why can't I read my mail"... I remember it well).
+.\"
+it might lose and regain a lock without ever being aware of the fact.
+(The period of time after which contact is assumed lost is known as
+the NFSv4 leasetime.
+On a Linux NFS server, this can be determined by looking at
+.IR /proc/fs/nfsd/nfsv4leasetime ,
+which expresses the period in seconds.
+The default value for this file is 90.)
+.\"
+.\" Jeff Layton:
+.\"     Note that this is not a firm timeout. The server runs a job
+.\"     periodically to clean out expired stateful objects, and it's likely
+.\"     that there is some time (maybe even up to another whole lease period)
+.\"     between when the timeout expires and the job actually runs. If the
+.\"     client gets a RENEW in there within that window, its lease will be
+.\"     renewed and its state preserved.
+.\"
+This scenario potentially risks data corruption,
+since another process might acquire a lock in the intervening period
+and perform file I/O.
+
+Since Linux 3.12,
+.\" commit ef1820f9be27b6ad158f433ab38002ab8131db4d
+if an NFSv4 client loses contact with the server,
+any I/O to the file by a process which "thinks" it holds
+a lock will fail until that process closes and reopens the file.
+A kernel parameter,
+.IR nfs.recover_lost_locks ,
+can be set to 1 to obtain the pre-3.12 behavior,
+whereby the client will attempt to recover lost locks
+when contact is reestablished with the server.
+Because of the attendant risk of data corruption,
+.\" commit f6de7a39c181dfb8a2c534661a53c73afb3081cd
+this parameter defaults to 0 (disabled).
 .SH BUGS
 .SS F_SETFL
 It is not possible to use
@@ -1323,10 +1605,37 @@ even when the owner process (group) is one that the caller
 has permission to send signals to.
 Despite this error return, the file descriptor owner is set,
 and signals will be sent to the owner.
+.\"
+.SS Deadlock detection
+The deadlock-detection algorithm employed by the kernel when dealing with
+.BR F_SETLKW
+requests can yield both
+false negatives (failures to detect deadlocks,
+leaving a set of deadlocked processes blocked indefinitely)
+and false positives
+.RB ( EDEADLK
+errors when there is no deadlock).
+For example,
+the kernel limits the lock depth of its dependency search to 10 steps,
+meaning that circular deadlock chains that exceed
+that size will not be detected.
+In addition, the kernel may falsely indicate a deadlock
+when two or more processes created using the
+.BR clone (2)
+.B CLONE_FILES
+flag place locks that appear (to the kernel) to conflict.
+.\"
 .SS Mandatory locking
-The implementation of mandatory locking in all known versions of Linux
+The Linux implementation of mandatory locking
 is subject to race conditions which render it unreliable:
 .\" http://marc.info/?l=linux-kernel&m=119013491707153&w=2
+.\"
+.\" Reconfirmed by Jeff Layton
+.\"     From: Jeff Layton <jlayton <at> redhat.com>
+.\"     Subject: Re: Status of fcntl() mandatory locking
+.\"     Newsgroups: gmane.linux.file-systems
+.\"     Date: 2014-04-28 10:07:57 GMT
+.\"     http://thread.gmane.org/gmane.linux.file-systems/84481/focus=84518
 a
 .BR write (2)
 call that overlaps with a lock may modify data after the mandatory lock is

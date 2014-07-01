@@ -7,7 +7,7 @@
 .\" 2004-12-14, mtk, Added EAI_OVERFLOW error
 .\" 2004-12-14 Fixed description of error return
 .\"
-.TH GETNAMEINFO 3 2013-01-15 "GNU" "Linux Programmer's Manual"
+.TH GETNAMEINFO 3 2014-05-28 "GNU" "Linux Programmer's Manual"
 .SH NAME
 getnameinfo \- address-to-name translation in protocol-independent manner
 .SH SYNOPSIS
@@ -16,8 +16,8 @@ getnameinfo \- address-to-name translation in protocol-independent manner
 .B #include <netdb.h>
 .sp
 .BI "int getnameinfo(const struct sockaddr *" "sa" ", socklen_t " "salen" ,
-.BI "                char *" "host" ", size_t " "hostlen" ,
-.BI "                char *" "serv" ", size_t " "servlen" ", int " "flags" );
+.BI "                char *" "host" ", socklen_t " "hostlen" ,
+.BI "                char *" "serv" ", socklen_t " "servlen" ", int " "flags" );
 .fi
 .sp
 .in -4n
@@ -233,6 +233,13 @@ in recent versions of BIND's
 header file.
 The latter is a guess based on the services listed
 in the current Assigned Numbers RFC.
+
+Before glibc version 2.2, the
+.I hostlen
+and
+.I servlen
+arguments were typed as
+.IR size_t .
 .SH EXAMPLE
 The following code tries to get the numeric hostname and service name,
 for a given socket address.

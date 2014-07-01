@@ -19913,7 +19913,7 @@ Guillem Jover <guillem@hadrons.org>
 Jianhua Li <jhlicc@gmail.com>
 Linus Nilsson <lajnold@gmail.com>
 Lenaic Huard <lenaic.huard@laposte.net>
-mac@mcrowe.com
+Mac <mac@mcrowe.com>
 Martin Schulze <joey@infodrom.org>
 Maxin John <maxin.john@gmail.com>
 Michael Kerrisk <mtk.manpages@gmail.com>
@@ -20056,7 +20056,7 @@ Contributors
 The following people contributed notes, ideas, or patches that have
 been incorporated in changes in this release:
 
-caishuxian@gmail.com
+caishuxian <caishuxian@gmail.com>
 Denis Barbier <bouzim@gmail.com>
 Denis Silakov <silakov@ispras.ru>
 der Mouse <mouse@rodents-montreal.org>
@@ -20499,7 +20499,6 @@ random.3
 readdir.3
     Michael Kerrisk
         Clarify that "positive error numbers" are listed in ERRORS
-            Reported-by fkater@googlemail.com
 
 rexec.3
     Michael Kerrisk
@@ -22441,7 +22440,7 @@ Pat Pannuto <pat.pannuto@gmail.com>
 Salvo Tomaselli <tiposchi@tiscali.it>
 Simone Piccardi <piccardi@truelite.it>
 Slaven Rezic <srezic@iconmobile.com>
-starlight@binnacle.cx
+starlight <starlight@binnacle.cx>
 Stephan Mueller <stephan.mueller@atsec.com>
 Vijay Rao <vijay@portuosus.com>
 Walter Haidinger <walter.haidinger@gmx.at>
@@ -22547,16 +22546,16 @@ sync.2
         PROTOTYPE: Fix return type of syncfs()
 
 vfork.2
-    Michael Kerrisk  [starlight@binnacle.cx]
+    Michael Kerrisk  [starlight]
         Clarify what is duplicated in the child
             Add some words to make it clear to the reader that vfork(),
             like fork(), creates duplicates of process attributes
             in the child.
     Michael Kerrisk
         Note clone() flags equivalent to vfork()
-    Michael Kerrisk  [starlight@binnacle.cx, Mike Frysinger]
+    Michael Kerrisk  [starlight, Mike Frysinger]
         Add some notes on reasons why vfork() still exists
-    Michael Kerrisk  [starlight@binnacle.cx]
+    Michael Kerrisk  [starlight]
         Clarify that calling *thread* is suspended during vfork()
     Michael Kerrisk
         CONFORMING TO: Note that POSIX.1-2001 marked vfork() obsolete
@@ -23485,10 +23484,10 @@ incorporated in changes in this release:
 
 Akihiro MOTOKI <amotoki@gmail.com>
 Andries E. Brouwer <Andries.Brouwer@cwi.nl>
-Angelo Borsotti <angelo.borsotti@gmail.com >
+Angelo Borsotti <angelo.borsotti@gmail.com>
 Bjarni Ingi Gislason <bjarniig@rhi.hi.is>
 Brian M. Carlson <sandals@crustytoothpaste.ath.cx>
-Casper.Dik@oracle.com
+Casper Dik <Casper.Dik@oracle.com>
 David Prévot <taffit@debian.org>
 D. Barbier <bouzim@gmail.com>
 Eric Blake <eblake@redhat.com>
@@ -23509,7 +23508,7 @@ Mike Frysinger <vapier@gentoo.org>
 Nick Piggin <npiggin@gmail.com>
 Paul Pluzhnikov <ppluzhnikov@google.com>
 Petr Baudis <pasky@ucw.cz>
-Ralph Corderoy <ralph@inputplus.co.uk >
+Ralph Corderoy <ralph@inputplus.co.uk>
 Rich Felker <bugdal@aerifal.cx>
 Simone Piccardi <piccardi@truelite.it>
 Simon Paillard <spaillard@debian.org>
@@ -23701,7 +23700,7 @@ io_submit.2
             Rewrite to focus on the system call interface, adding
             some notes on the libaio wrapper differences.
             See the following mail:
-            2012-05-07 "aio manuals", linux-man@vger.kernel.org
+            2012-05-07 "aio manuals", linux-man@vger
             http://thread.gmane.org/gmane.linux.man/1935/focus=2910
 
             Other minor rewrites.
@@ -23923,7 +23922,7 @@ mmap64.3
             Upstreamed from Red Hat / Fedora
 
 realpath.3
-    Michael Kerrisk  [Casper.Dik@oracle.com]
+    Michael Kerrisk  [Casper Dik]
         Remove note about Solaris possibly returning a relative path
 
 syslog.3
@@ -27120,7 +27119,7 @@ random.3
     Michael Kerrisk
         Add EINVAL error for setstate()
     Michael Kerrisk
-        BUGS: inistate() does not return NULL on error
+        BUGS: initstate() does not return NULL on error
             http://sourceware.org/bugzilla/show_bug.cgi?id=15380
 
 random_r.3
@@ -27317,8 +27316,8 @@ Chuck Coffing <clc@alum.mit.edu>
 David Prévot <taffit@debian.org>
 Denys Vlasenko <dvlasenk@redhat.com>
 Dmitry V. Levin <ldv@altlinux.org>
-Felix_Schulte@McAfee.com
-graud@gmx.com
+Felix Schulte <Felix_Schulte@McAfee.com>
+Graud <graud@gmx.com>
 Michael Kerrisk <mtk.manpages@gmail.com>
 Oleg Nesterov <oleg@redhat.com>
 Peng Haitao <penght@cn.fujitsu.com>
@@ -27428,7 +27427,7 @@ readlink.2
             cause the program to operate on uninitialized data.
 
 setpgid.2
-    Michael Kerrisk  [graud@gmx.com]
+    Michael Kerrisk  [Graud]
         s/SIGTSTP/SIGTTIN/ when discussing reads from terminal
             See https://bugzilla.kernel.org/show_bug.cgi?id=60504
 
@@ -27489,7 +27488,7 @@ capabilities.7
         Add open_by_handle_at(2) under CAP_DAC_READ_SEARCH
 
 inotify.7
-    Michael Kerrisk  [Felix_Schulte@McAfee.com]
+    Michael Kerrisk  [Felix Schulte]
         Clarify description of IN_MOVED_FROM and IN_MOVED_TO
 
 man-pages.7
@@ -31214,6 +31213,7 @@ sched.7
             sense to isolate out this general content to a separate
             page that is referred to by the other scheduling pages.
 
+
 Newly documented interfaces in existing pages
 ---------------------------------------------
 
@@ -31225,7 +31225,7 @@ fallocate.2
 
 rename.2
     Miklos Szeredi [Michael Kerrisk]
-        Document renameat2()
+        Document renameat2() system call added in Linux 3.15
 
 shmop.2
     Michael Kerrisk
@@ -31235,7 +31235,7 @@ shmop.2
 Changes to individual pages
 ---------------------------
 
-fallocate.2
+flock.2
     Michael Kerrisk
         Employ term "open file description" in DESCRIPTION
             And include reference to open(2) for an explanation of the term.
@@ -31453,3 +31453,935 @@ packet.7
         Status in PACKET_RX_RING is actually a bit mask
     Michael Kerrisk  [Carsten Andrich]
         SEE ALSO: add /tools/testing/selftests/net/psock_tpacket.c
+
+
+==================== Changes in man-pages-3.67 ====================
+
+Released: 2014-05-21, Munich
+
+
+Contributors
+------------
+
+The following people contributed patches/fixes or (noted in brackets
+in the changelog below) reports, notes, and ideas that have been
+incorporated in changes in this release:
+
+Andy Lutomirski <luto@amacapital.net>
+Aurelien Jarno <aurelien@aurel32.net>
+Bill Allombert <ballombe@debian.org>
+Christoph Hellwig <hch@infradead.org>
+Davidlohr Bueso <davidlohr@hp.com>
+Heinrich Schuchardt <xypron.glpk@gmx.de>
+Ingo Schwarze <schwarze@usta.de>
+Jan Kara <jack@suse.cz>
+Jon Grant <jg@jguk.org>
+Juri Lelli <juri.lelli@gmail.com>
+Lucas De Marchi <lucas.demarchi@profusion.mobi>
+Michael Kerrisk <mtk.manpages@gmail.com>
+Peng Haitao <penght@cn.fujitsu.com>
+Peter Zijlstra <peterz@infradead.org>
+Rasmus Villemoes <rv@rasmusvillemoes.dk>
+Sam Varshavchik <mrsam@courier-mta.com>
+Simon Paillard <spaillard@debian.org>
+Steven Stewart-Gallus <sstewartgallus00@mylangara.bc.ca>
+Török Edwin <edwin@etorok.net>
+William Morriss <wjmelements@gmail.com>
+Yuri Kozlov <yuray@komyakino.ru>
+
+Apologies if I missed anyone!
+
+
+New and rewritten pages
+-----------------------
+
+sched_setattr.2
+    Michael Kerrisk, Peter Zijlstra [Juri Lelli]
+        New page describing sched_setattr(2) and sched_getattr(2)
+
+system.3
+    Michael Kerrisk
+        Rewrote large parts of the page and added a number of details
+
+
+Newly documented interfaces in existing pages
+---------------------------------------------
+
+sched.7
+    Peter Zijlstra, Michael Kerrisk  [Juri Lelli]
+        Document SCHED_DEADLINE
+
+New and changed links
+---------------------
+
+renameat2.2
+    Michael Kerrisk
+        New link to rename.2
+
+sched_getattr.2
+    Michael Kerrisk
+        New link to new sched_setattr
+
+
+Changes to individual pages
+---------------------------
+
+bind.2
+    Michael Kerrisk
+        ERRORS: Add EADDRINUSE for ephemeral port range exhaustion
+
+chown.2
+    Michael Kerrisk
+        NOTES: Add some subheadings
+
+connect.2
+    Michael Kerrisk  [William Morriss]
+        ERRORS: Add EADDRNOTAVAIL for ephemeral port range exhaustion
+            Verified from testing and the kernel source.
+            See https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=745775
+    Michael Kerrisk
+        Remove mention of ip_local_port_range under EAGAIN error
+
+create_module.2
+delete_module.2
+init_module.2
+query_module.2
+    Michael Kerrisk  [Lucas De Marchi]
+        Clarify glibc header file declaration/ABI wrapper details
+            create_module(), delete_module(), init_module(), and
+            query_module() are not declared in header files, but
+            through an accident of history glibc provides an ABI
+            for them that it continues to maintain, for
+            compatibility reasons.
+
+execve.2
+    Michael Kerrisk  [Steven Stewart-Gallus]
+        Note SIGKILL case when execve() fails beyond the point of no return
+    Michael Kerrisk
+        NOTES: Add a subheading and reorder paragraphs
+
+fanotify_init.2
+    Heinrich Schuchardt [Michael Kerrisk]
+        Document range of permitted flags for event_f_flags
+            With a new patch included in the mm tree, event_f_flags is
+            checked for allowable values.
+
+fcntl.2
+    Michael Kerrisk
+        Add "file locking" subheading under NOTES
+
+fork.2
+    Michael Kerrisk
+        ERRORS: SCHED_DEADLINE tasks can fail with EAGAIN
+            SCHED_DEADLINE tasks can fail with EAGAIN unless the
+            reset-on-fork flag is set.
+
+futex.2
+    Michael Kerrisk
+        Note that there is no glibc wrapper
+
+getpriority.2
+    Rasmus Villemoes
+        Fix prototypes for getpriority() and setpriority()
+            The who argument has type id_t (which happens to be u32 on linux).
+
+get_robust_list.2
+    Rasmus Villemoes
+        Add <sys/types.h> to synopsis of get_robust_list()
+            If one were to implement wrappers for [gs]et_robust_list() using the
+            given prototypes, one would also have to include sys/types.h to get
+            a definition of size_t.
+
+getrusage.2
+    Michael Kerrisk  [Bill Allombert]
+        _GNU_SOURCE must be defined to obtain RUSAGE_THREAD definition
+            See http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=746569
+
+link.2
+open.2
+    Andy Lutomirski [Michael Kerrisk]
+        Update AT_EMPTY_PATH and O_PATH documentation
+
+listen.2
+    Michael Kerrisk
+        ERRORS: Add EADDRINUSE for ephemeral port range exhaustion
+
+mbind.2
+    Rasmus Villemoes
+        Fix prototype for mbind(2)
+            The nmask argument is const. The return type in numaif.h is long.
+            (Well, at least <numaif.h> says nmask is const. The current kernel
+            does not define it as a const argument, but sys_mbind() only
+            passes it to get_nodes(), which does treat it as const.)
+
+msgop.2
+    Davidlohr Bueso [Michael Kerrisk]
+        Enhance description of "full queue" criteria
+
+poll.2
+    Rasmus Villemoes
+        Add <signal.h> to synopsis for ppoll()
+            One needs to #include <signal.h> to get the definition of the
+            type (sigset_t) of the mask argument to ppoll().
+
+readlink.2
+    Rasmus Villemoes
+        Fix return type of readlinkat()
+
+recv.2
+    Michael Kerrisk
+        Clarify details of msg_name and msg_namelen fields
+
+recvmmsg.2
+    Michael Kerrisk
+        Describe timeout bug
+            See https://bugzilla.kernel.org/show_bug.cgi?id=75371
+            and http://thread.gmane.org/gmane.linux.man/5677
+
+remap_file_pages.2
+    Andy Lutomirski [Christoph Hellwig, Andy Lutomirski]
+        remap_file_pages() has no benefit for real files
+            Linux commit 3ee6dafc677a68e461a7ddafc94a580ebab80735 caused
+            remap_file_pages to be emulated when used on real file.
+
+sched_get_priority_max.2
+    Michael Kerrisk
+        'policy' can also be SCHED_DEADLINE
+
+sched_setaffinity.2
+    Rasmus Villemoes
+        Fix prototype for sched_setaffinity()
+            The mask argument is const.
+
+sched_setparam.2
+    Michael Kerrisk
+        ERRORS: mark errors that apply just for sched_setparam()
+    Michael Kerrisk
+        ERRORS: Add EINVAL for invalid arguments
+    Michael Kerrisk
+        SEE ALSO: add sched_setattr(2)
+
+sched_setscheduler.2
+    Michael Kerrisk
+        ERRORS: mark errors that apply just to sched_setscheduler()
+    Michael Kerrisk
+        ERRORS: add EINVAL case for pid < 0
+    Michael Kerrisk
+        ERRORS: separate out EINVAL cases
+
+semget.2
+    Michael Kerrisk
+        NOTES: Add subheadings and reorder paragraphs
+
+semop.2
+    Rasmus Villemoes
+        Fix prototypes for semop() and semtimedop()
+            The nsops arguments have type size_t, not unsigned, and the
+            timeout argument of semtimedop() is const.
+    Michael Kerrisk
+        NOTES: Add a subheading
+
+send.2
+    Michael Kerrisk
+        Add details on various 'msghdr' fields
+    Michael Kerrisk
+        ERRORS: Add EAGAIN for ephemeral port range exhaustion
+    Michael Kerrisk
+        Add some subheadings under DESCRIPTION
+
+shmget.2
+    Michael Kerrisk
+        NOTES: Add a subheading
+
+stat.2
+    Michael Kerrisk  [Aurelien Jarno]
+        Describe feature test macro requirements for file type test macros
+            See https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=728240
+    Michael Kerrisk
+        Update FTM requirements for lstat()
+    Michael Kerrisk
+        Split discussion of 'st_mode' fields into type and permissions
+    Michael Kerrisk
+        Move text on S_I*() macros to follow text on S_I* macros
+            That ordering is more logical
+
+stime.2
+    Rasmus Villemoes
+        Fix prototype for stime()
+            The argument is const, both according to the actual header files and
+            according to <http://www.sco.com/developers/devspecs/vol1a.pdf>.
+
+syscall.2
+    Rasmus Villemoes
+        Fix prototype for syscall()
+            The first argument and the return value of syscall() has type long,
+            not int.
+
+getopt.3
+    Michael Kerrisk
+        EXAMPLE: Add subheadings to distinguish the two example programs
+
+malloc.3
+    Michael Kerrisk
+        Reword text referring to mallopt(3)
+            Linux libc is no longer "recent"; drop mention of it.
+
+pthread_attr_setinheritsched.3
+pthread_attr_setschedparam.3
+pthread_attr_setschedpolicy.3
+pthread_setaffinity_np.3
+pthread_setschedparam.3
+pthread_setschedprio.3
+pthread_yield.3
+pthreads.7
+    Michael Kerrisk
+        Change references to "sched_setscheduler(2)" to "sched(7)"
+            Change consistent with the fact that the scheduling overview
+            page is now sched(7) not sched_setscheduler(2).
+
+pthread_attr_setstackaddr.3
+    Peng Haitao
+        ATTRIBUTES: Note functions that are thread-safe
+            The functions pthread_attr_setstackaddr() and
+            pthread_attr_getstackaddr() are thread safe.
+
+pthread_attr_setstacksize.3
+    Peng Haitao
+        ATTRIBUTES: Note functions that are thread-safe
+            The functions pthread_attr_setstacksize() and
+            pthread_attr_getstacksize() are thread safe.
+
+pthread_kill.3
+    Peng Haitao
+        ATTRIBUTES: Note function that is thread-safe
+            The function pthread_kill() is thread safe.
+
+pthread_kill_other_threads_np.3
+    Peng Haitao
+        ATTRIBUTES: Note function that is thread-safe
+            The function pthread_kill_other_threads_np() is thread safe.
+
+pthread_self.3
+    Peng Haitao
+        ATTRIBUTES: Note function that is thread-safe
+            The function pthread_self() is thread safe.
+
+pthread_setcancelstate.3
+    Michael Kerrisk
+        Add paragraph breaks to "Asynchronous cancelability" subsection
+
+pthread_setcancelstate.3
+    Peng Haitao
+        ATTRIBUTES: Note functions that are thread-safe
+            The functions pthread_setcancelstate() and
+            pthread_setcanceltype() are thread safe.
+    Michael Kerrisk
+        NOTES: Add some subheadings
+
+pthread_setschedparam.3
+    Peng Haitao
+        ATTRIBUTES: Note functions that are thread-safe
+            The functions pthread_setschedparam() and pthread_getschedparam()
+            are thread safe.
+
+pthread_setschedprio.3
+    Peng Haitao
+        ATTRIBUTES: Note function that is thread-safe
+            The function pthread_setschedprio() is thread safe.
+
+pthread_sigmask.3
+    Peng Haitao
+        ATTRIBUTES: Note function that is thread-safe
+            The function pthread_sigmask() is thread safe.
+
+pthread_sigqueue.3
+    Peng Haitao
+        ATTRIBUTES: Note function that is thread-safe
+            The function pthread_sigqueue() is thread safe.
+
+pthread_testcancel.3
+    Peng Haitao
+        ATTRIBUTES: Note function that is thread-safe
+            The function pthread_testcancel() is thread safe.
+
+pthread_yield.3
+    Peng Haitao
+        ATTRIBUTES: Note function that is thread-safe
+            The function pthread_yield() is thread safe.
+
+remquo.3
+    Peng Haitao
+        ATTRIBUTES: Note functions that are thread-safe
+            The functions remquo(), remquof() and remquol() are thread safe.
+
+rtime.3
+    Peng Haitao
+        ATTRIBUTES: Note function that is thread-safe
+            The function rtime() is thread safe.
+
+sched_getcpu.3
+    Peng Haitao
+        ATTRIBUTES: Note function that is thread-safe
+            The function sched_getcpu() is thread safe.
+
+stpcpy.3
+    Ingo Schwarze
+        Note some history of stpcpy()
+            Quoting Ingo:
+            I just noticed that the stpcpy(3) manual contains a speculation
+            that appears to be untrue on closer investigation:  That function
+            did not originate in MS DOS, but in Lattice C on AmigaDOS.
+
+            Here is a patch against the git master HEAD to fix that, and add
+            some more historical information.  To provide some background and
+            allow you to more easily verify the correctness of the patch, i'm
+            appending my mail to <misc@openbsd.org>, where i'm giving some
+            more details about the history and pointing to some primary
+            sources.  That mail also contains the (similar, but shorter)
+            patch i just committed to the OpenBSD manual page.
+
+strcasecmp.3
+    Michael Kerrisk  [Aurelien Jarno, Török Edwin]
+        Explain why strcasecmp()+strncasecmp() are also declared in <string.h>
+            See http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=729436
+
+strcpy.3
+    Michael Kerrisk
+        NOTES: Add a subheading
+
+fd.4
+    Michael Kerrisk  [Sam Varshavchik]
+        Fix floppy disk device names
+            The naming convention shown in the page was ancient.
+            Now, the page is consistent with Documentation/devices.txt
+            (where it is noted that "The use of the capital letters
+            D, H and E for the 3.5" models have been deprecated, since
+            the drive type is insignificant for these devices"
+
+proc.5
+    Michael Kerrisk
+        Document /proc/timer_stats
+    Michael Kerrisk
+        (Briefly) document /proc/timer_list
+    Michael Kerrisk
+        Add /proc/sys/kernel/{sched_rt_period_us,sched_rt_runtime_us}
+            Reference sched(7) for an explanation of these two files
+
+capabilities.7
+    Michael Kerrisk
+        Mention sched_setattr(2) under CAP_SYS_NICE
+
+cpuset.7
+    Michael Kerrisk
+        SEE ALSO: add sched(7)
+
+credentials.7
+    Michael Kerrisk
+        Mention sched_getattr() as a place where credentials are checked
+
+fanotify.7
+    Heinrich Schuchardt  [Jan Kara]
+        BUGS: error events can be lost when reading from fanotify FD
+    Michael Kerrisk  [Heinrich Schuchardt]
+        Fix description of FAN_EVENT_NEXT()
+            FAN_EVENT_NEXT() does not update 'meta'; rather, it returns a
+            pointer to the next metadata structure. In addition, generally
+            rework the description to be a bit clearer and more detailed.
+    Heinrich Schuchardt
+        Document FAN_EVENT_METADATA_LEN
+
+ip.7
+    Michael Kerrisk
+        Note cases where an ephemeral port is used
+    Michael Kerrisk
+        Remove BUGS text on glibc failing to declare in_pktinfo
+    Michael Kerrisk
+        Clarify 'ip_local_port_range' and mention the term "ephemeral ports"
+    Michael Kerrisk
+        Note some more details about assignment of ephemeral ports
+    Michael Kerrisk
+        BUGS: ephemeral port range exhaustion is diagnosed inconsistently
+            Different system calls use different 'errno' values to diagnose
+            exhaustion of the ephemeral port range.
+
+sched.7
+    Michael Kerrisk
+        Document sched_rt_period_us and sched_rt_runtime_us /proc files
+            And rework and relocate the text on dealing with runaway
+            real-time processes.
+    Michael Kerrisk
+        Mention sched_setattr(2) in list of APIs that can change policies
+    Michael Kerrisk
+        sched_setattr(2) can also be used to set 'nice' value
+    Michael Kerrisk
+        Remove mention of sched_setscheduler() when talking about sched_priority
+            There are nowadays multiple ways to set sched_priority (and
+            in fact there always were, since we also had sched_setparam(2)).
+    Michael Kerrisk
+        SEE ALSO: Add Documentation/scheduler/sched-design-CFS.txt
+    Michael Kerrisk
+        Don't mention sched_setscheduler(2) in discussions of setting policies
+            In a couple of places, sched_setscheduler(2) is mentioned as the
+            way of setting policies. But now there is sched_setattr(2) as
+            well, rewrite the text in a more generic way.
+    Michael Kerrisk
+        Rework summary text describing sched_setattr(2) and sched_getattr(2)
+            Note that these APIs are a superset of sched_setscheduler(2)
+            and sched_getscheduler(2).
+    Michael Kerrisk
+        Remove crufty text relating to sched_setscheduler()
+            All of the removed text is in sched_setscheduler(2) and
+            should have been trimmed from this page.
+    Michael Kerrisk
+        SEE ALSO: Mention more files in Documentation/scheduler/ directory
+
+
+==================== Changes in man-pages-3.68 ====================
+
+Released: 2014-05-28, Munich
+
+
+Contributors
+------------
+
+The following people contributed patches/fixes or (noted in brackets
+in the changelog below) reports, notes, and ideas that have been
+incorporated in changes in this release:
+
+Alastair McKinstry <mckinstry@computer.org>
+Carsten Grohmann <carstengrohmann@gmx.de>
+Colin Williams <colinwilliams1968@gmail.com>
+Heinrich Schuchardt <xypron.glpk@gmx.de>
+Lars Wirzenius <liw@iki.fi>
+Marko Myllynen <myllynen@redhat.com>
+Michael Kerrisk <mtk.manpages@gmail.com>
+Peng Haitao <penght@cn.fujitsu.com>
+Rasmus Villemoes <rv@rasmusvillemoes.dk>
+Richard Braakman <richard.braakman@jollamobile.com>
+Simon Paillard <spaillard@debian.org>
+
+Apologies if I missed anyone!
+
+
+New and rewritten pages
+-----------------------
+
+localedef.1
+    Marko Myllynen, Richard Braakman, Alastair McKinstry, Lars Wirzenius
+        New page for localedef(1)
+            Add new page based on Debian localedef(1) page.
+
+
+New and changed links
+---------------------
+
+procfs.5
+    New link to proc.5
+        Since the term "procfs" is widely used, it seems reasonable to have
+        a link from that name to proc(5).
+
+
+Changes to individual pages
+---------------------------
+
+locale.1
+    Marko Myllynen
+        Provide a step-by-step example of how to use a custom locale
+    Marko Myllynen
+        Use LC_TELEPHONE instead of LC_MESSAGES in the example
+            yesstr/nostr in LC_MESSAGES are planned to be changed at some
+            point [1], so it's better to provide an example which won't
+            be obsoleted by that change.
+
+            [1] https://sourceware.org/bugzilla/show_bug.cgi?id=16975
+
+adjtimex.2
+    Michael Kerrisk
+        Add feature test macro requirements
+
+clone.2
+    Michael Kerrisk
+        ERRORS: add cross-reference to fork(2) for explanation of EAGAIN
+
+fork.2
+    Michael Kerrisk
+        ERRORS: add pid_max and threads-max to EAGAIN
+            And rewrite text to be the same as pthread_create(3).
+
+getrlimit.2
+    Michael Kerrisk
+        RLIMIT_NPROC is not enforced if CAP_SYS_ADMIN or CAP_SYS_RESOURCE
+
+remap_file_pages.2
+    Rasmus Villemoes
+        Fix prototype
+            The pgoff argument has type size_t, not ssize_t (and in the
+            kernel it is unsigned long).
+
+set_mempolicy.2
+    Rasmus Villemoes
+        Fix prototype for set_mempolicy(2)
+            The nodemask argument is const. The return type in numaif.h is long.
+
+swapon.2
+    Rasmus Villemoes
+        Remove header from synopsis
+            The <asm/page.h> header is not readily available, and the comment
+            seems to indicate that it is for getting PAGE_SIZE. But it is
+            never mentioned why one would need to know that, and it is in any
+            case better obtained using sysconf(), provided by <unistd.h>.
+
+a64l.3
+    Rasmus Villemoes
+        Fix prototype for a64l()
+            The argument is const, both according to POSIX and the
+            glibc headers.
+
+adjtime.3
+    Rasmus Villemoes
+        Add required header
+            The prototype for adjtime(3) is declared in <sys/time.h>.
+
+argz_add.3
+    Rasmus Villemoes
+        Fix prototypes
+            Update the prototypes of argz_{delete,extract,next} to agree with
+            glibc headers and manual.
+
+bstring.3
+    Rasmus Villemoes
+        Fix prototypes
+            The length parameter n has type size_t in bcmp(), bcopy() and
+            bzero().
+
+envz_add.3
+    Rasmus Villemoes
+        Fix prototypes
+            The envz_len parameters for envz_entry() and envz_get() are not
+            passed by reference.
+
+fpathconf.3
+    Rasmus Villemoes
+        Fix prototype
+            The path argument to pathconf() is const.
+
+fseek.3
+    Rasmus Villemoes
+        Fix prototype
+            The pos argument to fsetpos() is const.
+
+gcvt.3
+    Rasmus Villemoes
+        Fix prototype
+            The ndigit parameter to gcvt() has type int.
+
+getaddrinfo_a.3
+    Rasmus Villemoes
+        Fix prototype
+            The pointer arguments to gai_suspend() are const.
+
+getauxval.3
+    Rasmus Villemoes
+        Fix permissions
+            There doesn't seem to be any reason for getauxval.3 to be
+            executable...
+
+getnameinfo.3
+    Rasmus Villemoes
+        Fix prototype
+            The hostlen and servlen parameters have type socklen_t.
+            (The types changed in glibc 2.2)
+    Michael Kerrisk
+        Note types of 'hostlen'; and 'servlen' in glibc < 2.2
+
+getrpcent.3
+    Rasmus Villemoes
+        Fix prototype
+            The argument to getrpcbyname() is const.
+
+getrpcport.3
+    Rasmus Villemoes
+        Add #include and fix prototype
+            The prototype for getrpcport() is obtained by #include'ing
+            <rpc/rpc.h>. Also, update its prototype.
+
+getspnam.3
+    Rasmus Villemoes
+        Fix prototype
+            The struct spwd argument to putspent() is const.
+
+getutent.3
+    Rasmus Villemoes
+        Fix prototypes
+            The arguments to getutid(), getutline(), and pututline()
+            are const.
+
+inet.3
+    Rasmus Villemoes
+        Fix prototype
+            The parameters to inet_makeaddr have type in_addr_t.
+
+inet_net_pton.3
+    Rasmus Villemoes
+        srcfix, cfix
+            Use a consistent style throughout the man-pages.
+
+key_setsecret.3
+    Rasmus Villemoes
+        Fix prototypes
+            Remove const qualifiers from arguments to key_decryptsession,
+            key_encryptsession, and key_setsecret.
+
+makecontext.3
+    Rasmus Villemoes
+        Fix prototype
+            The second argument to swapcontext() is const.
+
+makedev.3
+    Rasmus Villemoes
+        Fix prototype
+            gnu_dev_makedev, and hence its trivial macro wrapper makedev, takes
+            two unsigned int parameters; this is consistent with it being the
+            inverse of (gnu_dev_)major/minor, which return unsigned int.
+
+malloc_trim.3
+    Rasmus Villemoes
+        Fix prototype
+            As mentioned further down, malloc_trim returns an integer.
+
+mq_getattr.3
+    Rasmus Villemoes
+        Fix prototype
+            The newattr parameter to mq_setattr is const.
+
+newlocale.3
+    Marko Myllynen
+        List all available category masks
+    Michael Kerrisk
+        Add LC_ALL_MASK description
+
+nl_langinfo.3
+    Marko Myllynen
+        Expand the example code a bit
+            Better illustrate querying elements from different categories.
+
+perror.3
+    Rasmus Villemoes
+        Fix declaration
+            The elements of the array sys_errlist are also const.
+
+pthread_attr_setaffinity_np.3
+pthread_attr_setdetachstate.3
+pthread_attr_setguardsize.3
+pthread_attr_setinheritsched.3
+pthread_attr_setschedparam.3
+pthread_attr_setschedpolicy.3
+pthread_attr_setscope.3
+pthread_attr_setstack.3
+pthread_attr_setstackaddr.3
+pthread_attr_setstacksize.3
+    Rasmus Villemoes
+        Constify parameters
+            Each of the pthread_attr_get* functions extract some piece of
+            information from a pthread_attr_t, which is passed by const
+            reference. Add the const keyword to the prototypes of these
+            functions.
+
+pthread_cleanup_push_defer_np.3
+    Michael Kerrisk  [Rasmus Villemoes]
+        Add feature test macro requirements
+
+pthread_create.3
+    Michael Kerrisk  [Carsten Grohmann]
+        Add pid_max limit to EAGAIN error cases
+
+pthread_equal.3
+    Peng Haitao
+        ATTRIBUTES: Note function that is thread-safe
+            The function pthread_equal() is thread safe.
+
+pthread_exit.3
+    Peng Haitao
+        ATTRIBUTES: Note function that is thread-safe
+            The function pthread_exit() is thread safe.
+
+pthread_getcpuclockid.3
+    Peng Haitao
+        ATTRIBUTES: Note function that is thread-safe
+            The function pthread_getcpuclockid() is thread safe.
+
+pthread_setaffinity_np.3
+    Peng Haitao
+        ATTRIBUTES: Note functions that are thread-safe
+            The functions pthread_setaffinity_np() and
+            pthread_getaffinity_np() are thread safe.
+
+pthread_setconcurrency.3
+    Peng Haitao
+        ATTRIBUTES: Note functions that are thread-safe
+            The functions pthread_setconcurrency() and
+            pthread_getconcurrency() are thread safe.
+
+pthread_setname_np.3
+    Rasmus Villemoes
+        Fix prototype
+            The name parameter of pthread_getname_np is an output parameter and
+            hence not const.
+
+pthread_setschedparam.3
+    Rasmus Villemoes
+        Fix prototypes
+            Add return type for pthread_{s,g}etschedparam.
+
+pthread_setschedprio.3
+    Rasmus Villemoes
+        Fix prototype
+            Add return type for pthread_setschedprio.
+
+pthread_sigqueue.3
+    Rasmus Villemoes
+        Add missing #include <signal.h>
+
+rcmd.3
+    Rasmus Villemoes
+        Fix prototypes
+            Unlike the BSDs, the second argument of rcmd() and rcmd_af() has
+            type unsigned short.
+            The first argument of iruserok_af() has type const void*.
+
+re_comp.3
+    Rasmus Villemoes
+        Fix prototypes
+            re_comp and re_exec take const char* arguments.
+
+resolver.3
+    Rasmus Villemoes
+        Fix prototypes and extern-declaration
+            Fix const- and signedness of various char* parameters.
+
+            Also, there is no "struct state", but _res is a struct
+            __res_state. (Actually, _res is errno-like in that it is really a
+            macro expanding to (*__res_state()).)
+
+rexec.3
+    Rasmus Villemoes
+        Fix prototypes
+            The user, passwd and cmd arguments to rexec and rexec_af are all
+            const.
+
+rtime.3
+    Rasmus Villemoes
+        Replace header
+            The header <rpc/des_crypt.h> does not provide rtime();
+            <rpc/auth_des.h> does, as is also implied in both the NOTES and
+            EXAMPLE sections.
+
+scandir.3
+    Rasmus Villemoes
+        Fix prototypes
+            The alphasort and versionsort functions take arguments of type
+            const struct dirent **, not const void *.
+
+setlocale.3
+    Michael Kerrisk  [Marko Myllynen]
+        Simplify locale category listing and add GNU-specific locale categories
+            Some information that was here will move to locale(7).
+    Marko Myllynen
+        Remove now obsolete NOTES section
+
+setnetgrent.3
+    Rasmus Villemoes
+        Fix prototype
+            The buflen argument to getnetgrent_r has type size_t.
+
+sigvec.3
+    Rasmus Villemoes
+        Fix prototype
+            The vec argument to sigvec is const.
+
+tsearch.3
+    Rasmus Villemoes
+        Fix prototype
+            The rootp argument to tfind is "void * const *",
+            not "const void **".
+
+core.5
+    Michael Kerrisk
+        Core dump files are nowadays core.pid by default
+
+locale.5
+    Marko Myllynen
+        Document mon_grouping and grouping properly
+    Michael Kerrisk
+        Note default value for 'first_workday'
+    Michael Kerrisk  [Marko Myllynen]
+        Add brief descriptions of collating-element and collating-symbol
+    Marko Myllynen
+        t_fmt_ampm is needed only for locales that employ AM/PM convention
+    Michael Kerrisk  [Marko Myllynen]
+        Remove crufty reference to /usr/lib/nls/src
+            That file is nowhere to be found
+    Marko Myllynen
+        Clarify LC_TIME/am_pm and LC_NAME keywords usage
+            am_pm should be defined only if AM/PM convention is used to signal
+            applications they should not try to print them when using them in
+            unwanted.
+
+            Same for all LC_NAME keywords expect for name_fmt which should be
+            always defined.
+    Marko Myllynen
+        Clarify lang_term / lang_lib
+            As noted by Keld Simonsen in the lib-locales@sourceware mailing
+            list:
+
+                https://sourceware.org/ml/libc-locales/2014-q2/msg00008.html
+                From: Keld Simonsen <keld at rap dot rap dot dk>
+                To: Marko Myllynen <myllynen at redhat dot com>
+                Date: Tue, 29 Apr 2014 17:02:09 +0200
+
+                lang_term reflects ISO 639-2/T (terminology) codes, while
+                lang_lib reflects ISO 639-2/B (bibliographic) codes.
+                lang_term is preferred over lang_lib codes for locale names.
+                There are 20 specific ISO 639-2/B codes.
+    Marko Myllynen
+        Correct the FILES section
+
+proc.5
+    Michael Kerrisk
+        'pid_max' is a system-wide limit on number of threads and processes
+            Since PIDs > /proc/sys/kernel/pid_max are not allocated, this
+            file thus also imposes a system-wide limit on the number of
+            threads and processes.
+
+capabilities.7
+    Michael Kerrisk
+        CAP_SYS_ADMIN allows overriding RLIMIT_NPROC
+    Michael Kerrisk
+        CAP_SYS_PTRACE allows process_vm_readv(2) and process_vm_writev(2)
+
+charsets.7
+    Michael Kerrisk  [Marko Myllynen]
+        Remove crufty statement that Romanian may be switching to ISO 8859-16
+    Michael Kerrisk
+        Remove ancient paragraph on charsets supported in glibc 2.3.2
+            That test is rather ancient, and probably of little use.
+
+fanotify.7
+    Heinrich Schuchardt
+        Fix to example program: fanotify read() should use aligned buffer
+
+inotify.7
+    Heinrich Schuchardt
+        Add example program
+            This example of the usage of the inotify API shows the
+            usage of inotify_init1(2) and inotify_add_watch(2) as well
+            as polling and reading from the inotify file descriptor.
+    Heinrich Schuchardt
+        munmap() does not generate inotify events
+
+locale.7
+    Marko Myllynen [Michael Kerrisk]
+        Document the LOCPATH environment variable
+    Michael Kerrisk
+        Add further details on various categories
+

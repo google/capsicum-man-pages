@@ -28,10 +28,7 @@
 .\"   <jochen.hein@delphi.central.de>
 .\" Modified Thu Apr 25 00:43:19 2002 by Bruno Haible <bruno@clisp.org>
 .\"
-.\" FIXME Document LOCPATH;
-.\" see http://sourceware.org/bugzilla/show_bug.cgi?id=174
-.\"	Is removed for SUID/SGID programs (see sysdeps/generic/unsecvars.h)
-.TH LOCALE 7  2014-03-18 "Linux" "Linux Programmer's Manual"
+.TH LOCALE 7  2014-05-28 "Linux" "Linux Programmer's Manual"
 .SH NAME
 locale \- description of multilanguage support
 .SH SYNOPSIS
@@ -82,7 +79,11 @@ which return strings such as "Deutschland" and "Deutsch"
 .IR <langinfo.h> .)
 .TP
 .B LC_COLLATE
-This is used to change the behavior of the functions
+This category governs the collation rules used for
+sorting and regular expressions,
+including character equivalence classes and
+multicharacter collating elements.
+This locale category changes the behavior of the functions
 .BR strcoll (3)
 and
 .BR strxfrm (3),
@@ -91,7 +92,10 @@ For example,
 the German sharp s is sorted as "ss".
 .TP
 .B LC_CTYPE
-This changes the behavior of the character handling and
+This category determines the interpretation of byte sequences as characters
+(e.g., single versus multibyte characters), character classifications
+(e.g., alphabetic or digit), and the behavior of character classes.
+It changes the behavior of the character handling and
 classification functions, such as
 .BR isupper (3)
 and
@@ -118,8 +122,10 @@ and "USA".
 .IR <langinfo.h> .)
 .TP
 .B LC_MONETARY
+This category determines the formatting used for
+monetary-related numeric values.
 This changes the information returned by
-.BR localeconv (3)
+.BR localeconv (3),
 which describes the way numbers are usually printed, with details such
 as decimal point versus decimal comma.
 This information is internally
@@ -127,9 +133,9 @@ used by the function
 .BR strfmon (3).
 .TP
 .B LC_MESSAGES
-This changes the language messages are displayed in and what an affirmative or
-negative answer looks like.
-The GNU C-library contains the
+This category affects the language in which messages are displayed
+and what an affirmative or negative answer looks like.
+The GNU C library contains the
 .BR gettext (3),
 .BR ngettext (3),
 and
@@ -141,6 +147,8 @@ functions also obey the environment variable
 (containing a colon-separated list of locales)
 if the category is set to a valid locale other than
 .BR """C""" .
+This category also affects the behavior of
+.BR catopen (3).
 .TP
 .BR LC_MEASUREMENT " (GNU extension, since glibc 2.2)"
 Change the settings relating to the measurement system in the locale
@@ -169,11 +177,16 @@ elements, which return strings such as "Herr" and "Frau"
 .IR <langinfo.h> .)
 .TP
 .B LC_NUMERIC
-This changes the information used by the
-.BR printf (3)
+This category determines the formatting rules used for nonmonetary
+numeric values\(emfor example,
+the thousands separator and the radix character
+(a period in most English-speaking countries,
+but a comma in many other regions).
+It affects functions such as
+.BR printf (3),
+.BR scanf (3),
 and
-.BR scanf (3)
-family of functions, when they are advised to use the locale settings.
+.BR strtod (3).
 This information can also be read with the
 .BR localeconv (3)
 function.
@@ -205,11 +218,13 @@ which returns a string such as "49" (for Germany).
 .IR <langinfo.h> .)
 .TP
 .B LC_TIME
-This changes the behavior of the
-.BR strftime (3)
-function to display the current time in a locally acceptable form; for
-example, most of Europe uses a 24-hour clock versus the
+This category governs the formatting used for date and time values.
+For example, most of Europe uses a 24-hour clock versus the
 12-hour clock used in the United States.
+The setting of this category affects the behavior of functions such as
+.BR strftime (3)
+and
+.BR strptime (3).
 .TP
 .B LC_ALL
 All of the above.
@@ -310,6 +325,32 @@ that extend the traditional locale-dependent APIs (e.g.,
 .BR toupper (3))
 to allow the specification of a locale object that should apply when
 executing the function.
+.SH ENVIRONMENT
+The following environment variable is used by
+.BR newlocale (3)
+and
+.BR setlocale (3),
+and thus affects all localized programs:
+.TP
+.B LOCPATH
+A list of pathnames, separated by colons (\(aq:\(aq),
+that should be used to find locale data.
+If this variable is set, only the individual locale data files from
+.I LOCPATH
+and the system default locale data path are used; any available locale
+archives are not used. The individual locale data files are searched
+under subdirectories which depend on the currently used locale. For
+example, when
+.I en_GB.UTF-8
+is used for a category, the following subdirectories are searched for,
+in this order:
+.IR en_GB.UTF-8 ,
+.IR en_GB.utf8 ,
+.IR en_GB ,
+.IR en.UTF-8 ,
+.IR en.utf8 ,
+and
+.IR en .
 .SH CONFORMING TO
 POSIX.1-2001.
 .\"
@@ -332,4 +373,7 @@ POSIX.1-2001.
 .BR strxfrm (3),
 .BR uselocale (3),
 .BR wcstombs (3),
-.BR locale (5)
+.BR locale (5),
+.BR charsets (7),
+.BR unicode (7),
+.BR utf-8 (7)

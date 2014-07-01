@@ -27,7 +27,7 @@
 .\"   <richard@greenend.org.uk>, aeb 970616.
 .\" Modified, 27 May 2004, Michael Kerrisk <mtk.manpages@gmail.com>
 .\"     Added notes on capability requirements
-.TH SETUID 2 2010-11-22 "Linux" "Linux Programmer's Manual"
+.TH SETUID 2 2014-06-13 "Linux" "Linux Programmer's Manual"
 .SH NAME
 setuid \- set user identity
 .SH SYNOPSIS
@@ -72,16 +72,36 @@ On success, zero is returned.
 On error, \-1 is returned, and
 .I errno
 is set appropriately.
+
+.IR Note :
+there are cases where
+.BR setuid ()
+can fail even when the caller is UID 0;
+it is a grave security error to omit checking for a failure return from
+.BR setuid ().
 .SH ERRORS
 .TP
 .B EAGAIN
-The
+The call would change the caller's real UID (i.e.,
 .I uid
-does not match the current uid and
+does not match the caller's real UID),
+but there was a temporary failure allocating the
+necessary kernel data structures.
+.TP
+.B EAGAIN
 .I uid
-brings process over its
+does not match the real user ID of the caller and this call would
+bring the number of processes belonging to the real user ID
+.I uid
+over the caller's
 .B RLIMIT_NPROC
 resource limit.
+Since Linux 3.1, this error case no longer occurs
+(but robust applications should check for this error);
+see the description of
+.B EAGAIN
+in
+.BR execve (2).
 .TP
 .B EPERM
 The user is not privileged (Linux: does not have the

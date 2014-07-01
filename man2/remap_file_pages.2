@@ -25,7 +25,7 @@
 .\" 2003-12-10 Initial creation, Michael Kerrisk <mtk.manpages@gmail.com>
 .\" 2004-10-28 aeb, corrected prototype, prot must be 0
 .\"
-.TH REMAP_FILE_PAGES 2 2014-05-10 "Linux" "Linux Programmer's Manual"
+.TH REMAP_FILE_PAGES 2 2014-05-28 "Linux" "Linux Programmer's Manual"
 .SH NAME
 remap_file_pages \- create a nonlinear file mapping
 .SH SYNOPSIS
@@ -34,9 +34,17 @@ remap_file_pages \- create a nonlinear file mapping
 .B #include <sys/mman.h>
 .sp
 .BI "int remap_file_pages(void *" addr ", size_t " size ", int " prot ,
-.BI "                     ssize_t " pgoff ", int " flags );
+.BI "                     size_t " pgoff ", int " flags );
 .fi
 .SH DESCRIPTION
+.BR Note :
+.\" commit 33041a0d76d3c3e0aff28ac95a2ffdedf1282dbc
+.\" http://lwn.net/Articles/597632/
+this system call is (since Linux 3.16) deprecated and will
+eventually be replaced by a slower in-kernel emulation.
+Those few applications that use this system call should
+consider migrating to alternatives.
+
 The
 .BR remap_file_pages ()
 system call is used to create a nonlinear mapping, that is, a mapping

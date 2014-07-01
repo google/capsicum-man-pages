@@ -34,13 +34,16 @@
 .\"		commit 094aa1881fdc1b8889b442eb3511b31f3ec2b762
 .\"		Author: Richard Cochran <richardcochran@gmail.com>
 .\"
-.TH ADJTIMEX 2 2013-08-07 "Linux" "Linux Programmer's Manual"
+.TH ADJTIMEX 2 2014-05-28 "Linux" "Linux Programmer's Manual"
 .SH NAME
 adjtimex \- tune kernel clock
 .SH SYNOPSIS
+.nf
+.BR "#define _BSD_SOURCE" "      /* See feature_test_macros(7) */"
 .B #include <sys/timex.h>
-.sp
+
 .BI "int adjtimex(struct timex *" "buf" );
+.fi
 .SH DESCRIPTION
 Linux uses David L. Mills' clock adjustment algorithm (see RFC\ 1305).
 The system call

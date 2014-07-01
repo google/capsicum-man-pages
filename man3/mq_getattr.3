@@ -23,7 +23,7 @@
 .\" the source, must acknowledge the copyright and authors of this work.
 .\" %%%LICENSE_END
 .\"
-.TH MQ_GETATTR 3 2010-08-29 "Linux" "Linux Programmer's Manual"
+.TH MQ_GETATTR 3 2014-05-28 "Linux" "Linux Programmer's Manual"
 .SH NAME
 mq_getattr, mq_setattr \- get/set message queue attributes
 .SH SYNOPSIS
@@ -32,7 +32,7 @@ mq_getattr, mq_setattr \- get/set message queue attributes
 .sp
 .BI "int mq_getattr(mqd_t " mqdes ", struct mq_attr *" attr );
 
-.BI "int mq_setattr(mqd_t " mqdes ", struct mq_attr *" newattr ","
+.BI "int mq_setattr(mqd_t " mqdes ", const struct mq_attr *" newattr ","
 .BI "                 struct mq_attr *" oldattr );
 .fi
 .sp
@@ -134,6 +134,13 @@ is invalid.
 .I newattr\->mq_flags
 contained set bits other than
 .BR O_NONBLOCK .
+.SH ATTRIBUTES
+.SS Multithreading (see pthreads(7))
+The
+.BR mq_getattr ()
+and
+.BR mq_setattr ()
+functions are thread-safe.
 .SH CONFORMING TO
 POSIX.1-2001.
 .SH NOTES

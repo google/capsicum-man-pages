@@ -25,7 +25,7 @@
 .\" Added section stuff, aeb, 2002-04-22.
 .\" Corrected include file, drepper, 2003-06-15.
 .\"
-.TH LOCKF 3 2014-02-11 "GNU" "Linux Programmer's Manual"
+.TH LOCKF 3 2014-06-13 "GNU" "Linux Programmer's Manual"
 .SH NAME
 lockf \- apply, test or remove a POSIX lock on an open file
 .SH SYNOPSIS
@@ -151,6 +151,11 @@ An invalid operation was specified in
 .TP
 .B ENOLCK
 Too many segment locks open, lock table is full.
+.SH ATTRIBUTES
+.SS Multithreading (see pthreads(7))
+The
+.BR lockf ()
+function is thread-safe.
 .SH CONFORMING TO
 SVr4, POSIX.1-2001.
 .SH SEE ALSO

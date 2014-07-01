@@ -5,13 +5,15 @@
 .\" %%%LICENSE_END
 .\"
 .\" @(#)getrpcport.3r	2.2 88/08/02 4.0 RPCSRC; from 1.12 88/02/26 SMI
-.TH GETRPCPORT 3 2007-12-23 "" "Linux Programmer's Manual"
+.TH GETRPCPORT 3 2014-05-28 "" "Linux Programmer's Manual"
 .SH NAME
 getrpcport \- get RPC port number
 .SH SYNOPSIS
 .nf
-.BI "int getrpcport(char *" host ", int " prognum ", int " versnum \
-", int " proto );
+.B "#include <rpc/rpc.h>"
+.sp
+.BI "int getrpcport(const char *" host ", unsigned long " prognum \
+", unsigned long " versnum ", unsigned " proto );
 .fi
 .SH DESCRIPTION
 .BR getrpcport ()

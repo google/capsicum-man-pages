@@ -23,7 +23,7 @@
 .\" the source, must acknowledge the copyright and authors of this work.
 .\" %%%LICENSE_END
 .\"
-.TH PTHREAD_SETSCHEDPARAM 3 2008-11-17 "Linux" "Linux Programmer's Manual"
+.TH PTHREAD_SETSCHEDPARAM 3 2014-05-28 "Linux" "Linux Programmer's Manual"
 .SH NAME
 pthread_setschedparam, pthread_getschedparam \- set/get
 scheduling policy and parameters of a thread
@@ -31,10 +31,10 @@ scheduling policy and parameters of a thread
 .nf
 .B #include <pthread.h>
 
-.BI "pthread_setschedparam(pthread_t " thread ", int " policy ,
-.BI "                      const struct sched_param *" param );
-.BI "pthread_getschedparam(pthread_t " thread ", int *" policy ,
-.BI "                      struct sched_param *" param );
+.BI "int pthread_setschedparam(pthread_t " thread ", int " policy ,
+.BI "                          const struct sched_param *" param );
+.BI "int pthread_getschedparam(pthread_t " thread ", int *" policy ,
+.BI "                          struct sched_param *" param );
 .sp
 Compile and link with \fI\-pthread\fP.
 .fi
@@ -50,7 +50,7 @@ specifies the new scheduling policy for
 The supported values for
 .IR policy ,
 and their semantics, are described in
-.BR sched_setscheduler (2).
+.BR sched (7).
 .\" FIXME . pthread_setschedparam() places no restriction on the policy,
 .\" but pthread_attr_setschedpolicy() restricts policy to RR/FIFO/OTHER
 .\" http://sourceware.org/bugzilla/show_bug.cgi?id=7013
@@ -72,7 +72,7 @@ struct sched_param {
 As can be seen, only one scheduling parameter is supported.
 For details of the permitted ranges for scheduling priorities
 in each scheduling policy, see
-.BR sched_setscheduler (2).
+.BR sched (7).
 
 The
 .BR pthread_getschedparam ()
@@ -138,6 +138,13 @@ to an unsupported value") error for
 .BR pthread_setschedparam ().
 .\" .SH VERSIONS
 .\" Available since glibc 2.0
+.SH ATTRIBUTES
+.SS Multithreading (see pthreads(7))
+The
+.BR pthread_setschedparam ()
+and
+.BR pthread_getschedparam ()
+functions are thread-safe.
 .SH CONFORMING TO
 POSIX.1-2001.
 .SH NOTES
@@ -145,7 +152,7 @@ For a description of the permissions required to, and the effect of,
 changing a thread's scheduling policy and priority,
 and details of the permitted ranges for priorities
 in each scheduling policy, see
-.BR sched_setscheduler (2).
+.BR sched (7).
 .SH EXAMPLE
 The program below demonstrates the use of
 .BR pthread_setschedparam ()
@@ -433,7 +440,6 @@ main(int argc, char *argv[])
 .nh
 .BR getrlimit (2),
 .BR sched_get_priority_min (2),
-.BR sched_setscheduler (2),
 .BR pthread_attr_init (3),
 .BR pthread_attr_setinheritsched (3),
 .BR pthread_attr_setschedparam (3),
@@ -441,4 +447,5 @@ main(int argc, char *argv[])
 .BR pthread_create (3),
 .BR pthread_self (3),
 .BR pthread_setschedprio (3),
-.BR pthreads (7)
+.BR pthreads (7),
+.BR sched (7)

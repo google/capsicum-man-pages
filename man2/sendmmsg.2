@@ -25,12 +25,12 @@
 .\" the source, must acknowledge the copyright and authors of this work.
 .\" %%%LICENSE_END
 .\"
-.TH SENDMMSG 2 2012-12-16 "Linux" "Linux Programmer's Manual"
+.TH SENDMMSG 2 2014-06-13 "Linux" "Linux Programmer's Manual"
 .SH NAME
 sendmmsg \- send multiple messages on a socket
 .SH SYNOPSIS
 .nf
-.B "#define _GNU_SOURCE"
+.B "#define _GNU_SOURCE" "         /* See feature_test_macros(7) */"
 .BI "#include <sys/socket.h>"
 
 .BI "int sendmmsg(int " sockfd ", struct mmsghdr *" msgvec \

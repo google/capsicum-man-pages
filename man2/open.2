@@ -48,7 +48,7 @@
 .\" FIXME . Apr 08: The next POSIX revision has O_EXEC, O_SEARCH, and
 .\" O_TTYINIT.  Eventually these may need to be documented.  --mtk
 .\"
-.TH OPEN 2 2014-05-10 "Linux" "Linux Programmer's Manual"
+.TH OPEN 2 2014-06-13 "Linux" "Linux Programmer's Manual"
 .SH NAME
 open, openat, creat \- open and possibly create a file
 .SH SYNOPSIS
@@ -101,10 +101,10 @@ By default, the new file descriptor is set to remain open across an
 (i.e., the
 .B FD_CLOEXEC
 file descriptor flag described in
-.BR fcntl (2)
+.BR fcntl (2))
 is initially disabled; the
 .B O_CLOEXEC
-flag, described below, can be used to change this default).
+flag, described below, can be used to change this default.
 The file offset is set to the beginning of the file (see
 .BR lseek (2)).
 .PP
@@ -113,21 +113,13 @@ A call to
 creates a new
 .IR "open file description" ,
 an entry in the system-wide table of open files.
-(This object is variously also called an "open file object",
-a "file handle", an "open file table entry",
-or\(emin kernel-developer parlance\(ema
-.IR "struct file" .
-The term "open file description" is used by POSIX.)
 The open file description records the file offset and the file status flags
 (see below).
 A file descriptor is a reference to an open file description;
 this reference is unaffected if
 .I pathname
 is subsequently removed or modified to refer to a different file.
-The new open file description is initially not shared
-with any other process,
-but sharing may arise via
-.BR fork (2).
+For further details on open file descriptions, see NOTES.
 .PP
 The argument
 .I flags
@@ -567,7 +559,7 @@ and the other "*at()" system calls.
 This includes
 .BR linkat (2)
 with
-.BR AT_EMPTY_PATH 
+.BR AT_EMPTY_PATH
 (or via procfs using
 .BR AT_SYMLINK_FOLLOW )
 even if the file is not a directory.
@@ -717,7 +709,7 @@ as described above).
 requires support by the underlying filesystem;
 only a subset of Linux filesystems provide that support.
 In the initial implementation, support was provided in
-the ex2, ext3, ext4, UDF, Minix, and shmem filesystems.
+the ext2, ext3, ext4, UDF, Minix, and shmem filesystems.
 XFS support was added
 .\" commit 99b6436bc29e4f10e4388c27a3e4810191cc4788
 .\" commit ab29743117f9f4c22ac44c13c1647fb24fb2bafe
@@ -974,8 +966,8 @@ was not a directory.
 .TP
 .B ENXIO
 .BR O_NONBLOCK " | " O_WRONLY
-is set, the named file is a FIFO and
-no process has the file open for reading.
+is set, the named file is a FIFO, and
+no process has the FIFO open for reading.
 Or, the file is a device special file and no corresponding device exists.
 .TP
 .BR EOPNOTSUPP
@@ -1038,7 +1030,7 @@ is not a valid file descriptor.
 .TP
 .B ENOTDIR
 .I pathname
-is relative and
+is a relative pathname and
 .I dirfd
 is a file descriptor referring to a file other than a directory.
 .SH VERSIONS
@@ -1136,6 +1128,35 @@ parent directory.
 Otherwise, if the file is modified because of the
 .B O_TRUNC
 flag, its st_ctime and st_mtime fields are set to the current time.
+.\"
+.\"
+.SS Open file descriptions
+The term open file description is the one used by POSIX to refer to the
+entries in the system-wide table of open files.
+In other contexts, this object is
+variously also called an "open file object",
+a "file handle", an "open file table entry",
+or\(emin kernel-developer parlance\(ema
+.IR "struct file" .
+
+When a file descriptor is duplicated (using
+.BR dup (2)
+or similar),
+the duplicate refers to the same open file description
+as the original file descriptor,
+and the two file descriptors consequently share
+the file offset and file status flags.
+Such sharing can also occur between processes:
+a child process created via
+.BR fork (2)
+inherits duplicates of its parent's file descriptors,
+and those duplicates refer to the same open file descriptions.
+
+Each
+.BR open (2)
+of a file creates a new open file description;
+thus, there may be multiple open file descriptions
+corresponding to a file inode.
 .\"
 .\"
 .SS Synchronized I/O

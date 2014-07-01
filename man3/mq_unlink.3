@@ -23,7 +23,7 @@
 .\" the source, must acknowledge the copyright and authors of this work.
 .\" %%%LICENSE_END
 .\"
-.TH MQ_UNLINK 3 2010-08-29 "Linux" "Linux Programmer's Manual"
+.TH MQ_UNLINK 3 2014-06-13 "Linux" "Linux Programmer's Manual"
 .SH NAME
 mq_unlink \- remove a message queue
 .SH SYNOPSIS
@@ -59,6 +59,11 @@ was too long.
 .B ENOENT
 There is no message queue with the given
 .IR name .
+.SH ATTRIBUTES
+.SS Multithreading (see pthreads(7))
+The
+.BR mq_unlink ()
+function is thread-safe.
 .SH CONFORMING TO
 POSIX.1-2001.
 .SH SEE ALSO

@@ -24,7 +24,7 @@
 .\" the source, must acknowledge the copyright and authors of this work.
 .\" %%%LICENSE_END
 .\"
-.TH GETDIRENTRIES 3 2007-07-26 "GNU" "Linux Programmer's Manual"
+.TH GETDIRENTRIES 3 2014-06-13 "GNU" "Linux Programmer's Manual"
 .SH NAME
 getdirentries \- get directory entries in a filesystem-independent format
 .SH SYNOPSIS
@@ -61,6 +61,11 @@ If an error occurs, \-1 is returned, and
 is set appropriately.
 .SH ERRORS
 See the Linux library source code for details.
+.SH ATTRIBUTES
+.SS Multithreading (see pthreads(7))
+The
+.BR getdirentries ()
+function is thread-safe.
 .SH CONFORMING TO
 Not in POSIX.1-2001.
 Present on the BSDs, and a few other systems.

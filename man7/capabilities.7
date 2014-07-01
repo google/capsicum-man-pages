@@ -45,7 +45,7 @@
 .\"     other capabilities where the permitted or inheritable bit is set.
 .\" 2011-09-07, mtk/Serge hallyn: Add CAP_SYSLOG
 .\"
-.TH CAPABILITIES 7 2014-04-09 "Linux" "Linux Programmer's Manual"
+.TH CAPABILITIES 7 2014-05-21 "Linux" "Linux Programmer's Manual"
 .SH NAME
 capabilities \- overview of Linux capabilities
 .SH DESCRIPTION
@@ -312,6 +312,10 @@ and
 .B IPC_RMID
 operations on arbitrary System V IPC objects;
 .IP *
+override
+.B RLIMIT_NPROC
+resource limit;
+.IP *
 perform operations on
 .I trusted
 and
@@ -377,7 +381,7 @@ employ the
 .B TIOCSTI
 .BR ioctl (2)
 to insert characters into the input queue of a terminal other than
-the caller's controlling terminal.
+the caller's controlling terminal;
 .IP *
 employ the obsolete
 .BR nfsservctl (2)
@@ -430,7 +434,8 @@ and change the nice value for arbitrary processes;
 set real-time scheduling policies for calling process,
 and set scheduling policies and priorities for arbitrary processes
 .RB ( sched_setscheduler (2),
-.BR sched_setparam (2));
+.BR sched_setparam (2),
+.BR shed_setattr (2));
 .IP *
 set CPU affinity for arbitrary processes
 .RB ( sched_setaffinity (2));
@@ -465,13 +470,25 @@ Use
 .BR acct (2).
 .TP
 .B CAP_SYS_PTRACE
+.PD 0
+.RS
+.IP * 3
 Trace arbitrary processes using
 .BR ptrace (2);
+.IP *
 apply
 .BR get_robust_list (2)
 to arbitrary processes;
+.IP *
+transfer data to or from the memory of arbitrary processes using
+.BR process_vm_readv (2)
+and
+.BR process_vm_writev (2).
+.IP *
 inspect processes using
 .BR kcmp (2).
+.RE
+.PD
 .TP
 .B CAP_SYS_RAWIO
 .PD 0
@@ -597,6 +614,8 @@ employ various privileged
 operations on virtual terminals.
 .TP
 .BR CAP_SYSLOG " (since Linux 2.6.37)"
+.RS
+.PD 0
 .IP * 3
 Perform privileged
 .BR syslog (2)
@@ -614,6 +633,8 @@ has the value 1.
 .I kptr_restrict
 in
 .BR proc (5).)
+.PD
+.RE
 .TP
 .BR CAP_WAKE_ALARM " (since Linux 3.0)"
 Trigger something that will wake up the system (set

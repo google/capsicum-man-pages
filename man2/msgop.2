@@ -37,7 +37,7 @@
 .\"	Added notes on /proc files
 .\" FIXME . Add example programs to this page.
 .\"
-.TH MSGOP 2 2014-04-28 "Linux" "Linux Programmer's Manual"
+.TH MSGOP 2 2014-05-16 "Linux" "Linux Programmer's Manual"
 .SH NAME
 msgrcv, msgsnd \- System V message queue operations
 .SH SYNOPSIS
@@ -105,13 +105,30 @@ by
 If sufficient space is available in the queue,
 .BR msgsnd ()
 succeeds immediately.
-(The queue capacity is defined by the
+The queue capacity is governed by the
 .I msg_qbytes
 field in the associated data structure for the message queue.
 During queue creation this field is initialized to
 .B MSGMNB
 bytes, but this limit can be modified using
-.BR msgctl (2).)
+.BR msgctl (2).
+A message queue is considered to be full if either of the following
+conditions is true:
+.IP * 2
+Adding a new message to the queue would cause the total number of bytes
+in the queue to exceed the queue's maximum size (the
+.I msg_qbytes
+field).
+.IP *
+Adding another message to the queue would cause the total number of messages
+in the queue to exceed the queue's maximum size (the
+.I msg_qbytes
+field).
+This check is necessary to prevent an unlimited number of zero-length
+messages being placed on the queue.
+Although such messages contain no data,
+they nevertheless consume (locked) kernel memory.
+.PP
 If insufficient space is available in the queue, then the default
 behavior of
 .BR msgsnd ()

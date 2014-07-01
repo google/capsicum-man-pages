@@ -23,7 +23,7 @@
 .\" the source, must acknowledge the copyright and authors of this work.
 .\" %%%LICENSE_END
 .\"
-.TH PTHREAD_SETCANCELSTATE 3 2008-11-24 "Linux" "Linux Programmer's Manual"
+.TH PTHREAD_SETCANCELSTATE 3 2014-05-13 "Linux" "Linux Programmer's Manual"
 .SH NAME
 pthread_setcancelstate, pthread_setcanceltype \-
 set cancelability state and type
@@ -110,6 +110,13 @@ Invalid value for
 .IR type .
 .\" .SH VERSIONS
 .\" Available since glibc 2.0
+.SH ATTRIBUTES
+.SS Multithreading (see pthreads(7))
+The
+.BR pthread_setcancelstate ()
+and
+.BR pthread_setcanceltype ()
+functions are thread-safe.
 .SH CONFORMING TO
 POSIX.1-2001.
 .SH NOTES
@@ -122,7 +129,7 @@ that must not be interrupted by a cancellation request.
 Beware of disabling cancelability for long periods,
 or around operations that may block for long periods,
 since that will render the thread unresponsive to cancellation requests.
-
+.SS Asynchronous cancelability
 Setting the cancelability type to
 .B PTHREAD_CANCEL_ASYNCHRONOUS
 is rarely useful.
@@ -141,6 +148,7 @@ Furthermore, some internal data structures
 family of functions) may be left in an inconsistent state
 if cancellation occurs in the middle of the function call.
 Consequently, clean-up handlers cease to be useful.
+
 Functions that can be safely asynchronously canceled are called
 .IR "async-cancel-safe functions" .
 POSIX.1-2001 requires only that
@@ -151,9 +159,10 @@ and
 be async-cancel-safe.
 In general, other library functions
 can't be safely called from an asynchronously cancelable thread.
+
 One of the few circumstances in which asynchronous cancelability is useful
 is for cancellation of a thread that is in a pure compute-bound loop.
-
+.SS Portability notes
 The Linux threading implementations permit the
 .I oldstate
 argument of

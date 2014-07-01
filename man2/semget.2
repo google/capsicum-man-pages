@@ -33,7 +33,7 @@
 .\"	Rewrote BUGS note about semget()'s failure to initialize
 .\"		semaphore values
 .\"
-.TH SEMGET 2 2014-04-28 "Linux" "Linux Programmer's Manual"
+.TH SEMGET 2 2014-05-21 "Linux" "Linux Programmer's Manual"
 .SH NAME
 semget \- get a System V semaphore set identifier
 .SH SYNOPSIS
@@ -168,7 +168,7 @@ capability.
 and
 .BR IPC_EXCL
 were specified in
-.IR shmflg ,
+.IR semflg ,
 but a semaphore set already exists for
 .IR key .
 .\" .TP
@@ -212,32 +212,6 @@ SVr4, POSIX.1-2001.
 .\" SVr4 documents additional error conditions EFBIG, E2BIG, EAGAIN,
 .\" ERANGE, EFAULT.
 .SH NOTES
-.PP
-The values of the semaphores in a newly created set are indeterminate.
-(POSIX.1-2001 and POSIX.1-2008 are explicit on this point,
-although POSIX.1-2008 notes that a future version of the standard
-may require an implementation to initialize the semaphores to 0.)
-Although Linux, like many other implementations,
-initializes the semaphore values to 0,
-a portable application cannot rely on this:
-it should explicitly initialize the semaphores to the desired values.
-.\" In truth, every one of the many implementations that I've tested sets
-.\" the values to zero, but I suppose there is/was some obscure
-.\" implementation out there that does not.
-Initialization can be done using
-.BR semctl (2)
-.B SETVAL
-or
-.B SETALL
-operation.
-(Where multiple peers do not know who will be the first to
-initialize the set, checking for a nonzero
-.I sem_otime
-in the associated data structure retrieved by a
-.BR semctl (2)
-.B IPC_STAT
-operation can be used to avoid races.)
-
 The inclusion of
 .I <sys/types.h>
 and
@@ -260,7 +234,35 @@ If this special value is used for
 the system call ignores all but the least significant 9 bits of
 .I semflg
 and creates a new semaphore set (on success).
-.PP
+.\"
+.SS Semaphore initialization
+The values of the semaphores in a newly created set are indeterminate.
+(POSIX.1-2001 and POSIX.1-2008 are explicit on this point,
+although POSIX.1-2008 notes that a future version of the standard
+may require an implementation to initialize the semaphores to 0.)
+Although Linux, like many other implementations,
+initializes the semaphore values to 0,
+a portable application cannot rely on this:
+it should explicitly initialize the semaphores to the desired values.
+.\" In truth, every one of the many implementations that I've tested sets
+.\" the values to zero, but I suppose there is/was some obscure
+.\" implementation out there that does not.
+
+Initialization can be done using
+.BR semctl (2)
+.B SETVAL
+or
+.B SETALL
+operation.
+Where multiple peers do not know who will be the first to
+initialize the set, checking for a nonzero
+.I sem_otime
+in the associated data structure retrieved by a
+.BR semctl (2)
+.B IPC_STAT
+operation can be used to avoid races.
+.\"
+.SS Semaphore limits
 The following limits on semaphore set resources affect the
 .BR semget ()
 call:

@@ -22,7 +22,7 @@
 .\" the source, must acknowledge the copyright and authors of this work.
 .\" %%%LICENSE_END
 .\"
-.TH CORE 5 2014-03-14 "Linux" "Linux Programmer's Manual"
+.TH CORE 5 2014-05-28 "Linux" "Linux Programmer's Manual"
 .SH NAME
 core \- core dump file
 .SH DESCRIPTION
@@ -48,8 +48,13 @@ There are various circumstances in which a core dump file is
 not produced:
 .IP * 3
 The process does not have permission to write the core file.
-(By default the core file is called
-.IR core ,
+(By default, the core file is called
+.IR core
+or
+.IR core.pid ,
+where
+.I pid
+is the ID of the process that dumped core,
 and is created in the current working directory.
 See below for details on naming.)
 Writing the core file will fail if the directory in which

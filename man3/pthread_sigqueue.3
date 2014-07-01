@@ -22,11 +22,12 @@
 .\" the source, must acknowledge the copyright and authors of this work.
 .\" %%%LICENSE_END
 .\"
-.TH PTHREAD_SIGQUEUE 3 2012-08-19 "Linux" "Linux Programmer's Manual"
+.TH PTHREAD_SIGQUEUE 3 2014-05-28 "Linux" "Linux Programmer's Manual"
 .SH NAME
 pthread_sigqueue \- queue a signal and data to a thread
 .SH SYNOPSIS
 .nf
+.B #include <signal.h>
 .B #include <pthread.h>
 
 .BI "int pthread_sigqueue(pthread_t " thread ", int " sig ,
@@ -90,6 +91,11 @@ is not valid.
 The
 .BR pthread_sigqueue ()
 function first appeared in glibc 2.11.
+.SH ATTRIBUTES
+.SS Multithreading (see pthreads(7))
+The
+.BR pthread_sigqueue ()
+function is thread-safe.
 .SH CONFORMING TO
 This function is a GNU extension.
 .SH SEE ALSO

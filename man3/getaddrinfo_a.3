@@ -26,7 +26,7 @@
 .\" References: http://people.redhat.com/drepper/asynchnl.pdf,
 .\"     http://www.imperialviolet.org/2005/06/01/asynchronous-dns-lookups-with-glibc.html
 .\"
-.TH GETADDRINFO_A 3 2010-09-27 "GNU" "Linux Programmer's Manual"
+.TH GETADDRINFO_A 3 2014-05-28 "GNU" "Linux Programmer's Manual"
 .SH NAME
 getaddrinfo_a, gai_suspend, gai_error, gai_cancel \- asynchronous
 network address and service translation
@@ -38,8 +38,8 @@ network address and service translation
 .BI "int getaddrinfo_a(int " "mode" ", struct gaicb *" "list[]" ,
 .BI "                int " "nitems" ", struct sigevent *" "sevp" );
 .sp
-.BI "int gai_suspend(struct gaicb *" "list[]" ", int " "nitems" ,
-.BI "                struct timespec *" "timeout" );
+.BI "int gai_suspend(const struct gaicb * const " "list[]" ", int " "nitems" ,
+.BI "                const struct timespec *" "timeout" );
 .sp
 .BI "int gai_error(struct gaicb *" "req" );
 .sp

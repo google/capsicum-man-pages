@@ -23,7 +23,7 @@
 .\" the source, must acknowledge the copyright and authors of this work.
 .\" %%%LICENSE_END
 .\"
-.TH PTHREADS 7  2010-11-14 "Linux" "Linux Programmer's Manual"
+.TH PTHREADS 7  2014-05-21 "Linux" "Linux Programmer's Manual"
 .SH NAME
 pthreads \- POSIX threads
 .SH DESCRIPTION
@@ -97,9 +97,7 @@ alternate signal stack
 .RB ( sigaltstack (2))
 .IP \- 3
 real-time scheduling policy and priority
-.RB ( sched_setscheduler (2)
-and
-.BR sched_setparam (2))
+.RB ( sched (7))
 .PP
 The following Linux-specific features are also per-thread:
 .IP \- 3

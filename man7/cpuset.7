@@ -22,7 +22,7 @@
 .\" <http://www.gnu.org/licenses/>.
 .\" %%%LICENSE_END
 .\"
-.TH CPUSET 7 2013-02-12 "Linux" "Linux Programmer's Manual"
+.TH CPUSET 7 2014-05-21 "Linux" "Linux Programmer's Manual"
 .SH NAME
 cpuset \- confine processes to processor and memory node subsets
 .SH DESCRIPTION
@@ -665,7 +665,7 @@ thread initializing or reading in the data set.
 Normally, under the default setting (disabled) of
 .IR cpuset.memory_migrate ,
 once a page is allocated (given a physical page
-of main memory) then that page stays on whatever node it
+of main memory), then that page stays on whatever node it
 was allocated, so long as it remains allocated, even if the
 cpuset's memory-placement policy
 .I mems
@@ -1497,6 +1497,7 @@ syntax that works on any shell, but alas more obscurely, by using the
 .BR CPU_SET (3),
 .BR proc (5),
 .BR numa (7),
+.BR sched (7),
 .BR migratepages (8),
 .BR numactl (8)
 .PP

@@ -24,7 +24,7 @@
 .\" the source, must acknowledge the copyright and authors of this work.
 .\" %%%LICENSE_END
 .\"
-.TH MATHERR 3 2010-09-10 "Linux" "Linux Programmer's Manual"
+.TH MATHERR 3 2014-06-13 "Linux" "Linux Programmer's Manual"
 .SH NAME
 matherr \- SVID math library exception handling
 .SH SYNOPSIS
@@ -272,6 +272,11 @@ scalb() u/f	UNDERFLOW	copysign(	n	ERANGE
 fmod(x,0)	DOMAIN	x	y	EDOM
 remainder(x,0)	DOMAIN	NAN	y	EDOM	\" retval is 0.0/0.0
 .TE
+.SH ATTRIBUTES
+.SS Multithreading (see pthreads(7))
+The
+.BR matherr ()
+function is thread-safe.
 .SH EXAMPLE
 The example program demonstrates the use of
 .BR matherr ()

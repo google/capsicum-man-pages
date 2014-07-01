@@ -31,7 +31,7 @@
 .\" Modified Wed Jan 24 06:37:24 2001 by Eric S. Raymond (esr@thyrsus.com)
 .\" Modified Thu Dec 13 23:53:27 2001 by Martin Schulze <joey@infodrom.org>
 .\"
-.TH ENVIRON 7 2014-01-18 "Linux" "Linux Programmer's Manual"
+.TH ENVIRON 7 2014-06-13 "Linux" "Linux Programmer's Manual"
 .SH NAME
 environ \- user environment
 .SH SYNOPSIS
@@ -246,9 +246,11 @@ The authors of
 should consider renaming their option to
 .BR GZIP_OPT .
 .SH SEE ALSO
+.BR env (1),
 .BR bash (1),
 .BR csh (1),
 .BR login (1),
+.BR printenv (1),
 .BR sh (1),
 .BR tcsh (1),
 .BR execve (2),
@@ -258,4 +260,5 @@ should consider renaming their option to
 .BR putenv (3),
 .BR setenv (3),
 .BR unsetenv (3),
-.BR locale (7)
+.BR locale (7),
+.BR ld.so (8)

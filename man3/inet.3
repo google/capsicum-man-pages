@@ -39,7 +39,7 @@
 .\"     Add discussion of Classful Addressing, noting that it is obsolete.
 .\"     Added an EXAMPLE program.
 .\"
-.TH INET 3  2014-04-19 "GNU" "Linux Programmer's Manual"
+.TH INET 3  2014-05-28 "GNU" "Linux Programmer's Manual"
 .SH NAME
 inet_aton, inet_addr, inet_network, inet_ntoa, inet_makeaddr, inet_lnaof,
 inet_netof \- Internet address manipulation routines
@@ -57,7 +57,7 @@ inet_netof \- Internet address manipulation routines
 .sp
 .BI "char *inet_ntoa(struct in_addr " in );
 .sp
-.BI "struct in_addr inet_makeaddr(int " net ", int " host );
+.BI "struct in_addr inet_makeaddr(in_addr_t " net ", in_addr_t " host );
 .sp
 .BI "in_addr_t inet_lnaof(struct in_addr " in );
 .sp
@@ -152,7 +152,7 @@ Avoid its use in favor of
 .BR inet_aton (),
 .BR inet_pton (3),
 or
-.BR getaddrinfo (3)
+.BR getaddrinfo (3),
 which provide a cleaner way to indicate error return.
 .PP
 The

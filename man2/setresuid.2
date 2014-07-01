@@ -23,7 +23,7 @@
 .\" %%%LICENSE_END
 .\"
 .\" Modified, 2003-05-26, Michael Kerrisk, <mtk.manpages@gmail.com>
-.TH SETRESUID 2 2010-11-22 "Linux" "Linux Programmer's Manual"
+.TH SETRESUID 2 2014-06-13 "Linux" "Linux Programmer's Manual"
 .SH NAME
 setresuid, setresgid \- set real, effective and saved user or group ID
 .SH SYNOPSIS
@@ -66,14 +66,36 @@ On success, zero is returned.
 On error, \-1 is returned, and
 .I errno
 is set appropriately.
+
+.IR Note :
+there are cases where
+.BR setresuid ()
+can fail even when the caller is UID 0;
+it is a grave security error to omit checking for a failure return from
+.BR setresuid ().
 .SH ERRORS
 .TP
 .B EAGAIN
-.I uid
-does not match the current UID and this call would
-bring that user ID over its
+The call would change the caller's real UID (i.e.,
+.I ruid
+does not match the caller's real UID),
+but there was a temporary failure allocating the
+necessary kernel data structures.
+.TP
+.B EAGAIN
+.I ruid
+does not match the caller's real UID and this call would
+bring the number of processes belonging to the real user ID
+.I ruid
+over the caller's
 .B RLIMIT_NPROC
 resource limit.
+Since Linux 3.1, this error case no longer occurs
+(but robust applications should check for this error);
+see the description of
+.B EAGAIN
+in
+.BR execve (2).
 .TP
 .B EPERM
 The calling process is not privileged (did not have the \fBCAP_SETUID\fP

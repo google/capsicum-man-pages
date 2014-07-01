@@ -59,7 +59,7 @@
 .\" to see what information could be imported from that file
 .\" into this file.
 .\"
-.TH PROC 5 2014-05-10 "Linux" "Linux Programmer's Manual"
+.TH PROC 5 2014-05-28 "Linux" "Linux Programmer's Manual"
 .SH NAME
 proc \- process information pseudo-filesystem
 .SH DESCRIPTION
@@ -1094,7 +1094,7 @@ The codes are the following:
     mw  - may write
     me  - may execute
     ms  - may share
-    gd  - stack segment growns down
+    gd  - stack segment grows down
     pf  - pure PFN range
     dw  - disabled write to the mapped file
     lo  - pages are locked in memory
@@ -1113,7 +1113,7 @@ The codes are the following:
     mm  - mixed map area
     hg  - huge page advise flag
     nh  - no-huge page advise flag
-    mg  - mergable advise flag
+    mg  - mergeable advise flag
 
 The
 .IR /proc/[pid]/smaps
@@ -1805,7 +1805,10 @@ Then filesystems contained in this file are tried
 (excepted those that are marked with "nodev").
 .TP
 .I /proc/fs
-Empty subdirectory.
+.\" FIXME Much more needs to be said about /proc/fs
+.\"
+Contains subdirectories that in turn contain files
+with information about (certain) mounted filesystems.
 .TP
 .I /proc/ide
 This directory
@@ -2038,7 +2041,9 @@ Memory which is actively being written back to the disk.
 Non-file backed pages mapped into user-space page tables.
 .TP
 .IR Mapped " %lu"
-Files which have been mmaped, such as libraries.
+Files which have been mapped into memory (with
+.BR mmap (2)),
+such as libraries.
 .TP
 .IR Shmem " %lu (since Linux 2.6.32)"
 [To be documented.]
@@ -3217,6 +3222,9 @@ file is also nonzero, then the machine will be rebooted.
 .IR /proc/sys/kernel/pid_max " (since Linux 2.5.34)"
 This file specifies the value at which PIDs wrap around
 (i.e., the value in this file is one greater than the maximum PID).
+PIDs greater than this value not allocated;
+thus, the value in this file also acts as a system-wide limit
+on the total number of processes and threads.
 The default value for this file, 32768,
 results in the same range of PIDs as on earlier kernels.
 On 32-bit platforms, 32768 is the maximum value for
@@ -3311,6 +3319,14 @@ This file shows the number POSIX real-time signals currently queued.
 .IR /proc/sys/kernel/sched_rr_timeslice_ms " (since Linux 3.9)"
 See
 .BR sched_rr_get_interval (2).
+.TP
+.IR /proc/sys/kernel/sched_rt_period_us " (Since Linux 2.6.25)"
+See
+.BR sched (7).
+.TP
+.IR /proc/sys/kernel/sched_rt_runtime_us " (Since Linux 2.6.25)"
+See
+.BR sched (7).
 .TP
 .IR /proc/sys/kernel/sem " (since Linux 2.4)"
 This file contains 4 numbers defining limits for System V IPC semaphores.
@@ -3819,14 +3835,6 @@ Linux version 1.0.9 (quinlan@phaze) #1 Sat May 14 01:51:54 EDT 1994
 .ft
 .in +2
 .fi
-.\" FIXME Document /proc/timer_list
-.\" .TP
-.\" .IR /proc/timer_list " (since Linux 2.6.21)"
-.\" See the 2.6.21 Change log
-.\" FIXME Document /proc/timer_stats
-.\" .TP
-.\" .IR /proc/timer_stats " (since Linux 2.6.21)"
-.\" See the 2.6.21 Change log
 .TP
 .IR /proc/vmstat " (since Linux 2.6)"
 This file displays various virtual memory statistics.

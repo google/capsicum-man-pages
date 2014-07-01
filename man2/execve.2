@@ -34,7 +34,7 @@
 .\" 2007-09-14 Ollie Wild <aaw@google.com>, mtk
 .\"     Add text describing limits on command-line arguments + environment
 .\"
-.TH EXECVE 2 2014-05-10 "Linux" "Linux Programmer's Manual"
+.TH EXECVE 2 2014-06-13 "Linux" "Linux Programmer's Manual"
 .SH NAME
 execve \- execute program
 .SH SYNOPSIS
@@ -386,6 +386,16 @@ Execute permission is denied for the file or a script or ELF interpreter.
 The filesystem is mounted
 .IR noexec .
 .TP
+.BR EAGAIN " (since Linux 3.1)"
+.\" commit 72fa59970f8698023045ab0713d66f3f4f96945c
+Having changed its real UID using one of the
+.BR set*uid ()
+calls, the caller was\(emand is now still\(emabove its
+.BR RLIMIT_NPROC
+resource limit (see
+.BR setrlimit (2)).
+For a more detailed explanation of this error, see NOTES.
+.TP
 .B EFAULT
 .I filename
 or one of the pointers in the vectors
@@ -465,8 +475,6 @@ but is otherwise compatible.
 Set-user-ID and set-group-ID processes can not be
 .BR ptrace (2)d.
 
-Linux ignores the set-user-ID and set-group-ID bits on scripts.
-
 The result of mounting a filesystem
 .I nosuid
 varies across Linux kernel versions:
@@ -477,29 +485,6 @@ give the user powers she did not have already (and return
 some will just ignore the set-user-ID and set-group-ID bits and
 .BR exec ()
 successfully.
-
-A maximum line length of 127 characters is allowed for the first line in
-a #! executable shell script.
-
-The semantics of the
-.I optional-arg
-argument of an interpreter script vary across implementations.
-On Linux, the entire string following the
-.I interpreter
-name is passed as a single argument to the interpreter,
-and this string can include white space.
-However, behavior differs on some other systems.
-Some systems
-.\" e.g., Solaris 8
-use the first white space to terminate
-.IR optional-arg .
-On some systems,
-.\" e.g., FreeBSD before 6.0, but not FreeBSD 6.0 onward
-an interpreter script can have multiple arguments,
-and white spaces in
-.I optional-arg
-are used to delimit the arguments.
-
 On Linux,
 .I argv
 and
@@ -542,6 +527,31 @@ In such cases, the kernel kills the process with a
 .BR SIGKILL
 signal.
 .\"
+.SS Interpreter scripts
+A maximum line length of 127 characters is allowed for the first line in
+an interpreter scripts.
+
+The semantics of the
+.I optional-arg
+argument of an interpreter script vary across implementations.
+On Linux, the entire string following the
+.I interpreter
+name is passed as a single argument to the interpreter,
+and this string can include white space.
+However, behavior differs on some other systems.
+Some systems
+.\" e.g., Solaris 8
+use the first white space to terminate
+.IR optional-arg .
+On some systems,
+.\" e.g., FreeBSD before 6.0, but not FreeBSD 6.0 onward
+an interpreter script can have multiple arguments,
+and white spaces in
+.I optional-arg
+are used to delimit the arguments.
+
+Linux ignores the set-user-ID and set-group-ID bits on scripts.
+.\"
 .\" .SH BUGS
 .\" Some Linux versions have failed to check permissions on ELF
 .\" interpreters.  This is a security hole, because it allows users to
@@ -550,6 +560,81 @@ signal.
 .\" .BR execve ()
 .\" that could be exploited for denial of service by a suitably crafted
 .\" ELF binary. There are no known problems with 2.0.34 or 2.2.15.
+.SS execve() and EAGAIN
+A more detailed explanation of the
+.BR EAGAIN
+error that can occur (since Linux 3.1) when calling
+.BR execve ()
+is as follows.
+
+The
+.BR EAGAIN
+error can occur when a
+.I preceding
+call to
+.BR setuid (2),
+.BR setreuid (2),
+or
+.BR setresuid (2)
+caused the real user ID of the process to change,
+and that change caused the process to exceed its
+.BR RLIMIT_NPROC
+resource limit (i.e., the number of processes belonging
+to the new real UID exceeds the resource limit).
+From Linux 2.6.0 to 3.0, this caused the
+.BR set*uid ()
+call to fail.
+(Prior to 2.6,
+.\" commit 909cc4ae86f3380152a18e2a3c44523893ee11c4
+the resource limit was not imposed on processes that
+changed their user IDs.)
+
+Since Linux 3.1, the scenario just described no longer causes the
+.BR set*uid ()
+call to fail,
+because it too often led to security holes where buggy applications
+didn't check the return status and assumed
+that\(emif the caller had root privileges\(emthe call would always succeed.
+Instead, the
+.BR set*uid ()
+calls now successfully change the real UID,
+but the kernel sets an internal flag, named
+.BR PF_NPROC_EXCEEDED ,
+to note that the
+.BR RLIMIT_NPROC
+resource limit has been exceeded.
+If the
+.BR PF_NPROC_EXCEEDED
+flag is set and the resource limit is still
+exceeded at the time of a subsequent
+.BR execve ()
+call, that call fails with the error
+.BR EAGAIN .
+This kernel logic ensures that the
+.BR RLIMIT_NPROC
+resource limit is still enforced for the
+common privileged daemon workflow\(emnamely,
+.BR fork (2)
++
+.BR set*uid ()
++
+.BR execve ().
+
+If the resource limit was not still exceeded at the time of the
+.BR execve ()
+call
+(because other processes belonging to this real UID terminated between the
+.BR set*uid()
+call and the
+.BR execve ()
+call), then the
+.BR execve ()
+call succeeds and the kernel clears the
+.BR PF_NPROC_EXCEEDED
+process flag.
+The flag is also cleared if a subsequent call to
+.BR fork (2)
+by this process succeeds.
 .SS Historical
 With UNIX\ V6, the argument list of an
 .BR exec ()
@@ -561,6 +646,15 @@ Thus, this argument list was not directly usable in a further
 .BR exec ()
 call.
 Since UNIX\ V7, both are NULL.
+.\"
+.\" .SH BUGS
+.\" Some Linux versions have failed to check permissions on ELF
+.\" interpreters.  This is a security hole, because it allows users to
+.\" open any file, such as a rewinding tape device, for reading.  Some
+.\" Linux versions have also had other security holes in
+.\" .BR execve ()
+.\" that could be exploited for denial of service by a suitably crafted
+.\" ELF binary. There are no known problems with 2.0.34 or 2.2.15.
 .SH EXAMPLE
 The following program is designed to be execed by the second program below.
 It just echoes its command-line arguments, one per line.

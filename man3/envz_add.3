@@ -7,7 +7,7 @@
 .\" based on the description in glibc source and infopages
 .\"
 .\" Corrections and additions, aeb
-.TH ENVZ_ADD 3 2007-05-18 "" "Linux Programmer's Manual"
+.TH ENVZ_ADD 3 2014-05-28 "" "Linux Programmer's Manual"
 .SH NAME
 envz_add, envz_entry, envz_get, envz_merge,
 envz_remove, envz_strip \- environment string support
@@ -18,10 +18,10 @@ envz_remove, envz_strip \- environment string support
 .BI "error_t envz_add(char **" envz ", size_t *" envz_len ,
 .BI "                 const char *" name ", const char *" value );
 
-.BI "char *envz_entry(const char *" envz ", size_t *" envz_len \
+.BI "char *envz_entry(const char *" envz ", size_t " envz_len \
 ", const char *" name );
 
-.BI "char *envz_get(const char *" envz ", size_t *" envz_len \
+.BI "char *envz_get(const char *" envz ", size_t " envz_len \
 ", const char *" name );
 
 .BI "error_t envz_merge(char **" envz ", size_t *" envz_len ,

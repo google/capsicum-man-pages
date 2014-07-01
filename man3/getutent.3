@@ -28,7 +28,7 @@
 .\" Modified Thu Jul 25 14:43:46 MET DST 1996 by Michael Haardt
 .\"     <michael@cantor.informatik.rwth-aachen.de>
 .\"
-.TH GETUTENT 3 2013-04-19 "" "Linux Programmer's Manual"
+.TH GETUTENT 3 2014-05-28 "" "Linux Programmer's Manual"
 .SH NAME
 getutent, getutid, getutline, pututline, setutent, endutent,
 utmpname \- access utmp file entries
@@ -37,11 +37,11 @@ utmpname \- access utmp file entries
 .sp
 .B struct utmp *getutent(void);
 .br
-.BI "struct utmp *getutid(struct utmp *" ut );
+.BI "struct utmp *getutid(const struct utmp *" ut );
 .br
-.BI "struct utmp *getutline(struct utmp *" ut );
+.BI "struct utmp *getutline(const struct utmp *" ut );
 .sp
-.BI "struct utmp *pututline(struct utmp *" ut );
+.BI "struct utmp *pututline(const struct utmp *" ut );
 .sp
 .B void setutent(void);
 .br

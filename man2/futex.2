@@ -30,7 +30,7 @@
 .\"	Author: Ingo Molnar <mingo@elte.hu>
 .\"	Date:   Tue Jun 27 02:54:47 2006 -0700
 .\"
-.\"	See Documentation/futex-requeue-pi.txt
+.\"	See Documentation/pi-futex.txt
 .\"
 .\" FIXME
 .\" 2.6.25 adds FUTEX_WAKE_BITSET, FUTEX_WAIT_BITSET
@@ -50,7 +50,7 @@
 .\"
 .\"	See Documentation/futex-requeue-pi.txt
 .\"
-.TH FUTEX 2 2013-12-12 "Linux" "Linux Programmer's Manual"
+.TH FUTEX 2 2014-05-21 "Linux" "Linux Programmer's Manual"
 .SH NAME
 futex \- fast user-space locking
 .SH SYNOPSIS
@@ -65,6 +65,8 @@ futex \- fast user-space locking
 .BI "          int *" uaddr2 ", int " val3 );
 .\" int *? void *? u32 *?
 .fi
+.IR Note :
+There is no glibc wrapper for this system call; see NOTES.
 .SH DESCRIPTION
 .PP
 The

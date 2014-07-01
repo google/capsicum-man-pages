@@ -23,13 +23,13 @@
 .\" the source, must acknowledge the copyright and authors of this work.
 .\" %%%LICENSE_END
 .\"
-.TH MALLOC_TRIM 3  2012-03-29 "Linux" "Linux Programmer's Manual"
+.TH MALLOC_TRIM 3  2014-05-28 "Linux" "Linux Programmer's Manual"
 .SH NAME
 malloc_trim \- release free memory from the top of the heap
 .SH SYNOPSIS
 .B #include <malloc.h>
 
-.BI "void malloc_trim(size_t "  pad );
+.BI "int malloc_trim(size_t "  pad );
 .SH DESCRIPTION
 The
 .BR malloc_trim ()

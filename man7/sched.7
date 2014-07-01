@@ -1,4 +1,6 @@
 .\" Copyright (C) 2014 Michael Kerrisk <mtk.manpages@gmail.com>
+.\" and Copyright (C) 2014 Peter Zijlstra <peterz@infradead.org>
+.\" and Copyright (C) 2014 Juri Lelli <juri.lelli@gmail.com>
 .\" Various pieces from the old sched_setscheduler(2) page
 .\" 	Copyright (C) Tom Bjorkholm, Markus Kuhn & David A. Wheeler 1996-1999
 .\" 	and Copyright (C) 2007 Carsten Emde <Carsten.Emde@osadl.org>
@@ -27,7 +29,7 @@
 .\"
 .\" Worth looking at: http://rt.wiki.kernel.org/index.php
 .\"
-.TH SCHED 7 2014-04-28 "Linux" "Linux Programmer's Manual"
+.TH SCHED 7 2014-05-13 "Linux" "Linux Programmer's Manual"
 .SH NAME
 sched \- overview of scheduling APIs
 .SH DESCRIPTION
@@ -69,23 +71,26 @@ Set the CPU affinity of a specified thread.
 Get the CPU affinity of a specified thread.
 .TP
 .BR sched_setattr (2)
-(Linux-specific)
-A generalized API for setting the scheduling policy and parameters
-of a specified thread.
+Set the scheduling policy and parameters of a specified thread.
+This (Linux-specific) system call provides a superset of the functionality of
+.BR sched_setscheduler (2)
+and
+.BR sched_setparam (2).
 .TP
 .BR sched_getattr (2)
-(Linux-specific)
-A generalized API for fetching the scheduling policy and parameters
-of a specified thread.
+Fetch the scheduling policy and parameters of a specified thread.
+This (Linux-specific) system call provides a superset of the functionality of
+.BR sched_getscheduler (2)
+and
+.BR sched_getparam (2).
 .\"
 .SS Scheduling policies
 The scheduler is the kernel component that decides which runnable thread
 will be executed by the CPU next.
 Each thread has an associated scheduling policy and a \fIstatic\fP
-scheduling priority, \fIsched_priority\fP; these are the settings
-that are modified by
-.BR sched_setscheduler ().
-The scheduler makes it decisions based on knowledge of the scheduling
+scheduling priority,
+.IR sched_priority .
+The scheduler makes its decisions based on knowledge of the scheduling
 policy and static priority of all threads on the system.
 
 For threads scheduled under one of the normal scheduling policies
@@ -143,9 +148,10 @@ When a \fBSCHED_FIFO\fP thread becomes runnable, it
 will be inserted at the end of the list for its priority.
 .IP *
 A call to
-.BR sched_setscheduler ()
+.BR sched_setscheduler (2),
+.BR sched_setparam (2),
 or
-.BR sched_setparam (2)
+.BR sched_setattr (2)
 will put the
 \fBSCHED_FIFO\fP (or \fBSCHED_RR\fP) thread identified by
 \fIpid\fP at the start of the list if it was runnable.
@@ -187,6 +193,166 @@ retrieved using
 .\" On Linux 2.4, the length of the RR interval is influenced
 .\" by the process nice value -- MTK
 .\"
+.SS SCHED_DEADLINE: Sporadic task model deadline scheduling
+Since version 3.14, Linux provides a deadline scheduling policy
+.RB ( SCHED_DEADLINE ).
+This policy is currently implemented using
+GEDF (Global Earliest Deadline First)
+in conjunction with CBS (Constant Bandwidth Server).
+To set and fetch this policy and associated attributes,
+one must use the Linux-specific
+.BR sched_setattr (2)
+and
+.BR sched_getattr (2)
+system calls.
+
+A sporadic task is one that has a sequence of jobs, where each
+job is activated at most once per period.
+Each job also has a
+.IR "relative deadline" ,
+before which it should finish execution, and a
+.IR "computation time" ,
+which is the CPU time necessary for executing the job.
+The moment when a task wakes up
+because a new job has to be executed is called the
+.IR "arrival time"
+(also referred to as the request time or release time).
+The
+.IR "start time"
+is the time at which a task starts its execution.
+The
+.I "absolute deadline"
+is thus obtained by adding the relative deadline to the arrival time.
+
+The following diagram clarifies these terms:
+
+.in +4n
+.nf
+arrival/wakeup                    absolute deadline
+     |    start time                    |
+     |        |                         |
+     v        v                         v
+-----x--------xooooooooooooooooo--------x--------x---
+              |<- comp. time ->|
+     |<------- relative deadline ------>|
+     |<-------------- period ------------------->|
+.fi
+.in
+
+When setting a
+.B SCHED_DEADLINE
+policy for a thread using
+.BR sched_setattr (2),
+one can specify three parameters:
+.IR Runtime ,
+.IR Deadline ,
+and
+.IR Period .
+These parameters do not necessarily correspond to the aforementioned terms:
+usual practice is to set Runtime to something bigger than the average
+computation time (or worst-case execution time for hard real-time tasks),
+Deadline to the relative deadline, and Period to the period of the task.
+Thus, for
+.BR SCHED_DEADLINE
+scheduling, we have:
+
+.in +4n
+.nf
+arrival/wakeup                    absolute deadline
+     |    start time                    |
+     |        |                         |
+     v        v                         v
+-----x--------xooooooooooooooooo--------x--------x---
+              |<-- Runtime ------->|
+     |<----------- Deadline ----------->|
+     |<-------------- Period ------------------->|
+.fi
+.in
+
+The three deadline-scheduling parameters correspond to the
+.IR sched_runtime ,
+.IR sched_deadline ,
+and
+.IR sched_period
+fields of the
+.I sched_attr
+structure; see
+.BR sched_setattr (2).
+These fields express value in nanoseconds.
+.\" FIXME It looks as though specifying sched_period as 0 means
+.\"       "make sched_period the same as sched_deadline", right?
+.\"       This needs to be documented.
+If
+.IR sched_period
+is specified as 0, then it is made the same as
+.IR sched_deadline .
+
+The kernel requires that:
+
+    sched_runtime <= sched_deadline <= sched_period
+
+.\" See __checkparam_dl in kernel/sched/core.c
+In addition, under the current implementation,
+all of the parameter values must be at least 1024
+(i.e., just over one microsecond,
+which is the resolution of the implementation), and less than 2^63.
+If any of these checks fails,
+.BR sched_setattr (2)
+fails with the error
+.BR EINVAL .
+
+The CBS guarantees non-interference between tasks, by throttling
+threads that attempt to over-run their specified Runtime.
+
+To ensure deadline scheduling guarantees,
+the kernel must prevent situations where the set of
+.B SCHED_DEADLINE
+threads is not feasible (schedulable) within the given constraints.
+The kernel thus performs an admittance test when setting or changing
+.B SCHED_DEADLINE
+policy and attributes.
+This admission test calculates whether the change is feasible;
+if it is not
+.BR sched_setattr (2)
+fails with the error
+.BR EBUSY .
+
+For example, it is required (but not necessarily sufficient) for
+the total utilization to be less than or equal to the total number of
+CPUs available, where, since each thread can maximally run for
+Runtime per Period, that thread's utilization is its
+Runtime divided by its Period.
+
+In order to fulfil the guarantees that are made when
+a thread is admitted to the
+.BR SCHED_DEADLINE
+policy,
+.BR SCHED_DEADLINE
+threads are the highest priority (user controllable) threads in the
+system; if any
+.BR SCHED_DEADLINE
+thread is runnable,
+it will preempt any thread scheduled under one of the other policies.
+
+A call to
+.BR fork (2)
+by a thread scheduled under the
+.B SCHED_DEADLINE
+policy will fail with the error
+.BR EAGAIN ,
+unless the thread has its reset-on-fork flag set (see below).
+
+A
+.B SCHED_DEADLINE
+thread that calls
+.BR sched_yield (2)
+will yield the current job and wait for a new period to begin.
+.\"
+.\" FIXME Calling sched_getparam() on a SCHED_DEADLINE thread
+.\"       fails with EINVAL, but sched_getscheduler() succeeds.
+.\"       Is that intended? (Why?)
+.\"
+.\"
 .SS SCHED_OTHER: Default Linux time-sharing scheduling
 \fBSCHED_OTHER\fP can be used at only static priority 0.
 \fBSCHED_OTHER\fP is the standard Linux time-sharing scheduler that is
@@ -196,9 +362,10 @@ The thread to run is chosen from the static
 priority 0 list based on a \fIdynamic\fP priority that is determined only
 inside this list.
 The dynamic priority is based on the nice value (set by
-.BR nice (2)
+.BR nice (2),
+.BR setpriority (2),
 or
-.BR setpriority (2))
+.BR sched_setattr (2))
 and increased for each time quantum the thread is ready to run,
 but denied to run by the scheduler.
 This ensures fair progress among all \fBSCHED_OTHER\fP threads.
@@ -301,12 +468,17 @@ threads can set a nonzero static priority (i.e., set a real-time
 scheduling policy).
 The only change that an unprivileged thread can make is to set the
 .B SCHED_OTHER
-policy, and this can be done only if the effective user ID of the caller of
-.BR sched_setscheduler ()
+policy, and this can be done only if the effective user ID of the caller
 matches the real or effective user ID of the target thread
 (i.e., the thread specified by
 .IR pid )
 whose policy is being changed.
+
+A thread must be privileged
+.RB ( CAP_SYS_NICE )
+in order to set or modify a
+.BR SCHED_DEADLINE
+policy.
 
 Since Linux 2.6.12, the
 .B RLIMIT_RTPRIO
@@ -337,7 +509,8 @@ as long as the effective user ID of the thread making the change
 matches the real or effective user ID of the target thread.
 .IP *
 Special rules apply for the
-.BR SCHED_IDLE .
+.BR SCHED_IDLE
+policy.
 In Linux kernels before 2.6.39,
 an unprivileged thread operating under this policy cannot
 change its policy, regardless of the value of its
@@ -364,8 +537,61 @@ See
 .BR getrlimit (2)
 for further information on
 .BR RLIMIT_RTPRIO .
+.SS Limiting the CPU usage of real-time and deadline processes
+A nonblocking infinite loop in a thread scheduled under the
+.BR SCHED_FIFO ,
+.BR SCHED_RR ,
+or
+.BR SCHED_DEADLINE
+policy will block all threads with lower
+priority forever.
+Prior to Linux 2.6.25, the only way of preventing a runaway real-time
+process from freezing the system was to run (at the console)
+a shell scheduled under a higher static priority than the tested application.
+This allows an emergency kill of tested
+real-time applications that do not block or terminate as expected.
+
+Since Linux 2.6.25, there are other techniques for dealing with runaway
+real-time and deadline processes.
+One of these is to use the
+.BR RLIMIT_RTTIME
+resource limit to set a ceiling on the CPU time that
+a real-time process may consume.
+See
+.BR getrlimit (2)
+for details.
+
+Since version 2.6.25, Linux also provides two
+.I /proc
+files that can be used to reserve a certain amount of CPU time
+to be used by non-real-time processes.
+Reserving some CPU time in this fashion allows some CPU time to be
+allocated to (say) a root shell that can be used to kill a runaway process.
+Both of these files specify time values in microseconds:
+.TP
+.IR /proc/sys/kernel/sched_rt_period_us
+This file specifies a scheduling period that is equivalent to
+100% CPU bandwidth.
+The value in this file can range from 1 to
+.BR INT_MAX ,
+giving an operating range of 1 microsecond to around 35 minutes.
+The default value in this file is 1,000,000 (1 second).
+.TP
+.IR /proc/sys/kernel/sched_rt_runtime_us
+The value in this file specifies how much of the "period" time
+can be used by all real-time and deadline scheduled processes
+on the system.
+The value in this file can range from \-1 to
+.BR INT_MAX \-1.
+Specifying \-1 makes the runtime the same as the period;
+that is, no CPU time is set aside for non-real-time processes
+(which was the Linux behavior before kernel 2.6.25).
+The default value in this file is 950,000 (0.95 seconds),
+meaning that 5% of the CPU time is reserved for processes that
+don't run under a real-time or deadline scheduling policy.
+.PP
 .SS Response time
-A blocked high priority thread waiting for the I/O has a certain
+A blocked high priority thread waiting for I/O has a certain
 response time before it is scheduled again.
 The device driver writer
 can greatly reduce this response time by using a "slow interrupt"
@@ -383,80 +609,7 @@ paging delays; this can be done with
 .BR mlock (2)
 or
 .BR mlockall (2).
-
-Since a nonblocking infinite loop in a thread scheduled under
-\fBSCHED_FIFO\fP or \fBSCHED_RR\fP will block all threads with lower
-priority forever, a software developer should always keep available on
-the console a shell scheduled under a higher static priority than the
-tested application.
-This will allow an emergency kill of tested
-real-time applications that do not block or terminate as expected.
-See also the description of the
-.BR RLIMIT_RTTIME
-resource limit in
-.BR getrlimit (2).
-
-POSIX systems on which
-.BR sched_setscheduler ()
-and
-.BR sched_getscheduler ()
-are available define
-.B _POSIX_PRIORITY_SCHEDULING
-in \fI<unistd.h>\fP.
-.SH RETURN VALUE
-On success,
-.BR sched_setscheduler ()
-returns zero.
-On success,
-.BR sched_getscheduler ()
-returns the policy for the thread (a nonnegative integer).
-On error, \-1 is returned, and
-.I errno
-is set appropriately.
-.SH ERRORS
-.TP
-.B EINVAL
-The scheduling \fIpolicy\fP is not one of the recognized policies,
-\fIparam\fP is NULL,
-or \fIparam\fP does not make sense for the \fIpolicy\fP.
-.TP
-.B EPERM
-The calling thread does not have appropriate privileges.
-.TP
-.B ESRCH
-The thread whose ID is \fIpid\fP could not be found.
-.SH CONFORMING TO
-POSIX.1-2001 (but see BUGS below).
-The \fBSCHED_BATCH\fP and \fBSCHED_IDLE\fP policies are Linux-specific.
 .SH NOTES
-POSIX.1 does not detail the permissions that an unprivileged
-thread requires in order to call
-.BR sched_setscheduler (),
-and details vary across systems.
-For example, the Solaris 7 manual page says that
-the real or effective user ID of the caller must
-match the real user ID or the save set-user-ID of the target.
-.PP
-The scheduling policy and parameters are in fact per-thread
-attributes on Linux.
-The value returned from a call to
-.BR gettid (2)
-can be passed in the argument
-.IR pid .
-Specifying
-.I pid
-as 0 will operate on the attribute for the calling thread,
-and passing the value returned from a call to
-.BR getpid (2)
-will operate on the attribute for the main thread of the thread group.
-(If you are using the POSIX threads API, then use
-.BR pthread_setschedparam (3),
-.BR pthread_getschedparam (3),
-and
-.BR pthread_setschedprio (3),
-instead of the
-.BR sched_* (2)
-system calls.)
 .PP
 Originally, Standard Linux was intended as a general-purpose operating
 system being able to handle background processes, interactive
@@ -507,9 +660,7 @@ kernel, the additional configuration item
 becomes available.
 If this is selected, Linux is transformed into a regular
 real-time operating system.
-The FIFO and RR scheduling policies that can be selected using
-.BR sched_setscheduler ()
-are then used to run a thread
+The FIFO and RR scheduling policies are then used to run a thread
 with true real-time priority and a minimum worst-case scheduling latency.
 .SH SEE ALSO
 .ad l
