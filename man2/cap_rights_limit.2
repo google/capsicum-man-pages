@@ -65,10 +65,67 @@ will be limited to those permitted by the remainder of the arguments.
 .PP
 The
 .I rights
-argument describes the primary rights for the file descriptor, and
-should be prepared using
+argument describes the primary rights for the file descriptor, as a
+.I cap_rights
+structure:
+.in +4n
+.nf
+
+#define CAP_RIGHTS_VERSION_00	0
+#define CAP_RIGHTS_VERSION_01	1
+#define CAP_RIGHTS_VERSION_02	2
+#define CAP_RIGHTS_VERSION_03	3
+#define CAP_RIGHTS_VERSION	CAP_RIGHTS_VERSION_00
+struct cap_rights {
+    __u64    cr_rights[CAP_RIGHTS_VERSION + 2];
+};
+.fi
+.in
+.PP
+The contents of the
+.I cr_rights
+array are encoded as follows.
+.IP \(bu
+The top 2 bits of
+.I cr_rights[0]
+hold the array size minus 2, allowing for an array size between 2 and 5 inclusive.
+.IP \(bu
+The top 2 bits of the other
+.I cr_rights
+entries are zero.
+.IP \(bu
+The following 5 bits of each array entry indicate its position in the array,
+from 0b00001 for entry [0], 0b00010 for entry [1], up to 0b10000 for entry [4].
+.IP \(bu
+The remaining 57 bits of each array entry identify a particular primary
+right.
+.PP
+This encoding allows for future expansion in the number of distinct rights;
+for example, a
+.I cap_rights
+structure holding the
+.B CAP_READ
+and
+.B CAP_BINDAT
+rights would have contents of
+.in +4n
+.nf
+0x0200000000000001 0x0400000000001000
+.fi
+.in
+as a version 0 array, but would be encoded in a larger version 1 array as
+.in +4n
+.nf
+0x4200000000000001 0x0400000000001000 0x0800000000000000.
+.fi
+.in
+.PP
+User programs should prepare the contents of the
+.I cap_rights
+structure with the
 .BR cap_rights_init (3)
-family of functions.  The complete list of primary rights can be found in the
+family of functions.
+The complete list of primary rights can be found in the
 .BR rights (7)
 manual page.
 .PP
