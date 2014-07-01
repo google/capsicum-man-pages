@@ -74,13 +74,13 @@ manual page.
 .PP
 If a file descriptor is granted the
 .B CAP_FCNTL
-primary capability right, the list of allowed
+primary capability right, some specific
 .BR fcntl (2)
-commands can be selectively reduced (but never expanded) with the
+commands can be selectively disallowed with the
 .I fcntls
 argument.  The following flags may be specified in the
 .I fcntls
-argument:
+argument for this:
 .TP
 .B CAP_FCNTL_GETFL
 Permit
@@ -109,6 +109,19 @@ for the
 argument leaves the set of allowed
 .BR fcntl (2)
 commands unchanged.
+.PP
+However, note that
+.BR fcntl (2)
+commands that are analogous to other system calls
+(such as
+.B F_DUPFD
+or
+.BR F_GETPIPE_SZ )
+are not controlled by the
+.B CAP_FCNTL
+right and so do not have corresponding values in the
+.I fcntls
+argument.
 .PP
 If a file descriptor is granted the
 .B CAP_IOCTL
