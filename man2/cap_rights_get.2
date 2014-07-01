@@ -44,7 +44,13 @@ The function will fill the
 .I rights
 argument (if non-NULL) with the primary capability rights of the
 .I fd
-descriptor.  The result can be examined with the
+descriptor. The
+.I rights
+field is a
+.I cap_rights
+structure, as described in
+.BR cap_rights_limit (2),
+and can be examined with the
 .BR cap_rights_is_set (3)
 family of functions.  The complete list of primary rights can be found in the
 .BR rights (7)
