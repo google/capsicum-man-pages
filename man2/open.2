@@ -715,7 +715,7 @@ XFS support was added
 .\" commit ab29743117f9f4c22ac44c13c1647fb24fb2bafe
 in Linux 3.15.
 .TP
-.B O_BENEATH_ONLY
+.B O_BENEATH
 Ensure that the
 .I pathname
 is beneath the current working directory (for
@@ -817,7 +817,7 @@ is denied for one of the directories in the path prefix of
 .IR pathname ,
 or the file did not exist yet and write access to the parent directory
 is not allowed, or the
-.B O_BENEATH_ONLY
+.B O_BENEATH
 flag was specified and the
 .I pathname
 was not beneath the relevant directory.
