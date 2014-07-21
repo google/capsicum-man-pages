@@ -295,6 +295,41 @@ A value of 1 indicates
 .BR execve (2)
 will operate in the privilege-restricting mode described above.
 .TP
+.BR PR_SET_OPENAT_BENEATH " (since Linux 3.??)"
+Set the calling process's
+.I openat_beneath
+bit to the value in
+.IR arg2 .
+With
+.I openat_beneath
+set to 1, all
+.BR openat (2)
+and
+.BR open (2)
+operations act as though the
+.B O_BENEATH
+flag is set.
+Once set, this bit cannot be unset.
+The setting of this bit is inherited by children created by
+.BR fork (2)
+and
+.BR clone (2),
+and preserved across
+.BR execve (2).
+.TP
+.BR PR_GET_OPENAT_BENEATH " (since Linux 3.??)"
+Return (as the function result) the value of the
+.I openat_beneath
+bit for the current process.
+A value of 0 indicates the regular behavior.
+A value of 1 indicates that
+.BR openat (2)
+and
+.BR open (2)
+will operate in the implicit
+.B O_BENEATH
+mode described above.
+.TP
 .BR PR_SET_PDEATHSIG " (since Linux 2.1.57)"
 Set the parent process death signal
 of the calling process to \fIarg2\fP (either a signal value
