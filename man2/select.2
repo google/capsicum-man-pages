@@ -35,7 +35,7 @@
 .\" 2005-03-11, mtk, modified pselect() text (it is now a system
 .\"     call in 2.6.16.
 .\"
-.TH SELECT 2 2014-01-31 "Linux" "Linux Programmer's Manual"
+.TH SELECT 2 2014-08-19 "Linux" "Linux Programmer's Manual"
 .SH NAME
 select, pselect, FD_CLR, FD_ISSET, FD_SET, FD_ZERO \-
 synchronous I/O multiplexing
@@ -86,9 +86,10 @@ allow a program to monitor multiple file descriptors,
 waiting until one or more of the file descriptors become "ready"
 for some class of I/O operation (e.g., input possible).
 A file descriptor is considered ready if it is possible to
-perform the corresponding I/O operation (e.g.,
-.BR read (2))
-without blocking.
+perform a corresponding I/O operation (e.g.,
+.BR read (2)
+without blocking, or a sufficiently small
+.BR write (2)).
 .PP
 The operation of
 .BR select ()
@@ -131,8 +132,8 @@ available for reading (more precisely, to see if a read will not
 block; in particular, a file descriptor is also ready on end-of-file),
 those in
 .I writefds
-will be watched to see if a write will not block, and
-those in
+will be watched to see if space is available for write (though a large
+write may still block), and those in
 .I exceptfds
 will be watched for exceptions.
 On exit, the sets are modified in place
@@ -411,17 +412,16 @@ for
 and
 .BR pselect ().
 
-Libc4 and libc5 do not have a
+Under glibc 2.0,
 .I <sys/select.h>
-header; under glibc 2.0 and later this header exists.
-Under glibc 2.0 it unconditionally gives the wrong prototype for
+gives the wrong prototype for
 .BR pselect ().
-Under glibc 2.1 to 2.2.1 it gives
+Under glibc 2.1 to 2.2.1, it gives
 .BR pselect ()
 when
 .B _GNU_SOURCE
 is defined.
-Since glibc 2.2.2 the requirements are as shown in the SYNOPSIS.
+Since glibc 2.2.2, the requirements are as shown in the SYNOPSIS.
 .SS Multithreaded applications
 If a file descriptor being monitored by
 .BR select ()
@@ -438,7 +438,8 @@ closing the file descriptor in another thread has no effect on
 .BR select ().
 In summary, any application that relies on a particular behavior
 in this scenario must be considered buggy.
-.SS Linux notes
+.\"
+.SS C library/kernel ABI differences
 The
 .BR pselect ()
 interface described in this page is implemented by glibc.

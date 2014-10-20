@@ -32385,3 +32385,1786 @@ locale.7
     Michael Kerrisk
         Add further details on various categories
 
+
+
+==================== Changes in man-pages-3.69 ====================
+
+Released: 2014-06-14, Munich
+
+
+Contributors
+------------
+
+The following people contributed patches/fixes or (noted in brackets
+in the changelog below) reports, notes, and ideas that have been
+incorporated in changes in this release:
+
+Cyril Hrubis <chrubis@suse.cz>
+Jan Chaloupka <jchaloup@redhat.com>
+Jeff Layton <jlayton@poochiereds.net>
+Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
+KOSAKI Motohiro <kosaki.motohiro@jp.fujitsu.com>
+Marko Myllynen <myllynen@redhat.com>
+Michael Kerrisk <mtk.manpages@gmail.com>
+NeilBrown <neilb@suse.de>
+Peng Haitao <penght@cn.fujitsu.com>
+Petr Gajdos <pgajdos@suse.cz>
+Qian Lei <qianl.fnst@cn.fujitsu.com>
+Rasmus Villemoes <rv@rasmusvillemoes.dk>
+Vasiliy Kulikov <segoon@openwall.com>
+Walter Harms <wharms@bfs.de>
+Yuri Kozlov <yuray@komyakino.ru>
+
+Apologies if I missed anyone!
+
+
+New and rewritten pages
+-----------------------
+
+iconv.1
+    Marko Myllynen  [Michael Kerrisk]
+        New page for the iconv(1) command
+
+iconvconfig.8
+    Marko Myllynen
+        New page for iconvconfig(8)
+
+
+Newly documented interfaces in existing pages
+---------------------------------------------
+
+fcntl.2
+    Jeff Layton, Michael Kerrisk
+        Document open file description locks
+            As provided by the fcntl() operations F_OFD_SETLK,
+            F_OFD_SETLKW, and F_OFD_GETLK
+
+
+Changes to individual pages
+---------------------------
+
+locale.1
+    Marko Myllynen
+        Add FILES section, add charmap(5) reference
+    Marko Myllynen
+        Align with recent charmap(5) / repertoiremap(5) changes
+
+execve.2
+    Michael Kerrisk  [NeilBrown]
+        Before kernel 2.6.0, RLIMIT_NPROC had no effect for set*uid()
+    Michael Kerrisk  [Vasiliy Kulikov]
+        RLIMIT_NPROC is checked only if preceded by set*uid()
+    Michael Kerrisk  [Vasiliy Kulikov, NeilBrown, KOSAKI Motohiro]
+        Document EAGAIN error
+            See also https://bugzilla.kernel.org/show_bug.cgi?id=42704
+
+fcntl.2
+    Michael Kerrisk
+        Detail the limitations of traditional (process-associated) locks
+    Michael Kerrisk  [Jeff Layton]
+        Describe how to check whether the kernel supports a particular command
+    Michael Kerrisk
+        ERRORS: add EINVAL for invalid 'cmd'
+    Michael Kerrisk
+        Add para introducing advisory locks and noting existence of OFD locks
+    Michael Kerrisk  [Jeff Layton]
+        Add notes on F_SETLKW deadlock detection and its limitations
+    Michael Kerrisk
+        Add an explicit note that mandatory locking is not in POSIX
+    Michael Kerrisk
+        Rewrite introductory paragraphs on mandatory locking
+            Make the structure more logical, and also explicitly mention
+            OFD locks.
+    Michael Kerrisk  [Jeff Layton]
+        Reword discussion of mandatory lock bug a little
+            Jeff Layton confirmed that the bug remains even in modern kernels.
+    Michael Kerrisk
+        Explain POSIX background to EACCES/EAGAIN error for F_GETLK
+    Michael Kerrisk
+        Add NOTES subhead for record locking and NFS
+    Michael Kerrisk  [NeilBrown]
+        Note treatment of locks when an NFS client loses contact with the server
+    Michael Kerrisk  [Jeff Layton]
+        nfsv4leasetime controls the "contact lost" interval for NFSv4
+
+flock.2
+    Michael Kerrisk
+        In some modern BSDs, fcntl() and flock() locks do interact
+            So, reword and extend the discussion of this topic in NOTES.
+    Michael Kerrisk
+        Move NOTES text describing implementation of flock()
+    Michael Kerrisk  [NeilBrown]
+        Add more details on NFS, including Linux 2.6.37 changes
+            Also: move NOTES text describing interaction of fcntl()
+            and flock() locks.
+
+fork.2
+    Michael Kerrisk
+        Add notes on inheritance of flock() and OFD locks across fork()
+
+lseek.2
+    Michael Kerrisk
+        Add reference to open(2) for discussion of file descriptors and OFDs
+
+open.2
+    Michael Kerrisk
+        Rework and extend the discussion of open file descriptions
+
+open_by_handle_at.2
+    Rasmus Villemoes
+        Add reference to feature_test_macros(7)
+
+recvmmsg.2
+    Rasmus Villemoes
+        Add reference to feature_test_macros(7)
+
+remap_file_pages.2
+    Michael Kerrisk  [Kirill A. Shutemov]
+        Note that remap_file_pages() is deprecated
+
+sendmmsg.2
+    Rasmus Villemoes
+        Add reference to feature_test_macros(7)
+
+seteuid.2
+    Michael Kerrisk
+        seteuid() and setegid() are implemented as library functions
+    Michael Kerrisk
+        Error checking should always be performed, even when caller is UID 0
+
+setresuid.2
+    Michael Kerrisk
+        Document EAGAIN error that can occur after kernel alloc_uid() failure
+    Michael Kerrisk
+        Since Linux 3.1, the EAGAIN case for RLIMIT_NPROC no longer occurs
+    Michael Kerrisk
+        Correct the description of the EAGAIN error
+    Michael Kerrisk
+        Error checking should always be performed, even when caller is UID 0
+
+setreuid.2
+    Michael Kerrisk
+        Document EAGAIN error that can occur after kernel alloc_uid() failure
+    Michael Kerrisk
+        Error checking should always be performed, even when caller is UID 0
+    Michael Kerrisk
+        Add EAGAIN error for hitting RLIMIT_NPROC limit
+    Michael Kerrisk
+        Since Linux 3.1, the EAGAIN case for RLIMIT_NPROC no longer occurs
+
+setuid.2
+    Michael Kerrisk
+        Document EAGAIN error that can occur after kernel alloc_uid() failure
+    Michael Kerrisk
+        Correct the description of the EAGAIN error
+    Michael Kerrisk
+        Error checking should always be performed, even when caller is UID 0
+    Michael Kerrisk
+        Since Linux 3.1, the EAGAIN case for RLIMIT_NPROC no longer occurs
+
+statfs.2
+    Cyril Hrubis
+        Update MAGIC constants
+            Most of the updates are taken from /usr/include/linux/magic.h,
+            some were found by grepping the Linux source code.
+    Cyril Hrubis  [Michael Kerrisk]
+        fstatfs(2) was broken on file descriptors from pipe(2)
+
+syscalls.2
+    Michael Kerrisk
+        Note that remap_file_pages() is deprecated
+
+basename.3
+    Peng Haitao
+        ATTRIBUTES: Note functions that are thread-safe
+            The functions basename() and dirname() are thread safe.
+
+catgets.3
+    Peng Haitao
+        ATTRIBUTES: Note function that is thread-safe
+            The function catgets() is thread safe.
+
+getdate.3
+    Rasmus Villemoes
+        Use blank definition of _GNU_SOURCE in example program
+
+getdirentries.3
+    Peng Haitao
+        ATTRIBUTES: Note function that is thread-safe
+            The function getdirentries() is thread safe.
+
+getdtablesize.3
+    Peng Haitao
+        ATTRIBUTES: Note function that is thread-safe
+            The function getdtablesize() is thread safe.
+
+iconv.3
+    Qian Lei  [Peng Haitao]
+        ATTRIBUTES: Note function that is thread-safe
+            The function iconv() is thread safe.
+    Michael Kerrisk
+        SEE ALSO: add iconvconfig(8)
+
+lockf.3
+    Qian Lei  [Peng Haitao]
+        ATTRIBUTES: Note function that is thread-safe
+            The function lockf() is thread safe.
+
+malloc_get_state.3
+    Rasmus Villemoes
+        SYNOPSIS: use correct header
+            The nonstandard functions malloc_set_state() and
+            malloc_get_state() are provided by <malloc.h> not <stdlib.h>.
+
+malloc_usable_size.3
+    Qian Lei
+        ATTRIBUTES: Note function that is thread-safe
+            The function malloc_usable_size() is thread safe.
+
+matherr.3
+    Qian Lei  [Peng Haitao]
+        ATTRIBUTES: Note function that is thread-safe
+            The function matherr() is thread safe.
+
+mkdtemp.3
+    Peng Haitao
+        ATTRIBUTES: Note function that is thread-safe
+            The function mkdtemp() is thread safe.
+
+mkstemp.3
+    Peng Haitao
+        ATTRIBUTES: Note functions that are thread-safe
+            The functions mkstemp(), mkostemp(), mkstemps() and mkostemps()
+            are thread safe.
+
+mq_close.3
+    Qian Lei
+        ATTRIBUTES: Note function that is thread-safe
+            The function mq_close() is thread safe.
+
+mq_getattr.3
+    Qian Lei
+        ATTRIBUTES: Note function that is thread-safe
+            The functions mq_getattr() and mq_setattr() are thread safe.
+
+mq_open.3
+    Peng Haitao
+        ATTRIBUTES: Note function that is thread-safe
+            The function mq_open() is thread safe.
+
+mq_receive.3
+    Peng Haitao
+        ATTRIBUTES: Note functions that are thread-safe
+            The functions mq_receive() and mq_timedreceive() are thread safe.
+
+mq_send.3
+    Peng Haitao
+        ATTRIBUTES: Note functions that are thread-safe
+            The functions mq_send() and mq_timedsend() are thread safe.
+
+mq_unlink.3
+    Qian Lei
+        ATTRIBUTES: Note function that is thread-safe
+            The function mq_unlink() is thread safe.
+
+posix_fallocate.3
+    Peng Haitao
+        ATTRIBUTES: Note function that is thread-safe
+            The function posix_fallocate() is thread safe.
+
+posix_openpt.3
+    Peng Haitao
+        ATTRIBUTES: Note function that is thread-safe
+            The function posix_openpt() is thread safe.
+
+siginterrupt.3
+    Peng Haitao
+        ATTRIBUTES: Note function that is not thread-safe
+            The function siginterrupt() is not thread safe.
+
+system.3
+    Peng Haitao
+        ATTRIBUTES: Note function that is thread-safe
+            The function system() is thread safe.
+
+charmap.5
+    Marko Myllynen
+        Update to match current glibc
+            charmap(5) was outdated, bring it to closer to reality by fixing
+            syntax descriptions to match current glibc code and practices,
+            adding missing options, removing obsolete comments and references,
+            and removing now incorrect examples.
+
+locale.5
+    Marko Myllynen
+        Clarify AM/PM settings a bit
+            localedef(1) complains if really undefined, should be empty instead.
+            Also: add some SEE ALSO references.
+    Marko Myllynen
+        Document glibc conventions regarding days and week
+            Based on existing practice and glibc community wiki page at
+            https://sourceware.org/glibc/wiki/Locales
+
+proc.5
+    Michael Kerrisk  [Jan Chaloupka, Walter Harms]
+        Add a brief description of /proc/fs
+
+repertoiremap.5
+    Marko Myllynen
+        New page for repertoiremap(5)
+            Rather obsolete feature but localedef(1) refers to repertoiremaps.
+
+bootparam.7
+    Petr Gajdos
+        Describe 'rootflags' and 'rootdelay' kernel parameters
+            Patch based on text from Documentation/kernel-parameters.txt
+
+charsets.7
+    Marko Myllynen
+        Update to reflect past developments
+            Rewrite the introduction to make Unicode's prominence more obvious.
+            Reformulate parts of the text to reflect current Unicode world.
+            Minor clarification for ASCII/ISO sections, some other minor fixes.
+    Marko Myllynen
+        List CJK encodings in the order of C, J, K
+
+environ.7
+    Michael Kerrisk
+        SEE ALSO: add env(1), printenv(1), ld.so(8)
+
+locale.7
+    Marko Myllynen
+        Add some SEE ALSO references
+
+man-pages.7
+    Michael Kerrisk
+        Note that .TH 'date' field is nowadays automatically updated by scripts
+
+signal.7
+    Michael Kerrisk
+        Describe EINTR semantics for recvmmsg(2)
+    Michael Kerrisk
+        Clarify text describing EINTR semantics for socket interfaces
+
+unicode.7
+    Marko Myllynen
+        Update to reflect past developments
+            The unicode(7) page will look more modern with few small changes:
+
+            - drop old BUGS section, editors cope with UTF-8 ok these days,
+              and perhaps the state-of-the-art is better described elsewhere
+              anyway than in a man page
+            - drop old suggestion about avoiding combined characters
+            - refer to LANANA for Linux zone, add registry file reference
+            - drop a reference to an inactive/dead mailing list
+            - update some reference URLs
+
+utf-8.7
+    Marko Myllynen
+        Drop an old comment about UTF-8 replacing ISO 8859
+            And add locale(1) under SEE ALSO.
+
+
+==================== Changes in man-pages-3.70 ====================
+
+Released: 2014-07-08, Munich
+
+
+Contributors
+------------
+
+The following people contributed patches/fixes or (noted in brackets
+in the changelog below) reports, notes, and ideas that have been
+incorporated in changes in this release:
+
+Carlos O'Donell <carlos@redhat.com>
+Elie De Brauwer <eliedebrauwer@gmail.com>
+Florian Weimer <fweimer@redhat.com>
+Heinrich Schuchardt <xypron.glpk@gmx.de>
+Marko Myllynen <myllynen@redhat.com>
+Michael Kerrisk <mtk.manpages@gmail.com>
+Nadav Har'El <nyh@math.technion.ac.il>
+NeilBrown <neilb@suse.de>
+Rich Felker <dalias@libc.org>
+Robert P. J. Day <rpjday@crashcourse.ca>
+Simon Paillard <spaillard@debian.org>
+Tomi Salminen <tlsalmin@gmail.com>
+Walter Harms <wharms@bfs.de>
+Yuri Kozlov <yuray@komyakino.ru>
+Кирилл <kirillnow@gmail.com>
+
+Apologies if I missed anyone!
+
+
+New and rewritten pages
+-----------------------
+
+sprof.1
+    Michael Kerrisk [Marko Myllynen]
+        New page for the glibc sprof(1) command
+
+
+Newly documented interfaces in existing pages
+---------------------------------------------
+
+epoll_ctl.2
+    NeilBrown
+        Document EPOLLWAKEUP
+
+epoll.7
+    NeilBrown
+        Document EPOLLWAKEUP
+
+
+Changes to individual pages
+---------------------------
+
+iconv.1
+iconvconfig.8
+    Marko Myllynen
+        Clarify gconv file terminology a bit
+
+ldd.1
+    Michael Kerrisk
+        SEE ALSO: add sprof(1)
+
+connect.2
+    Michael Kerrisk
+        ERRORS: add EPROTOTYPE
+            See https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=708394
+
+dup.2
+    Michael Kerrisk  [Rich Felker]
+        Fix erroneous discussion regarding closing 'newfd' before calling dup2()
+            And propose a workaround if the caller cares about catching
+            close() time errors.
+
+            See http://stackoverflow.com/questions/23440216/race-condition-when-using-dup2#comment36888604_23444465
+            and http://austingroupbugs.net/view.php?id=411
+    Michael Kerrisk
+        Rework and enhance discussion of dup2()
+            In particular, note that dup2() performs the steps of closing
+            and reusing 'newfd' atomically.
+    Michael Kerrisk
+        Add subhead for dup3()
+
+epoll_ctl.2
+    Michael Kerrisk
+        BUGS: EPOLLWAKEUP is silently ignored without CAP_BLOCK_SUSPEND
+            If the caller does not have CAP_BLOCK_SUSPEND, then EPOLLWAKEUP
+            is silently ignored.
+
+fcntl.2
+    Michael Kerrisk  [Tomi Salminen]
+        The return value for F_SETPIPE_SZ is the pipe capacity
+    Michael Kerrisk
+        ERRORS: Document ENOTDIR error for F_NOTIFY
+    Michael Kerrisk
+        Use proper page cross-references in F_NOTIFY discussion
+    Michael Kerrisk
+        Suggest the use of real-time signals with F_NOTIFY
+
+getitimer.2
+    Michael Kerrisk
+        Rewrite a few pieces to clarify some details
+
+inotify_add_watch.2
+    Michael Kerrisk
+        Clarify that the target of a watch is an i-node
+            The target of a watch is an i-node, not a pathname. Clarify
+            the text to prevent the reader possibly misunderstanding
+            that establishing watches by two different links to the same
+            file might create different watch descriptors.
+
+open.2
+    Michael Kerrisk  [Кирилл]
+        O_CLOEXEC is also one the flags not ignored when O_PATH is specified
+
+pipe.2
+    Elie De Brauwer
+        PIPE_BUF is defined in limits.h
+            To make use of PIPE_BUF in an application one should include
+            <limits.h>.  Adding a reference to this inclusion.
+
+poll.2
+    Michael Kerrisk  [Nadav Har'El]
+        The negate-fd-to-ignore technique does not work for file descriptor 0
+            See https://bugzilla.kernel.org/show_bug.cgi?id=79411
+
+set_tid_address.2
+    Michael Kerrisk  [Rich Felker]
+        Use "thread" rather than "process" in DESCRIPTION
+    Michael Kerrisk
+        SEE ALSO: add gettid(2)
+
+shmop.2
+    Michael Kerrisk
+        Explain SHMLBA in much more detail
+
+splice.2
+    Michael Kerrisk
+        Document EAGAIN error
+            See https://bugzilla.kernel.org/show_bug.cgi?id=48641
+
+syscalls.2
+    Carlos O'Donell
+        Add prlimit64(2)
+            While trying to reconcile the new features in glibc with the
+            documented entries in the linux kernel man pages I noticed that
+            glibc exports prlimit64 for use by 32-bit applications (as does
+            the linux kernel), but that prlimit64 was not defined in the
+            syscalls list or in the prlimit-related page.
+
+            This is not the complete fix for this, but I don't have the time
+            to explain why and when prlimit64 should be used (or how it should
+            be used safely). Therefore I'm just patching the syscalls.2 list
+            to show that prlimit64 exists and was added in 2.6.36 (verified
+            with git by checking out the tags before and after).
+
+syslog.2
+    Michael Kerrisk
+        Rework introductory paragraph
+    Michael Kerrisk  [Robert P. J. Day]
+        Rework text describing loglevels
+            The kernel header file mentioned in the discussion of the KERN_*
+            constants has morphed and is no longer exported inside glibc.
+            And the definitions of the constants themselves changed subtly
+            with kernel commit 04d2c8c83d0e3ac5f78aeede51babb3236200112.
+            So, rewrite the description of the constants to be a bit more
+            abstract.
+    Michael Kerrisk
+        Rewrite parts of the page, and import /proc/sys/kernel/printk
+            * Move /proc/sys/kernel/printk from proc(5) to this page,
+              and correct various details in the discussion of that file.
+            * Rewrite and correct various other details on the page.
+            * Clean out some crufty text.
+            * Miscellaneous minor fixes.
+    Michael Kerrisk
+        Update SYSLOG_ACTION_CONSOLE_OFF + SYSLOG_ACTION_CONSOLE_ON description
+            Details changed in Linux 2.6.32
+
+tee.2
+    Michael Kerrisk
+        Document EAGAIN error
+            See https://bugzilla.kernel.org/show_bug.cgi?id=48641
+
+vmsplice.2
+    Michael Kerrisk
+        Document EAGAIN error
+            See https://bugzilla.kernel.org/show_bug.cgi?id=48641
+
+ether_aton.3
+    Michael Kerrisk
+        Make description of ether_line() bug a little more informative
+
+mallopt.3
+    Michael Kerrisk  [Florian Weimer]
+        MALLOC_MMAP_THRESHOLD_ and MALLOC_MMAP_MAX_ *do* work in setgid programs
+            My testing on this point was bogus, overlooking details of
+            strace(1)'s behavior with setuid programs.
+
+            See https://sourceware.org/bugzilla/show_bug.cgi?id=12155
+
+printf.3
+    Michael Kerrisk  [Rich Felker]
+        Remove libc4 and libc5 details
+            Rich Felker noted that "scare text" in the man page warned about
+            the use of snprintf() on libc, and that some people had cited
+            this as a reason not to use snprintf().  Linux libc is now
+            ancient history, so there is no real need to keep that text.
+            But, while we're at it, we may as well clear out all of the
+            other ancient libc4 and libc5 pieces in the page. They are
+            nowadays more clutter than help.
+    Michael Kerrisk
+        SUSv3 and later agree with C99 for the snprintf() return value
+            Determined by inspection of the SUSv3 and SUSv4 specifications.
+    Michael Kerrisk
+        Remove some old text about glibc 2.0 changes
+            We probably don't now need such ancient info.
+    Michael Kerrisk
+        Update references to standards for C and S conversion specifiers
+
+profil.3
+    Michael Kerrisk
+        SEE ALSO: add sprof(1)
+
+charmap.5
+    Marko Myllynen
+        Various minor updates and improvements
+            - more precise title
+            - extend description a bit
+            - document previously omitted WIDTH_DEFAULT
+    Marko Myllynen
+        Remove accidental ISO C compliance reference
+            glibc refers in locale/programs/charmap.c to ISO C 99 section
+            7.17.(2) and ISO C 99 section 5.2.1.(3) that if a character map
+            is not ASCII compatible then the locale using it is not ISO C
+            compliant. This does not state anything about the character set
+            itself.
+
+proc.5
+    Michael Kerrisk
+        Replace /proc/sys/kernel/printk discussion with reference to syslog(2)
+            It makes more sense to have the /proc/sys/kernel/printk with
+            the related material in syslog(2).
+    Michael Kerrisk
+        Rewrite /proc/sys/kernel/printk description
+
+inotify.7
+    Michael Kerrisk
+        Clarify which events are generated for watched directories
+            Really, with respect to watched directories, events fall into
+            three classes (not two, as was shown):
+
+            * Events that can be generated only for the watched directory.
+            * Events that can be generated only for objects that are inside
+              the watched directory.
+            * Events that can be generated both for the watched directory
+              and for objects inside the directory.
+
+            So, mark these three classes more clearly in the list of inotify
+            events.
+    Heinrich Schuchardt  [Michael Kerrisk]
+        BUGS: Note possible bug triggered by watch descriptor reuse
+            Watch descriptor IDs are returned by inotify_add_watch().
+            When calling inotify_rm_watch() an IN_IGNORE is placed on the
+            inotify queue pointing to the ID of the removed watch.
+
+            inotify_add_watchi() should not return a watch descriptor ID for
+            which events are still on the queue but should return an
+            unused ID.
+
+            Unfortunately, the existing Kernel code does not provide such a
+            guarantee.
+
+            Actually, in rare cases watch descriptor IDs are returned by
+            inotify_add_watch() for which events are still on the inotify
+            queue.
+
+            See https://bugzilla.kernel.org/show_bug.cgi?id=77111
+    Michael Kerrisk
+        Add further detail to the watch descriptor reuse bug
+            As well as inotify_rm_watch(), file deletion and unmounting a
+            filesystem can also cause a watch descriptor to be deleted.
+    Michael Kerrisk
+        The watch descriptor reuse bug may be hard to hit in practice
+            Explain the circumstances in detail, indicating that the
+            bug may be very unlikely to occur in practice.
+    Michael Kerrisk
+        Clarify description of IN_EXCL_UNLINK
+            Clarify the text a little, in particular making it clearer
+            that the target of a watch is an i-node (not a pathname).
+    Michael Kerrisk
+        Clarify IN_ONESHOT explanation
+            Make it clearer that the target of monitoring is an i-node,
+            not a pathname.
+    Michael Kerrisk
+        Make comment on 'mask' field more accurate
+
+libc.7
+    Michael Kerrisk
+        Clarify man-pages policy on documenting C libraries other tahn glibc
+    Michael Kerrisk
+        Use absolute dates in discussion of libc vs glibc
+
+pipe.7
+    Elie De Brauwer
+        Add reference that the pipe capacity can be changed
+            In fcntl(2) F_SETPIPE_SZ, F_GETPIPE_SZ and
+            /proc/sys/fs/pipe-max-size are defined, however
+            pipe(7) still defines the pipe capacity as being
+            a static entity. Adding a reference to fcntl(2).
+    Michael Kerrisk  [Walter Harms]
+        Clarify that since 2.6.35, 65535 bytes is the default pipe capacity
+
+ld.so.8
+    Michael Kerrisk
+        Clarify that LD_PROFILE can specify just a single shared object
+    Michael Kerrisk
+        Clarify that LD_PROFILE output is appended to target file
+            The LD_PROFILE output is appended to any existing
+            contents of the target file.
+    Michael Kerrisk
+        SEE ALSO: add sprof(1)
+
+
+==================== Changes in man-pages-3.71 ====================
+
+Released: 2014-08-17, Chicago
+
+
+Contributors
+------------
+
+The following people contributed patches/fixes or (noted in brackets
+in the changelog below) reports, notes, and ideas that have been
+incorporated in changes in this release:
+
+Adrian Bunk <bunk@kernel.org>
+Damir Nedzibovic <d.nedzibovic@anoxtech.com>
+David Prévot <taffit@debian.org>
+D. Barbier <bouzim@gmail.com>
+Jakub Wilk <jwilk@debian.org>
+Jan Chaloupka <jchaloup@redhat.com>
+Marko Myllynen <myllynen@redhat.com>
+Michael Kerrisk <mtk.manpages@gmail.com>
+Mike Frysinger <vapier@gentoo.org>
+NeilBrown <neilb@suse.de>
+Paul Jackson <pj@usa.net>
+Peng Haitao <penght@cn.fujitsu.com>
+Rahul Bedarkar <rahulbedarkar89@gmail.com>
+Rob Landley <rob@landley.net>
+Ryan Hammonds <rhammonds@unicoi.com>
+Simon Paillard <spaillard@debian.org>
+Ville Ylenius <ville@ylenius.net>
+Vince Weaver <vincent.weaver@maine.edu>
+Yuri Kozlov <yuray@komyakino.ru>
+
+Apologies if I missed anyone!
+
+
+New and rewritten pages
+-----------------------
+
+group_member.3
+    Michael Kerrisk
+        New page documenting group_member(3)
+
+isfdtype.3
+    Michael Kerrisk
+        New page documenting isfdtype(3)
+
+
+Newly documented interfaces in existing pages
+---------------------------------------------
+
+perf_event_open.2
+    Vince Weaver
+        Document new comm_exec flag
+            Linux 3.16 (more specifically, commit 82b897782d10fcc4 )
+            added support for differentiating between process renames
+            caused by exec versus those caused by other methods.
+    Vince Weaver
+        Document new mmap2 record type
+            Linux 3.16 (more specifically, commit a5a5ba72843dd05f9 )
+            enabled the enhanced mmap2 record support.
+            The interface was added in Linux 3.12 but disabled until
+            Linux 3.16.
+    Vince Weaver
+        Document PERF_SAMPLE_BRANCH_COND
+            Linux 3.16 (more specifically, commit bac52139f0b7ab31330 )
+            adds support for gathering PERF_SAMPLE_BRANCH_COND
+            conditional branch values when doing PERF_SAMPLE_BRANCH_STACK
+            sampling.
+
+proc.5
+    Michael Kerrisk
+        Document /proc/PID/comm
+    Michael Kerrisk
+        Document /proc/PID/pagemap
+    Michael Kerrisk
+        Document /proc/PID/personality
+    Michael Kerrisk
+        Document /proc/PID/syscall
+    Michael Kerrisk
+        Document /proc/kpagecount
+    Michael Kerrisk
+        Document /proc/kpageflags
+    Michael Kerrisk
+        Document /proc/sys/vm/overcommit_kbytes
+
+capabilities.7
+    Michael Kerrisk
+        Add CAP_AUDIT_READ
+            CAP_AUDIT_READ is new in Linux 3.16.
+
+
+Global changes
+--------------
+
+ldd.1
+clone.2
+execve.2
+getpagesize.2
+ioperm.2
+msgop.2
+readv.2
+recv.2
+select.2
+send.2
+seteuid.2
+shmop.2
+signal.2
+sync.2
+sysinfo.2
+utime.2
+abs.3
+atoi.3
+catopen.3
+clearenv.3
+ctime.3
+des_crypt.3
+ecvt.3
+flockfile.3
+fseeko.3
+ftime.3
+ftok.3
+ftw.3
+getcwd.3
+getdtablesize.3
+getline.3
+getpass.3
+getpass.3
+getutent.3
+glob.3
+insque.3
+lseek64.3
+memmem.3
+mkstemp.3
+mktemp.3
+on_exit.3
+openpty.3
+putenv.3
+putenv.3
+qecvt.3
+realpath.3
+realpath.3
+remove.3
+setbuf.3
+sigpause.3
+strftime.3
+strptime.3
+tzset.3
+xcrypt.3
+utmp.5
+environ.7
+ipv6.7
+packet.7
+    Michael Kerrisk
+        Remove ancient Linux libc details
+
+access.2
+brk.2
+chmod.2
+eventfd.2
+gethostname.2
+getpriority.2
+mmap.2
+poll.2
+ptrace.2
+readv.2
+sched_setaffinity.2
+select.2
+seteuid.2
+signalfd.2
+sync_file_range.2
+timer_create.2
+uname.2
+wait.2
+    Michael Kerrisk
+        NOTES: add "C library/kernel ABI differences" subheading
+
+
+Changes to individual pages
+---------------------------
+
+access.2
+    Michael Kerrisk
+        Glibc falls back to using access() on kernels that lack faccessat()
+
+bdflush.2
+fsync.2
+sync.2
+proc.5
+    Adrian Bunk
+        Change "sync(1)" to "sync(8)"
+
+bind.2
+    Michael Kerrisk  [Ryan Hammonds]
+        Correct EINVAL error description
+            As pointed out by Ryan:
+
+                My application is trying to bind an IPv4 UDP socket to an
+                address. I've found that passing an invalid address length
+                to bind() causes bind to return EINVAL. According to the
+                bind(2) manpage, this should only occur when using unix
+                domain sockets (which I am not).
+
+chmod.2
+    Michael Kerrisk
+        Glibc falls back to chmod() on kernels that don't support fchmodat()
+    Michael Kerrisk
+        Glibc falls back to chown()/lchown() on kernels that lack fchownat()
+
+epoll_wait.2
+    Michael Kerrisk
+        NOTES: describe raw epoll_pwait() system call differences
+
+getgroups.2
+    Michael Kerrisk
+        SEE ALSO: add group_member(3)
+
+getpriority.2
+    Michael Kerrisk
+        Enhance discussion of kernel nice range versus user-space nice range
+    Michael Kerrisk
+        Move text describing nice range on other systems
+
+getrlimit.2
+    Michael Kerrisk
+        Add cross reference to core(5) in discussion of RLIMIT_CORE
+    Michael Kerrisk
+        Describe the "large" resource limit bug on 32-bit platforms
+            See https://bugzilla.kernel.org/show_bug.cgi?id=5042.
+    Michael Kerrisk
+        Glibc's setrlimit() and getrlimit() are implemented using prlimit()
+
+kexec_load.2
+    Michael Kerrisk
+        Note limit of 16 for 'nr_segments'
+    Michael Kerrisk
+        Clarify the 'flags' bits that contain the architecture
+    Michael Kerrisk
+        Add KEXEC_ARCH_68K to list of architectures for 'flags'
+    Michael Kerrisk
+        Reword description of 'flags' a little
+
+link.2
+    Michael Kerrisk
+        Glibc falls back to link() on kernels that lack linkat()
+            Unless 'flags' contains AT_SYMLINK_FOLLOW.
+
+mkdir.2
+    Michael Kerrisk
+        Glibc falls back to mkdir() on kernels that don't support mkdirat()
+
+perf_event_open.2
+    Vince Weaver
+        Clarify PERF_SAMPLE_STACK_USER usage
+            This clarifies the PERF_SAMPLE_STACK_USER section.
+            I found these issue while implementing some code that uses
+            the option.  The important change is fixing the name of the
+            sample_stack_user parameter, the rest is just some wording
+            fixes and minor clarifications.
+    Vince Weaver
+        Clarify PERF_SAMPLE_DATA_SRC usage
+            When checking the fields in the PERF_SAMPLE_DATA_SRC type samples
+            you need to shift the masks before doing the compare.
+
+            Although the value you are checking (perf_mem_data_src) is
+            specified as a bitfield so this might all fall apart if trying
+            to access the field in a cross-endian way.  The Power people
+            were working on this issue, not sure if they resolved it.
+
+poll.2
+    Michael Kerrisk
+        Describe fifth argument (sigsetsize) of raw ppoll() system call
+
+process_vm_readv.2
+    Michael Kerrisk  [Ville Ylenius]
+        Fix typo in example program
+
+readlink.2
+    Michael Kerrisk
+        Glibc falls back to readlink() on kernels that lack readlinkat()
+
+recv.2
+    Michael Kerrisk
+        'addrlen' should be NULL (not 0) if we don't need sender address
+
+rename.2
+    Michael Kerrisk
+        Glibc falls back to rename() when the kernel doesn't have renameat()
+
+sigwaitinfo.2
+    Michael Kerrisk
+        The raw sigtimedwait() system call has a fifth argument
+
+symlink.2
+    Michael Kerrisk
+        Glibc falls back to symlink() on kernels that lack symlinkat()
+
+sysinfo.2
+    Michael Kerrisk
+        Add VERSIONS section
+
+unlink.2
+    Michael Kerrisk
+        Glibc falls back to unlink() or rmdir() on kernels that lack unlinkat()
+
+atoi.3
+    Michael Kerrisk
+        Downgrade discussion of atoq()
+            Remove most references to atoq() in this page, since this function
+            was present only in Linux libc (not glibc).
+
+cerf.3
+cexp2.3
+clog2.3
+    Michael Kerrisk
+        Update version number on "Not yet in glibc" sentence
+
+fgetgrent.3
+getgrent.3
+getgrent_r.3
+getgrnam.3
+    Michael Kerrisk  [Rob Landley]
+        Clarify that 'gr_mem' is a NULL-terminated array of pointers
+
+fseeko.3
+    Michael Kerrisk
+        Add VERSIONS section
+
+ftw.3
+    Michael Kerrisk
+        Add VERSIONS section
+
+getauxval.3
+    Michael Kerrisk
+        Document ENOENT error
+            And add an entry to BUGS explaining the ambiguity that was
+            present before the addition of this error.
+
+getgrouplist.3
+    Michael Kerrisk
+        SEE ALSO: add group_member(3)
+
+getline.3
+    Rahul Bedarkar
+        Close opened file at end of example program
+
+memmem.3
+    Michael Kerrisk
+        Rewrite text of glibc 2.0 bug
+
+printf.3
+    Michael Kerrisk  [Jakub Wilk]
+        Clarify details of the %n conversion specifier
+            See http://bugs.debian.org/756602
+    Michael Kerrisk  [Jakub Wilk]
+        Note use of 'j', 'z', and 't' length modifiers for '%n'
+            See http://bugs.debian.org/756602
+    Michael Kerrisk
+        Update with some SUSv3 details
+
+setbuf.3
+    Michael Kerrisk
+        Remove ancient Linux libc and 4.x BSD details
+
+strstr.3
+    Michael Kerrisk
+        Remove discussion of Linux libc bugs
+            Linux libc is old enough that we needn't care any longer.
+
+strtod.3
+    Michael Kerrisk
+        Explain NAN(n-char-sequence)
+
+strtod.3
+    Michael Kerrisk
+        SEE ALSO: add nan(3), nanf(3), NANL(3)
+
+updwtmp.3
+    Michael Kerrisk
+        Replace AVAILABILITY section with note to link logwtmp() using -lutil
+            Linux libc details are no longer needed these days.
+
+core.5
+    Rahul Bedarkar
+        Close opened file in example program
+
+proc.5
+    Michael Kerrisk
+        Fix kernel version numbers for /proc/PID/stat fields
+
+proc.5
+    Jan Chaloupka
+        Add missing proc stats fields
+            Adding missing proc stats fields from
+            https://www.kernel.org/doc/Documentation/filesystems/proc.txt
+    Michael Kerrisk  [Simon Paillard]
+        Remove crufty text under 'timer_stats'
+    Michael Kerrisk
+        Update /proc/PID/stat 'state' field documentation
+    Michael Kerrisk
+        Improve description of /proc/PID/stat fields added in Linux 3.3 and 3.5
+    Michael Kerrisk
+        Refer to getauxval(3) in discussion of /proc/PID/auxv
+    Michael Kerrisk
+        Rework formatting of /proc/PID/stat list
+            Make the field numbers more prominent.
+    Michael Kerrisk
+        Note that /proc/PID/cmdline is read-only
+    Michael Kerrisk
+        Rework discussion of CommitLimit and /proc/sys/vm/overcommit_memory
+    Michael Kerrisk
+        Improve discussion of /proc/sys/vm/overcommit_ratio
+
+charsets.7
+    David Prévot  [Marko Myllynen]
+        Tidy up list
+            Remove German from main list, to be consistent with earlier
+            removal of Dutch and French (in commit a8ed5f7430e0d1).
+
+inotify.7
+    Michael Kerrisk
+        Note that IN_ONLY_DIR can be used to avoid races
+    Michael Kerrisk
+        Note that insertion of IN_MOVED_FROM+IN_MOVED_TO pair is not atomic
+    Michael Kerrisk
+        Mention use of timeout when reading IN_MOVED_TO after IN_MOVED_FROM
+
+man-pages.7
+    Michael Kerrisk
+        Add description of "C library/kernel ABI differences" subsection
+    Michael Kerrisk
+        Rework text describing sections (stylistic improvements)
+
+vdso.7
+    Mike Frysinger
+        Add new i386 vdso symbols in Linux 3.15
+    Michael Kerrisk
+        Note kernel version that exports new i386 symbols (Linux 3.15)
+
+
+==================== Changes in man-pages-3.72 ====================
+
+Released: 2014-09-07, Mountain View
+
+
+Contributors
+------------
+
+The following people contributed patches/fixes or (noted in brackets
+in the changelog below) reports, notes, and ideas that have been
+incorporated in changes in this release:
+
+Christian von Roques <roques@mti.ag>
+Holger Hans Peter Freyther <holger@moiji-mobile.com>
+Michael Haardt <michael@moria.de>
+Michael Kerrisk <mtk.manpages@gmail.com>
+Mike Frysinger <vapier@gentoo.org>
+Peter Schiffer <pschiffe@redhat.com>
+Rusty Russell <rusty@rustcorp.com.au>
+Sorin Dumitru <sdumitru@ixiacom.com>
+
+Apologies if I missed anyone!
+
+
+New and rewritten pages
+-----------------------
+
+memusage.1
+    Peter Schiffer, Michael Kerrisk  [Jan Chaloupka]
+        New page for glibc memusage(1) command
+
+memusagestat.1
+    Peter Schiffer  [Jan Chaloupka, Michael Kerrisk]
+        New page for glibc memusagestat(1) command
+
+mtrace.1
+    Peter Schiffer  [Jan Chaloupka]
+        New page describing the glibc mtrace(1) command
+
+
+Changes to individual pages
+---------------------------
+
+connect.2
+    Michael Haardt
+        Note that a new socket should be used if connect() fails
+
+fcntl.2
+    Michael Kerrisk
+        One must define _GNU_SOURCE to get the F_OFD_* definitions
+
+poll.2, select.2
+    Rusty Russell
+        Fix erroneous description of "available for write".
+            POSIX says: "POLLOUT Normal data may be written without
+            blocking.".  This "may" is misleading, see the POSIX
+            write page:
+
+                Write requests to a pipe or FIFO shall be handled in the
+                same way as a regular file with the following exceptions:
+                ...
+                If the O_NONBLOCK flag is clear, a write request may cause
+                the thread to block, but on normal completion it shall
+                return nbyte.
+                ...
+                When attempting to write to a file descriptor (other than a
+                pipe or FIFO) that supports non-blocking writes and cannot
+                accept the data immediately:
+
+                If the O_NONBLOCK flag is clear, write() shall block the
+                calling thread until the data can be accepted.
+
+                If the O_NONBLOCK flag is set, write() shall not block the
+                thread. If some data can be written without blocking the
+                thread, write() shall write what it can and return the
+                number of bytes written. Otherwise, it shall return -1 and
+                set errno to [EAGAIN].
+
+            The net result is that write() of more than 1 byte on a
+            socket, pipe or FIFO which is "ready" may block: write()
+            (unlike read!) will attempt to write the entire buffer and
+            only return a short write under exceptional circumstances.
+
+            Indeed, this is the behaviour we see in Linux:
+
+            https://github.com/rustyrussell/ccan/commit/897626152d12d7fd13a8feb36989eb5c8c1f3485
+            https://plus.google.com/103188246877163594460/posts/BkTGTMHDFgZ
+
+errno.3
+    Michael Kerrisk
+        SEE ALSO: add errno(1)
+
+rtnetlink.3
+    Holger Hans Peter Freyther
+        Fix parameters for the send() call in the example
+
+inotify.7
+    Michael Kerrisk
+        IN_OPEN and IN_CLOSE_NOWRITE can also occur for directories
+    Michael Kerrisk
+        IN_CLOSE_WRITE occurs only for files (not monitored directory)
+    Michael Kerrisk
+        IN_MODIFY is generated for files only (not monitored directories)
+    Michael Kerrisk
+        IN_ACCESS occurs only for files inside directories
+            IN_ACCESS does not occur for monitored directory.
+
+packet.7
+    Sorin Dumitru
+        Fix include file
+            It looks like most of the socket options from this man pages
+            are not defined in <netpacket/packet.h>. They are defined in
+            <linux/if_packet.h> so we should include that one.
+
+
+==================== Changes in man-pages-3.73 ====================
+
+Released: 2014-09-21, Munich
+
+
+Contributors
+------------
+
+The following people contributed patches/fixes or (noted in brackets
+in the changelog below) reports, notes, and ideas that have been
+incorporated in changes in this release:
+
+David Prévot <taffit@debian.org>
+Eric W. Biederman <ebiederm@xmission.com>
+J. Bruce Fields <bfields@fieldses.org>
+Justin Cormack <justin@street-vision.com>
+Lorenzo Beretta <lory.fulgi@infinito.it>
+Michael Kerrisk <mtk.manpages@gmail.com>
+Rob Landley <rob@landley.net>
+Serge E. Hallyn <serge@hallyn.com>
+Serge Hallyn <serge.hallyn@ubuntu.com>
+Vasily Kulikov <segoon@openwall.com>
+Vincent Lefevre <vincent@vinc17.net>
+Vitaly Rybnikov <frodox@zoho.com>
+Yuri Kozlov <yuray@komyakino.ru>
+
+Apologies if I missed anyone!
+
+
+New and rewritten pages
+-----------------------
+
+namespaces.7
+    Michael Kerrisk  [Eric W. Biederman]
+        New page providing overview of Linux namespaces
+
+pid_namespaces.7
+    Michael Kerrisk  [Eric W. Biederman, Vasily Kulikov, Rob Landley,
+                      Serge Hallyn]
+        New page describing PID namespaces
+
+user_namespaces.7
+    Michael Kerrisk  [Eric W. Biederman, Andy Lutomirski, Serge Hallyn]
+        New page describing user namespaces.
+
+
+Newly documented interfaces in existing pages
+---------------------------------------------
+
+clone.2
+    Eric W. Biederman  [Michael Kerrisk]
+        Document CLONE_NEWUSER for creating a new user namespace
+
+setns.2
+    Eric W. Biederman, Michael Kerrisk
+        Document the PID, user, and mount namespace support
+            Document CLONE_NEWPID, CLONE_NEWUSER, and CLONE_NEWNS flags.
+
+unshare.2
+    Michael Kerrisk  [Eric W. Biederman]
+        Document CLONE_NEWPID
+    Michael Kerrisk  [Eric W. Biederman]
+        Document CLONE_NEWUSER
+    Michael Kerrisk
+        Document CLONE_THREAD, CLONE_SIGHAND, and CLONE_VM
+
+
+Changes to individual pages
+---------------------------
+
+clone.2
+    Michael Kerrisk
+        Move some CLONE_NEWNET text to namespaces.7
+    Michael Kerrisk
+        Move some CLONE_NEWUTS text 2 to namespaces.7
+    Michael Kerrisk
+        Move some CLONE_NEWIPC text to namespaces.7
+    Michael Kerrisk
+        Reword discussion of CLONE_NEWNS, removing text also in namespaces(7)
+    Michael Kerrisk
+        Standardize text on CLONE_NEW* flags and CAP_SYS_ADMIN
+    Michael Kerrisk
+        EINVAL if (CLONE_NEWUSER|CLONE_NEWPID) && (CLONE_THREAD|CLONE_PARENT)
+    Michael Kerrisk
+        Add more detail on the meaning of CLONE_SYSVSEM
+
+flock.2
+    Michael Kerrisk  [J. Bruce Fields]
+        Don't mention "classical BSD" in discussion of fcntl()/flock interaction
+            The noninteraction of flock(2) and fcntl(2) locks does
+            not seem to be classical BSD semantics (at least, checking
+            the 4.4BSD sources suggest that the lock types do interact,
+            although there have been other systems also where fcntl()
+            and flock() locks do not interact). So, fix the text
+            discussing "classical BSD" lock semantics.
+
+getunwind.2
+    Michael Kerrisk  [Yuri Kozlov]
+        Fix description of return value
+            s/size of unwind table/size of the unwind data/
+
+mount.2
+    Eric W. Biederman
+        Clarify use of 'mountflags' and 'data' for MS_REMOUNT
+
+reboot.2
+    Michael Kerrisk  [Justin Cormack, Eric W. Biederman]
+        Document effect of reboot() inside PID namespaces
+
+semop.2
+    Michael Kerrisk
+        Refer to clone(2) for semantics of CLONE_SYSVSEM and semadj lists
+
+seteuid.2
+setgid.2
+setresuid.2
+setreuid.2
+setuid.2
+    Michael Kerrisk
+        EINVAL can occur if UID/GID is not valid in caller's user namespace
+
+setns.2
+    Michael Kerrisk  [Eric W. Biederman]
+        Clarify capabilities required for reassociating with a mount namespace
+    Michael Kerrisk
+        Specify kernel version on each CLONE_NEW* flag
+            And remove text on flags from VERSIONS.
+
+unshare.2
+    Michael Kerrisk
+        Add an example program
+    Michael Kerrisk
+        Clarify semantics of CLONE_SYSVSEM
+    Michael Kerrisk
+        CLONE_SYSVSEM does not require CAP_SYS_ADMIN
+    Michael Kerrisk
+        Note flags implied by CLONE_THREAD and CLONE_VM
+
+clock.3
+    Michael Kerrisk  [Vincent Lefevre]
+        The implementation uses clock_gettime() was to improve *accuracy*
+            (The man page text mistakenly used the word "precision".)
+
+drand48.3
+    Michael Kerrisk  [Lorenzo Beretta]
+        Remove crufty text about SVID 3 marking drand48() obsolete
+            See http://bugs.debian.org/758293
+
+proc.5
+    Michael Kerrisk
+        Move /proc/[pid]/mounts text to namespaces.7
+    Michael Kerrisk
+        Move /proc/[pid]/mountstats text to namespaces.7
+
+capabilities.7
+    Michael Kerrisk
+        Refer reader to user_namespaces(7) for a discussion of capabilities
+    Michael Kerrisk
+        Document CAP_SETUID and CAP_SETGID for user namespace mappings
+    Michael Kerrisk
+        setns() needs CAP_SYS_ADMIN in the *target* namespace
+    Michael Kerrisk
+        Since Linux 3.8, user namespaces no longer require CAP_SYS_ADMIN
+
+mq_overview.7
+    Michael Kerrisk
+        Refer to namespaces(7) for info on POSIX MQs and IPC namespaces
+
+svipc.7
+    Michael Kerrisk
+        Refer to namespaces(7) for info on System V IPC and IPC namespaces
+
+
+==================== Changes in man-pages-3.74 ====================
+
+Released: 2014-10-03, Munich
+
+
+Contributors
+------------
+
+The following people contributed patches/fixes or (noted in brackets
+in the changelog below) reports, notes, and ideas that have been
+incorporated in changes in this release:
+
+Arto Bendiken <arto@bendiken.net>
+Ben Hutchings <ben@decadent.org.uk>
+Benjamin Herr <ben@0x539.de>
+C. Alex North-Keys <erlkonig@talisman.org>
+Carlos O'Donell <carlos@redhat.com>
+Cyril Hrubis <chrubis@suse.cz>
+Davidlohr Bueso <dave@stgolabs.net>
+Doug Ledford <dledford@redhat.com>
+Elie De Brauwer <eliedebrauwer@gmail.com>
+Heinrich Schuchardt <xypron.glpk@gmx.de>
+Jonny Grant <jg@jguk.org>
+Lanchon <lanchon@gmail.com>
+Manfred Spraul <manfred@colorfullife.com>
+Marko Myllynen <myllynen@redhat.com>
+Michael Kerrisk <mtk.manpages@gmail.com>
+Shriramana Sharma <samjnaa@gmail.com>
+Thomas Mack <mack@ifis.cs.tu-bs.de>
+Wieland Hoffmann <themineo@gmail.com>
+
+Apologies if I missed anyone!
+
+
+New and rewritten pages
+-----------------------
+
+pldd.1
+    Michael Kerrisk
+        New page for pldd(1) command added to glibc in version 2.15
+
+cp1252.7
+    Marko Myllynen
+        New page documenting CP 1252
+            CP 1252 is probably one of the most used Windows Code Pages so
+            let's add a page for it alongside with the already provided
+            CP 1251 page.
+
+            Table generated from /usr/share/i18n/charmaps/CP1252.
+
+
+Newly documented interfaces in existing pages
+---------------------------------------------
+
+mq_overview.7
+    Michael Kerrisk
+        Document /proc/sys/fs/mqueue/msgsize_default
+    Michael Kerrisk
+        Document /proc/sys/fs/mqueue/msg_default
+
+
+Changes to individual pages
+---------------------------
+
+ldd.1
+    Michael Kerrisk
+        SEE ALSO: add pldd(1)
+
+execve.2
+    Michael Kerrisk  [C. Alex North-Keys]
+        Remove unneeded ".sh" extension in interpreter script example
+            See https://bugzilla.kernel.org/show_bug.cgi?id=84701
+
+fanotify_init.2
+    Heinrich Schuchardt
+        BUGS: O_CLOEXEC is ignored
+    Michael Kerrisk  [Heinrich Schuchardt]
+        The 'event_f_flags' failure to check invalid flags was fixed in 3.15
+
+fanotify_mark.2
+    Michael Kerrisk
+        Note that various bugs were fixed in Linux 3.16
+
+getrlimit.2
+    Michael Kerrisk  [Doug Ledford]
+        Since Linux 3.5, the accounting formula for RLIMIT_MSGQUEUE has changed
+
+open.2
+    Michael Kerrisk  [Shriramana Sharma]
+        Fix number and formula in description of EOVERFLOW error
+
+readlink.2
+    Michael Kerrisk  [Ben Hutchings]
+        Fix description of readlinkat() with empty 'pathname'
+    Michael Kerrisk
+        SEE ALSO: add realpath(3)
+
+sched_setattr.2
+sched_setscheduler.2
+    Michael Kerrisk
+        SEE ALSO: add chrt(1)
+
+shmget.2
+    Manfred Spraul  [Michael Kerrisk, Davidlohr Bueso]
+        Update for increase of SHMALL and SHMMAX
+            The default values of SHMALL and SHMMAX have been increased.
+
+syscalls.2
+    Michael Kerrisk
+        Add 3 new system calls added in Linux 3.17
+
+vmsplice.2
+    Cyril Hrubis
+        vmsplice() does not fail when nr_segs==0
+            This nr_segs==0 case is no-op; the call succeeds and no
+            EINVAL error is returned.
+
+dlopen.3
+    Michael Kerrisk
+        SEE ALSO: add pldd(1)
+
+fseeko.3
+    Michael Kerrisk  [Thomas Mack]
+        _FILE_OFFSET_BITS must be defined before including any header file
+
+getgrent.3
+    Carlos O'Donell
+        Add ENOENT and EAGAIN to error list
+
+mq_getattr.3
+    Michael Kerrisk
+        Add an example program
+            The example program can be used to discover the default
+            'mq_maxmsg' and 'mq_msgsize' values used to create a queue with
+            a mq_open(3) call in which 'attr' is NULL.
+
+mq_open.3
+    Michael Kerrisk
+        Two /proc files control the defaults for the attrp==NULL case
+            Refer the reader to the discussion in mq_overview(7) for a
+            discussion of these files, which exist since Linux 3.5.
+
+realpath.3
+    Michael Kerrisk
+        SEE ALSO: add realpath(1)
+
+proc.5
+    Elie De Brauwer
+        Document /proc/buddyinfo
+            This patch adds a short description about the contents of
+            /proc/buddyinfo and how this file can be used to assist
+            in checking for memory fragmentation issues.
+    Michael Kerrisk
+        Mention pmap(1) in discussion of /proc/PID/smaps
+
+armscii-8.7
+    Marko Myllynen
+        Charset pages unification, minor cleanups
+
+ascii.7
+    Marko Myllynen
+        Charset pages unification, minor cleanups
+            This and [the related *.7] patches will provide unification of
+            charset pages, minor cleanups, and some unifying cosmetic
+            changes. References are adjusted so that all pages include
+            a reference to charsets(7), which contains a description of
+            these sets, stray comments are removed, some obsolete
+            statements (like ISO 8859-1 being the de-facto ASCII
+            replacement) are removed, and some minor reformatting
+            to minimize diff's between the pages are done.
+
+            The actual substance, the character tables, remain unchanged.
+
+            This series changes the following pages (under man7): ascii,
+            armscii, cp1251, koi8-r, koi8-u, and all of iso_8859-*.
+
+cp1251.7
+    Marko Myllynen
+        Charset pages unification, minor cleanups
+
+iso_8859-10.7
+    Marko Myllynen
+        Charset pages unification, minor cleanups
+
+iso_8859-11.7
+    Marko Myllynen
+        Charset pages unification, minor cleanups
+
+iso_8859-13.7
+    Marko Myllynen
+        Charset pages unification, minor cleanups
+
+iso_8859-14.7
+    Marko Myllynen
+        Charset pages unification, minor cleanups
+
+iso_8859-15.7
+    Marko Myllynen
+        Charset pages unification, minor cleanups
+
+iso_8859-16.7
+    Marko Myllynen
+        Charset pages unification, minor cleanups
+
+iso_8859-1.7
+    Marko Myllynen
+        Charset pages unification, minor cleanups
+
+iso_8859-2.7
+    Marko Myllynen
+        Charset pages unification, minor cleanups
+
+iso_8859-3.7
+    Marko Myllynen
+        Charset pages unification, minor cleanups
+
+iso_8859-4.7
+    Marko Myllynen
+        Charset pages unification, minor cleanups
+
+iso_8859-5.7
+    Marko Myllynen
+        Charset pages unification, minor cleanups
+
+iso_8859-6.7
+    Marko Myllynen
+        Charset pages unification, minor cleanups
+
+iso_8859-7.7
+    Marko Myllynen
+        Charset pages unification, minor cleanups
+
+iso_8859-8.7
+    Marko Myllynen
+        Charset pages unification, minor cleanups
+
+iso_8859-9.7
+    Marko Myllynen
+        Charset pages unification, minor cleanups
+
+koi8-r.7
+    Marko Myllynen
+        Charset pages unification, minor cleanups
+            - remove stray comments, streamline description
+              (charsets(7) and Wikipedia provide more detailed
+               and up-to-date description)
+            - list differences between koi8-r.7 vs koi8-u.7
+
+koi8-u.7
+    Marko Myllynen
+        Charset pages unification, minor cleanups
+            - remove stray comments, streamline description
+              (charsets(7) and Wikipedia provide more detailed
+               and up-to-date description)
+            - list differences between koi8-r.7 vs koi8-u.7
+
+mq_overview.7
+    Michael Kerrisk
+        Update queues_max details for Linux 3.14
+            And in general rework the text a little.
+    Michael Kerrisk
+        Update discussion of HARD_MSGMAX
+            The limit has changed in 2.6.33 and then again in 3.5.
+    Michael Kerrisk  [Arto Bendiken]
+        Update details for 'queues_max' limit
+            Things changed in Linux 3.5.
+            See https://bugs.launchpad.net/bugs/1155695
+    Michael Kerrisk
+        Update details on defaults and ceiling for 'msgsize_max' limit
+    Michael Kerrisk
+        Rework discussion of HARD_MSGMAX
+    Michael Kerrisk  [Davidlohr Bueso]
+        Various fixes after review from Davidlohr Bueso
+
+sched.7
+    Michael Kerrisk
+        SEE ALSO: add taskset(1)
+
+ld.so.8
+    Michael Kerrisk
+        SEE ALSO: add pldd(1)
+    Michael Kerrisk
+        SEE ALSO: add dlopen(3)
+    Michael Kerrisk
+        SEE ALSO: add ld(1)
+
+
+
+==================== Changes in man-pages-3.75 ====================
+
+Released: 2014-10-15, Düsseldorf
+
+
+Contributors
+------------
+
+The following people contributed patches/fixes or (noted in brackets
+in the changelog below) reports, notes, and ideas that have been
+incorporated in changes in this release:
+
+Jonny Grant <jg@jguk.org>
+Michael Kerrisk <mtk.manpages@gmail.com>
+Robert Schweikert <rjschwei@suse.com>
+Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
+Walter Harms <wharms@bfs.de>
+
+Apologies if I missed anyone!
+
+
+New and rewritten pages
+-----------------------
+
+pthread_rwlockattr_setkind_np.3
+    Robert Schweikert  [Michael Kerrisk]
+        New page documenting pthread_rwlockattr_[sg]etkind_np(3)
+            Documents pthread_rwlockattr_setkind_np(3) and
+            pthread_rwlockattr_getkind_np(3).
+
+
+New and changed links
+---------------------
+
+pthread_rwlockattr_getkind_np.3
+    Robert Schweikert
+        New link to pthread_rwlockattr_setkind_np(3)
+
+
+Changes to individual pages
+---------------------------
+
+readlink.2
+    Michael Kerrisk  [Jonny Grant]
+        Add free() call to example program
+
+readv.2
+    Michael Kerrisk
+        The raw preadv() and pwritev() syscalls split 'offset' into 2 arguments
+
+signal.7
+    Michael Kerrisk
+        pthread_mutex_lock() and pthread_cond_wait() are restartable
+            pthread_mutex_lock(, pthread_cond_wait(), and related APIs are
+            automatically restarted if interrupted by a signal handler.
+
+unix.7
+    Michael Kerrisk  [Carlos O'Donell, David Miller, Tetsuo Handa]
+        Various additions and rewordings
+            Notable changes:
+            * Clarify some details for pathname sockets.
+            * Add some advice on portably coding with pathname sockets.
+            * Note the "buggy" behavior for pathname sockets when
+              the supplied pathname is 108 bytes (after a report by
+              Tetsuo Handa).

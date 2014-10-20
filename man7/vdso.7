@@ -10,7 +10,7 @@
 .\"   http://www.linuxjournal.com/content/creating-vdso-colonels-other-chicken
 .\"   http://www.trilithium.com/johan/2005/08/linux-gate/
 .\"
-.TH VDSO 7 2014-02-01 "Linux" "Linux Programmer's Manual"
+.TH VDSO 7 2014-08-19 "Linux" "Linux Programmer's Manual"
 .SH NAME
 vDSO \- overview of the virtual ELF dynamic shared object
 .SH SYNOPSIS
@@ -439,6 +439,11 @@ _
 __kernel_sigreturn	LINUX_2.5
 __kernel_rt_sigreturn	LINUX_2.5
 __kernel_vsyscall	LINUX_2.5
+.\" Added in 7a59ed415f5b57469e22e41fc4188d5399e0b194 and updated
+.\" in 37c975545ec63320789962bf307f000f08fabd48.
+__vdso_clock_gettime	LINUX_2.6 (exported since Linux 3.15)
+__vdso_gettimeofday	LINUX_2.6 (exported since Linux 3.15)
+__vdso_time	LINUX_2.6 (exported since Linux 3.15)
 .TE
 .if t \{\
 .in

@@ -25,7 +25,7 @@
 .\" Rewritten old page, 990824, aeb@cwi.nl
 .\" 2004-12-14, mtk, added discussion of resolved_path == NULL
 .\"
-.TH REALPATH 3  2013-03-15 "" "Linux Programmer's Manual"
+.TH REALPATH 3  2014-10-02 "" "Linux Programmer's Manual"
 .SH NAME
 realpath \- return the canonicalized absolute pathname
 .SH SYNOPSIS
@@ -132,8 +132,6 @@ The named file does not exist.
 .TP
 .B ENOTDIR
 A component of the path prefix is not a directory.
-.SH VERSIONS
-On Linux, this function appeared in libc 4.5.21.
 .SH CONFORMING TO
 4.4BSD, POSIX.1-2001.
 
@@ -177,10 +175,10 @@ A typical source fragment would be
 .\" Solaris may return a relative pathname when the
 .\" .I path
 .\" argument is relative.
-The prototype of
-.BR realpath ()
-is given in \fI<unistd.h>\fP in libc4 and libc5,
-but in \fI<stdlib.h>\fP everywhere else.
+.\" The prototype of
+.\" .BR realpath ()
+.\" is given in \fI<unistd.h>\fP in libc4 and libc5,
+.\" but in \fI<stdlib.h>\fP everywhere else.
 .SS GNU extensions
 If the call fails with either
 .BR EACCES
@@ -217,13 +215,14 @@ The
 .I "resolved_path\ ==\ NULL"
 feature, not standardized in POSIX.1-2001,
 but standardized in POSIX.1-2008, allows this design problem to be avoided.
-.LP
-The libc4 and libc5 implementation contained a buffer overflow
-(fixed in libc-5.4.13).
-Thus, set-user-ID programs like
-.BR mount (8)
-needed a private version.
+.\" .LP
+.\" The libc4 and libc5 implementation contained a buffer overflow
+.\" (fixed in libc-5.4.13).
+.\" Thus, set-user-ID programs like
+.\" .BR mount (8)
+.\" needed a private version.
 .SH SEE ALSO
+.BR realpath (1),
 .BR readlink (2),
 .BR canonicalize_file_name (3),
 .BR getcwd (3),

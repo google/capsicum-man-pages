@@ -25,7 +25,7 @@
 .\" Modified, 27 May 2004, Michael Kerrisk <mtk.manpages@gmail.com>
 .\"     Added notes on capability requirements
 .\"
-.TH REBOOT 2 2013-12-28 "Linux" "Linux Programmer's Manual"
+.TH REBOOT 2 2014-09-21 "Linux" "Linux Programmer's Manual"
 .SH NAME
 reboot \- reboot or enable/disable Ctrl-Alt-Del
 .SH SYNOPSIS
@@ -77,7 +77,7 @@ and since 2.1.97 also
 and since 2.5.71 also
 .B LINUX_REBOOT_MAGIC2C
 (that is, 537993216)
-are permitted as value for
+are permitted as values for
 .IR magic2 .
 (The hexadecimal values of these constants are meaningful.)
 The
@@ -162,6 +162,27 @@ For the i386 architecture, the additional argument does not do
 anything at present (2.1.122), but the type of reboot can be
 determined by kernel command-line arguments ("reboot=...") to be
 either warm or cold, and either hard or through the BIOS.
+.SS Behavior inside PID namespaces
+.\" commit cf3f89214ef6a33fad60856bc5ffd7bb2fc4709b
+.\" see also commit 923c7538236564c46ee80c253a416705321f13e3
+Since Linux 3.4, when
+.BR reboot ()
+is called from a PID namespace (see
+.BR pid_namespaces (7))
+other than the initial PID namespace,
+the effect of the call is to send a signal to the namespace "init" process.
+.BR LINUX_REBOOT_CMD_RESTART
+and
+.BR LINUX_REBOOT_CMD_RESTART2
+cause a
+.BR SIGHUP
+signal to be sent.
+.BR LINUX_REBOOT_CMD_POWER_OFF
+and
+.BR LINUX_REBOOT_CMD_HALT
+cause a
+.B SIGINT
+signal to be sent.
 .SH RETURN VALUE
 For the values of
 .I cmd

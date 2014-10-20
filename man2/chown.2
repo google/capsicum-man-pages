@@ -35,7 +35,7 @@
 .\"     (bsdgroups versus sysvgroups, and the effect of the parent
 .\"     directory's set-group-ID permission bit).
 .\"
-.TH CHOWN 2 2014-05-21 "Linux" "Linux Programmer's Manual"
+.TH CHOWN 2 2014-08-19 "Linux" "Linux Programmer's Manual"
 .SH NAME
 chown, fchown, lchown, fchownat \- change ownership of a file
 .SH SYNOPSIS
@@ -377,6 +377,21 @@ mount options are supported by ext2, ext3, ext4, and XFS.
 Filesystems that don't support these mount options follow the
 .IR "\-o\ nogrpid"
 rules.
+.SS Glibc notes
+On older kernels where
+.BR fchownat ()
+is unavailable, the glibc wrapper function falls back to the use of
+.BR chown ()
+and
+.BR lchown ().
+When
+.I pathname
+is a relative pathname,
+glibc constructs a pathname based on the symbolic link in
+.IR /proc/self/fd
+that corresponds to the
+.IR dirfd
+argument.
 .SS NFS
 The
 .BR chown ()

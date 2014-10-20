@@ -23,7 +23,7 @@
 .\" the source, must acknowledge the copyright and authors of this work.
 .\" %%%LICENSE_END
 .\"
-.TH SPLICE 2 2012-05-04 "Linux" "Linux Programmer's Manual"
+.TH SPLICE 2 2014-07-08 "Linux" "Linux Programmer's Manual"
 .SH NAME
 splice \- splice data to/from a pipe
 .SH SYNOPSIS
@@ -140,6 +140,12 @@ returns \-1 and
 .I errno
 is set to indicate the error.
 .SH ERRORS
+.TP
+.B EAGAIN
+.B SPLICE_F_NONBLOCK
+was specified in
+.IR flags ,
+and the operation would block.
 .TP
 .B EBADF
 One or both file descriptors are not valid,

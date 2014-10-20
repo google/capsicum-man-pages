@@ -24,7 +24,7 @@
 .\" This document is based on the perf_event.h header file, the
 .\" tools/perf/design.txt file, and a lot of bitter experience.
 .\"
-.TH PERF_EVENT_OPEN 2 2014-04-17 "Linux" "Linux Programmer's Manual"
+.TH PERF_EVENT_OPEN 2 2014-08-19 "Linux" "Linux Programmer's Manual"
 .SH NAME
 perf_event_open \- set up performance monitoring
 .SH SYNOPSIS
@@ -149,11 +149,11 @@ then
 .BR execve (2).
 .TP
 .BR PERF_FLAG_FD_NO_GROUP
-.\" FIXME The following sentence is unclear
+.\" FIXME . The following sentence is unclear
 This flag allows creating an event as part of an event group but
 having no group leader.
 It is unclear why this is useful.
-.\" FIXME So, why is it useful?
+.\" FIXME . So, why is it useful?
 .TP
 .BR PERF_FLAG_FD_OUTPUT
 This flag reroutes the output from an event to the group leader.
@@ -225,7 +225,9 @@ struct perf_event_attr {
                                 /* exclude kernel callchains */
           exclude_callchain_user   : 1,
                                 /* exclude user callchains */
-          __reserved_1   : 41;
+          mmap2          :  1,  /* include mmap with inode data */
+          comm_exec      :  1,  /* flag comm events that are due to exec */
+          __reserved_1   : 39;
 
     union {
         __u32 wakeup_events;    /* wakeup every n events */
@@ -860,9 +862,16 @@ bit enables tracking of process command name as modified by the
 .BR exec (2)
 and
 .BR prctl (PR_SET_NAME)
-system calls.
-Unfortunately for tools,
-there is no way to distinguish one system call versus the other.
+system calls as well as writing to
+.IR /proc/self/comm .
+If the
+.I comm_exec
+flag is also successfully set (possible since Linux 3.16),
+then the misc flag
+.B PERF_RECORD_MISC_COMM_EXEC
+can be used to differentiate the
+.BR exec (2)
+case from the others.
 .TP
 .IR "freq"
 If this bit is set, then
@@ -979,6 +988,28 @@ Do not include kernel callchains.
 .TP
 .IR "exclude_callchain_user" " (since Linux 3.7)"
 Do not include user callchains.
+.TP
+.IR "mmap2" " (since Linux 3.16)"
+Generate an extended executable mmap record that contains enough
+additional information to uniquely identify shared mappings.
+The
+.I mmap
+flag must also be set for this to work.
+.TP
+.IR "comm_exec" " (since Linux 3.16)"
+This is purely a feature-detection flag, it does not change
+kernel behavior.
+If this flag can successfully be set, then, when
+.I comm
+is enabled, the
+.B PERF_RECORD_MISC_COMM_EXEC
+flag will be set in the
+.I misc
+field of a comm record header if the rename event being
+reported was caused by a call to
+.BR exec (2).
+This allows tools to distinguish between the various
+types of process renaming.
 .TP
 .IR "wakeup_events" ", " "wakeup_watermark"
 This union sets how many samples
@@ -1106,6 +1137,9 @@ Any return branch.
 .TP
 .B PERF_SAMPLE_BRANCH_IND_CALL
 Indirect calls.
+.TP
+.BR PERF_SAMPLE_BRANCH_COND " (since Linux 3.16)"
+Conditional branches.
 .TP
 .BR PERF_SAMPLE_BRANCH_ABORT_TX " (since Linux 3.11)"
 Transactional memory aborts.
@@ -1542,6 +1576,17 @@ In addition, one of the following bits can be set:
 This is set when the mapping is not executable;
 otherwise the mapping is executable.
 .TP
+.B PERF_RECORD_MISC_COMM_EXEC
+This is set for a
+.B PERF_RECORD_COMM
+record on kernels more recent than Linux 3.16
+if a process name change was caused by an
+.BR exec (2)
+system call.
+It is an alias for
+.B PERF_RECORD_MISC_MMAP_DATA
+since the two values would not be set in the same record.
+.TP
 .B PERF_RECORD_MISC_EXACT_IP
 This indicates that the content of
 .B PERF_SAMPLE_IP
@@ -1584,6 +1629,23 @@ struct {
 };
 .fi
 .in
+.RS
+.TP
+.I pid
+is the process ID.
+.TP
+.I tid
+is the thread ID.
+.TP
+.I addr
+is the address of the allocated memory.
+.I len
+is the length of the allocated memory.
+.I pgoff
+is the page offset of the allocated memory.
+.I filename
+is a string describing the backing of the allocated memory.
+.RE
 .TP
 .B PERF_RECORD_LOST
 This record indicates when events are lost.
@@ -1614,12 +1676,24 @@ This record indicates a change in the process name.
 .nf
 struct {
     struct perf_event_header header;
-    u32 pid, tid;
+    u32 pid;
+    u32 tid;
     char comm[];
     struct sample_id sample_id;
 };
 .fi
 .in
+.RS
+.TP
+.I pid
+is the process ID.
+.TP
+.I tid
+is the thread ID.
+.TP
+.I comm
+is a string containing the new name of the process.
+.RE
 .TP
 .B PERF_RECORD_EXIT
 This record indicates a process exit event.
@@ -1885,13 +1959,15 @@ bit mask.
 .IR size ", " data[size] ", " dyn_size
 If
 .B PERF_SAMPLE_STACK_USER
-is enabled, then record the user stack to enable backtracing.
+is enabled, then the user stack is recorded.
+This can be used to generate stack backtraces.
 .I size
 is the size requested by the user in
-.I stack_user_size
+.I sample_stack_user
 or else the maximum record size.
 .I data
-is the stack data.
+is the stack data (a raw dump of the memory pointed to by the
+stack pointer at the time of sampling).
 .I dyn_size
 is the amount of data actually dumped (can be less than
 .IR size ).
@@ -1935,7 +2011,9 @@ Executable code
 .PD
 .TP
 .I mem_lvl
-Memory hierarchy level hit or miss, a bitwise combination of:
+Memory hierarchy level hit or miss, a bitwise combination of
+the following, shifted left by
+.BR PERF_MEM_LVL_SHIFT :
 
 .PD 0
 .RS
@@ -1985,7 +2063,8 @@ Uncached memory
 .PD
 .TP
 .I mem_snoop
-Snoop mode, a bitwise combination of:
+Snoop mode, a bitwise combination of the following, shifted left by
+.BR PERF_MEM_SNOOP_SHIFT :
 
 .PD 0
 .RS
@@ -2008,7 +2087,8 @@ Snoop hit modified
 .PD
 .TP
 .I mem_lock
-Lock instruction, a bitwise combination of:
+Lock instruction, a bitwise combination of the following, shifted left by
+.BR PERF_MEM_LOCK_SHIFT :
 
 .PD 0
 .RS
@@ -2022,7 +2102,9 @@ Locked transaction
 .PD
 .TP
 .I mem_dtlb
-TLB access hit or miss, a bitwise combination of:
+TLB access hit or miss, a bitwise combination of the following, shifted
+left by
+.BR PERF_MEM_TLB_SHIFT :
 
 .PD 0
 .RS
@@ -2091,9 +2173,79 @@ the high 32 bits of the field by shifting right by
 and masking with
 .BR PERF_TXN_ABORT_MASK .
 .RE
+.TP
+.B PERF_RECORD_MMAP2
+This record includes extended information on
+.BR mmap (2)
+calls returning executable mappings.
+The format is similar to that of the
+.B PERF_RECORD_MMAP
+record, but includes extra values that allow uniquely identifying
+shared mappings.
+
+.in +4n
+.nf
+struct {
+    struct perf_event_header header;
+    u32 pid;
+    u32 tid;
+    u64 addr;
+    u64 len;
+    u64 pgoff;
+    u32 maj;
+    u32 min;
+    u64 ino;
+    u64 ino_generation;
+    u32 prot;
+    u32 flags;
+    char filename[];
+    struct sample_id sample_id;
+};
+.fi
+.RS
+.TP
+.I pid
+is the process ID.
+.TP
+.I tid
+is the thread ID.
+.TP
+.I addr
+is the address of the allocated memory.
+.TP
+.I len
+is the length of the allocated memory.
+.TP
+.I pgoff
+is the page offset of the allocated memory.
+.TP
+.I maj
+is the major ID of the underlying device.
+.TP
+.I min
+is the minor ID of the underlying device.
+.TP
+.I ino
+is the inode number.
+.TP
+.I ino_generation
+is the inode generation.
+.TP
+.I prot
+is the protection information.
+.TP
+.I flags
+is the flags information.
+.TP
+.I filename
+is a string describing the backing of the allocated memory.
+.RE
 .RE
 .SS Signal overflow
 Events can be set to deliver a signal when a threshold is crossed.
+.\" FIXME .
+.\" The following sentence doesn't seem to make sense.
+.\" These system calls do not set up signal handlers.
 The signal handler is set up using the
 .BR poll (2),
 .BR select (2),
@@ -2130,8 +2282,8 @@ once the value reaches 0, a signal is sent of type
 and
 the underlying event is disabled.
 
-Note: on newer kernels (definitely noticed with 3.2)
-.\" FIXME(Vince) : Find out when this was introduced
+Note: on newer kernels (since at least as early as Linux 3.2),
+.\" FIXME . Find out when this was introduced
 a signal is provided for every overflow, even if
 .I wakeup_events
 is not set.

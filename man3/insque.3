@@ -33,7 +33,7 @@
 .\" mtk, 2010-09-09: Noted glibc 2.4 bug, added info on circular
 .\"	lists, added example program
 .\"
-.TH INSQUE 3  2010-09-09 "" "Linux Programmer's Manual"
+.TH INSQUE 3  2014-08-19 "" "Linux Programmer's Manual"
 .SH NAME
 insque, remque \- insert/remove an item from a queue
 .SH SYNOPSIS
@@ -99,7 +99,7 @@ doubly-linked list.
 .SH CONFORMING TO
 POSIX.1-2001.
 .SH NOTES
-Traditionally (e.g., SunOS, Linux libc 4 and libc 5),
+Traditionally (e.g., SunOS, Linux libc4 and libc5),
 the arguments of these functions were of type \fIstruct qelem *\fP,
 defined as:
 
@@ -122,8 +122,8 @@ The location of the prototypes for these functions differs among several
 versions of UNIX.
 The above is the POSIX version.
 Some systems place them in \fI<string.h>\fP.
-Linux libc4 and libc 5 placed them
-in \fI<stdlib.h>\fP.
+.\" Linux libc4 and libc 5 placed them
+.\" in \fI<stdlib.h>\fP.
 .SH BUGS
 In glibc 2.4 and earlier, it was not possible to specify
 .I prev

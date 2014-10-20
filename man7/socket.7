@@ -52,8 +52,10 @@
 .\"		Author: Keller, Jacob E <jacob.e.keller@intel.com>
 .\"     SO_MAX_PACING_RATE (3.13)
 .\"             commit 62748f32d501f5d3712a7c372bbb92abc7c62bc7
+.\"     SO_BPF_EXTENSIONS (3.14)
+.\"             commit ea02f9411d9faa3553ed09ce0ec9f00ceae9885e
 .\"
-.TH SOCKET 7 2014-02-21 Linux "Linux Programmer's Manual"
+.TH SOCKET 7 2014-07-08 Linux "Linux Programmer's Manual"
 .SH NAME
 socket \- Linux socket interface
 .SH SYNOPSIS
@@ -288,7 +290,7 @@ Unless otherwise noted,
 .I optval
 is a pointer to an
 .IR int .
-.\" FIXME
+.\" FIXME .
 .\" In the list below, the text used to describe argument types
 .\" for each socket option should be more consistent
 .\"
@@ -562,7 +564,7 @@ when it is set using
 and this doubled value is returned by
 .BR getsockopt (2).
 .\" The following thread on LMKL is quite informative:
-.\" getsockopt/setsockopt with SO_RCVBUF and SO_SNDBUF "non-standard" behaviour
+.\" getsockopt/setsockopt with SO_RCVBUF and SO_SNDBUF "non-standard" behavior
 .\" 17 July 2012
 .\" http://thread.gmane.org/gmane.linux.kernel/1328935
 The default value is set by the

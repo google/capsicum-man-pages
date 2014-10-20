@@ -23,7 +23,7 @@
 .\" the source, must acknowledge the copyright and authors of this work.
 .\" %%%LICENSE_END
 .\"
-.TH MALLOPT 3  2012-04-30 "Linux" "Linux Programmer's Manual"
+.TH MALLOPT 3  2014-07-08 "Linux" "Linux Programmer's Manual"
 .SH NAME
 mallopt \- set memory allocation parameters
 .SH SYNOPSIS
@@ -410,7 +410,7 @@ does not generate an error.
 
 A calculation error within the glibc implementation means that
 a call of the form:
-.\" FIXME This looks buggy:
+.\" FIXME . This looks buggy:
 .\" setting the M_MXFAST limit rounds up:    (s + SIZE_SZ) & ~MALLOC_ALIGN_MASK)
 .\" malloc requests are rounded up:
 .\"    (req) + SIZE_SZ + MALLOC_ALIGN_MASK) & ~MALLOC_ALIGN_MASK
@@ -431,18 +431,6 @@ where
 is an integer.
 .\" Bins are multiples of 2 * sizeof(size_t) + sizeof(size_t)
 
-The
-.BR MALLOC_MMAP_THRESHOLD_
-and
-.BR MALLOC_MMAP_MAX_
-variables are
-.I not
-ignored in set-group-ID programs.
-.\" FIXME MALLOC_MMAP_THRESHOLD_ and MALLOC_MMAP_MAX_
-.\" do have an effect for set-user-ID programs (but not
-.\" set-group-ID programs).
-.\" http://sources.redhat.com/bugzilla/show_bug.cgi?id=12155
-
 If
 .BR mallopt ()
 is used to set
@@ -456,7 +444,7 @@ the bytes of the region are initialized to the byte specified in
 However, there is an
 .RI off-by- sizeof(size_t)
 error in the implementation:
-.\" FIXME http://sources.redhat.com/bugzilla/show_bug.cgi?id=12140
+.\" FIXME . http://sources.redhat.com/bugzilla/show_bug.cgi?id=12140
 instead of initializing precisely the block of memory
 being freed by the call
 .IR free(p) ,

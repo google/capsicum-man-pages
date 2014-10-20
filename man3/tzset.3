@@ -30,7 +30,7 @@
 .\" Modified 2001-11-13, aeb
 .\" Modified 2004-12-01 mtk and Martin Schulze <joey@infodrom.org>
 .\"
-.TH TZSET 3  2012-03-25 "" "Linux Programmer's Manual"
+.TH TZSET 3  2014-08-19 "" "Linux Programmer's Manual"
 .SH NAME
 tzset, tzname, timezone, daylight \- initialize time conversion information
 .SH SYNOPSIS
@@ -190,27 +190,25 @@ Here's an example, once more for New Zealand:
     TZ=":Pacific/Auckland"
 .fi
 .SH FILES
-The system timezone directory used depends on the (g)libc version.
-Libc4 and libc5 use
-.IR /usr/lib/zoneinfo ,
-and, since libc-5.4.6,
-when this doesn't work, will try
-.IR /usr/share/zoneinfo .
-Glibc2 will use the environment variable
-.BR TZDIR ,
-when that exists.
-Its default depends on how it was installed, but normally is
+Under glibc,
+the system timezone directory is determined using the
+.BR TZDIR
+the environment variable.
+If
+.BR TZDIR
+is not set, the default depends on the system setup, but is normally
 .IR /usr/share/zoneinfo .
 .LP
 This timezone directory contains the files
+
 .nf
-localtime      local timezone file
-posixrules     rules for POSIX-style TZ's
+    localtime      local timezone file
+    posixrules     rules for POSIX-style TZ's
 .fi
 .LP
-Often
+Often,
 .I /etc/localtime
-is a symlink to the file
+is a symbolic link to the file
 .I localtime
 or to the correct timezone file in the system timezone directory.
 .SH CONFORMING TO

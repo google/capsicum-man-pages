@@ -31,7 +31,7 @@
 .\" 2000-07-26 jsm28@hermes.cam.ac.uk - three small fixes
 .\" 2000-10-16 jsm28@hermes.cam.ac.uk - more fixes
 .\"
-.TH PRINTF 3  2013-12-30 "GNU" "Linux Programmer's Manual"
+.TH PRINTF 3  2014-07-08 "GNU" "Linux Programmer's Manual"
 .SH NAME
 printf, fprintf, sprintf, snprintf, vprintf, vfprintf, vsprintf,
 vsnprintf \- formatted output conversion
@@ -332,9 +332,7 @@ For other conversions, the behavior is undefined.
 .B \-
 The converted value is to be left adjusted on the field boundary.
 (The default is right justification.)
-Except for
-.B n
-conversions, the converted value is padded on the right with blanks, rather
+The converted value is padded on the right with blanks, rather
 than on the left with blanks or zeros.
 A
 .B \-
@@ -354,8 +352,8 @@ A
 .B +
 overrides a space if both are used.
 .PP
-The five flag characters above are defined in the C standard.
-The SUSv2 specifies one further flag character.
+The five flag characters above are defined in the C99 standard.
+The Single UNIX Specification specifies one further flag character.
 .TP
 .B \(aq
 For decimal conversion
@@ -371,8 +369,8 @@ if the locale information indicates any.
 Note that many versions of
 .BR gcc (1)
 cannot parse this option and will issue a warning.
-SUSv2 does not
-include \fI%\(aqF\fP.
+(SUSv2 did not
+include \fI%\(aqF\fP, but SUSv3 added it.)
 .PP
 glibc 2.2 adds one further flag character.
 .TP
@@ -517,10 +515,10 @@ conversion corresponds to a
 .I long double
 argument.
 (C99 allows %LF, but SUSv2 does not.)
-.TP
-.B q
-("quad". 4.4BSD and Linux libc5 only.
-Don't use.)
+.\" .TP
+.\" .B q
+.\" ("quad". 4.4BSD and Linux libc5 only.
+.\" Don't use.)
 This is a synonym for
 .BR ll .
 .TP
@@ -529,6 +527,10 @@ A following integer conversion corresponds to an
 .I intmax_t
 or
 .I uintmax_t
+argument, or a following
+.B n
+conversion corresponds to a pointer to an
+.I intmax_t
 argument.
 .TP
 .B z
@@ -536,18 +538,27 @@ A following integer conversion corresponds to a
 .I size_t
 or
 .I ssize_t
+argument, or a following
+.B n
+conversion corresponds to a pointer to a
+.I size_t
 argument.
-(Linux libc5 has
-.B Z
-with this meaning.
-Don't use it.)
+.\" (Linux libc5 has
+.\" .B Z
+.\" with this meaning.
+.\" Don't use it.)
 .TP
 .B t
 A following integer conversion corresponds to a
 .I ptrdiff_t
+argument, or a following
+.B n
+conversion corresponds to a pointer to a
+.I ptrdiff_t
 argument.
 .PP
-The SUSv2 knows about only the length modifiers
+SUSv3 specifies all of the above.
+SUSv2 specified only the length modifiers
 .B h
 (in
 .BR hd ,
@@ -646,10 +657,12 @@ If the precision is missing, it is taken as
 6; if the precision is explicitly zero, no decimal-point character appears.
 If a decimal point appears, at least one digit appears before it.
 
-(The SUSv2 does not know about
+(SUSv2 does not know about
 .B F
 and says that character string representations for infinity and NaN
 may be made available.
+SUSv3 adds a specification for
+.BR F .
 The C99 standard specifies "[\-]inf" or "[\-]infinity"
 for infinity, and a string starting with "nan" for NaN, in the case of
 .B f
@@ -683,7 +696,8 @@ fractional part of the result; a decimal point appears only if it is
 followed by at least one digit.
 .TP
 .BR a ", " A
-(C99; not in SUSv2) For
+(C99; not in SUSv2, but added in SUSv3)
+For
 .B a
 conversion, the
 .I double
@@ -767,13 +781,13 @@ precision is given and it is so small that the number of bytes written
 exceeds it before the end of the array is reached.
 .TP
 .B C
-(Not in C99, but in SUSv2.)
+(Not in C99 or C11, but in SUSv2, SUSv3, and SUSv4.)
 Synonym for
 .BR lc .
 Don't use.
 .TP
 .B S
-(Not in C99, but in SUSv2.)
+(Not in C99 or C11, but in SUSv2, SUSv3, and SUSv4.)
 Synonym for
 .BR ls .
 Don't use.
@@ -788,10 +802,14 @@ or
 .TP
 .B n
 The number of characters written so far is stored into the integer
-indicated by the
-.I "int\ *"
-(or variant) pointer argument.
+pointed to by the corresponding argument.
+That argument shall be an
+.I "int\ *",
+or variant whose size matches the (optionally)
+supplied integer length modifier.
 No argument is converted.
+The behavior is undefined if the conversion specification includes
+any flags, a field width, or a precision.
 .TP
 .B m
 (Glibc extension.)
@@ -832,33 +850,36 @@ while C99 allows
 to be NULL in this case, and gives the return value (as always)
 as the number of characters that would have been written in case
 the output string has been large enough.
-.PP
-Linux libc4 knows about the five C standard flags.
-It knows about the length modifiers \fBh\fP, \fBl\fP, \fBL\fP,
-and the conversions
-\fBc\fP, \fBd\fP, \fBe\fP, \fBE\fP, \fBf\fP, \fBF\fP,
-\fBg\fP, \fBG\fP, \fBi\fP, \fBn\fP, \fBo\fP, \fBp\fP,
-\fBs\fP, \fBu\fP, \fBx\fP, and \fBX\fP,
-where \fBF\fP is a synonym for \fBf\fP.
-Additionally, it accepts \fBD\fP, \fBO\fP, and \fBU\fP as synonyms
-for \fBld\fP, \fBlo\fP, and \fBlu\fP.
-(This is bad, and caused serious bugs later, when
-support for \fB%D\fP disappeared.)
-No locale-dependent radix character,
-no thousands' separator, no NaN or infinity, no "%m$" and "*m$".
-.PP
-Linux libc5 knows about the five C standard flags and the \(aq flag,
-locale, "%m$" and "*m$".
-It knows about the length modifiers \fBh\fP, \fBl\fP, \fBL\fP,
-\fBZ\fP, and \fBq\fP, but accepts \fBL\fP and \fBq\fP
-both for \fIlong double\fP and for \fIlong long int\fP (this is a bug).
-It no longer recognizes \fBF\fP, \fBD\fP, \fBO\fP, and \fBU\fP,
-but adds the conversion character
-.BR m ,
-which outputs
-.IR strerror(errno) .
-.PP
-glibc 2.0 adds conversion characters \fBC\fP and \fBS\fP.
+SUSv3 and later align their specification of
+.BR snprintf ()
+with C99.
+.\" .PP
+.\" Linux libc4 knows about the five C standard flags.
+.\" It knows about the length modifiers \fBh\fP, \fBl\fP, \fBL\fP,
+.\" and the conversions
+.\" \fBc\fP, \fBd\fP, \fBe\fP, \fBE\fP, \fBf\fP, \fBF\fP,
+.\" \fBg\fP, \fBG\fP, \fBi\fP, \fBn\fP, \fBo\fP, \fBp\fP,
+.\" \fBs\fP, \fBu\fP, \fBx\fP, and \fBX\fP,
+.\" where \fBF\fP is a synonym for \fBf\fP.
+.\" Additionally, it accepts \fBD\fP, \fBO\fP, and \fBU\fP as synonyms
+.\" for \fBld\fP, \fBlo\fP, and \fBlu\fP.
+.\" (This is bad, and caused serious bugs later, when
+.\" support for \fB%D\fP disappeared.)
+.\" No locale-dependent radix character,
+.\" no thousands' separator, no NaN or infinity, no "%m$" and "*m$".
+.\" .PP
+.\" Linux libc5 knows about the five C standard flags and the \(aq flag,
+.\" locale, "%m$" and "*m$".
+.\" It knows about the length modifiers \fBh\fP, \fBl\fP, \fBL\fP,
+.\" \fBZ\fP, and \fBq\fP, but accepts \fBL\fP and \fBq\fP
+.\" both for \fIlong double\fP and for \fIlong long int\fP (this is a bug).
+.\" It no longer recognizes \fBF\fP, \fBD\fP, \fBO\fP, and \fBU\fP,
+.\" but adds the conversion character
+.\" .BR m ,
+.\" which outputs
+.\" .IR strerror(errno) .
+.\" .PP
+.\" glibc 2.0 adds conversion characters \fBC\fP and \fBS\fP.
 .PP
 glibc 2.1 adds length modifiers \fBhh\fP, \fBj\fP, \fBt\fP, and \fBz\fP
 and conversion characters \fBa\fP and \fBA\fP.
@@ -892,7 +913,7 @@ and
 .BR vsnprintf ()
 conforms to the C99 standard, that is, behaves as described above,
 since glibc version 2.1.
-Until glibc 2.0.6 they would return \-1
+Until glibc 2.0.6, they would return \-1
 when the output was truncated.
 .\" .SH HISTORY
 .\" UNIX V7 defines the three routines
@@ -944,19 +965,19 @@ instead (or
 .BR asprintf (3)
 and
 .BR vasprintf (3)).
-.PP
-Linux libc4.[45] does not have a
-.BR snprintf (),
-but provides a libbsd that contains an
-.BR snprintf ()
-equivalent to
-.BR sprintf (),
-that is, one that ignores the
-.I size
-argument.
-Thus, the use of
-.BR snprintf ()
-with early libc4 leads to serious security problems.
+.\" .PP
+.\" Linux libc4.[45] does not have a
+.\" .BR snprintf (),
+.\" but provides a libbsd that contains an
+.\" .BR snprintf ()
+.\" equivalent to
+.\" .BR sprintf (),
+.\" that is, one that ignores the
+.\" .I size
+.\" argument.
+.\" Thus, the use of
+.\" .BR snprintf ()
+.\" with early libc4 leads to serious security problems.
 .PP
 Code such as
 .BI printf( foo );

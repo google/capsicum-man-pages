@@ -174,7 +174,7 @@ A process may be added to a cpuset (automatically removing
 it from the cpuset that previously contained it) by writing its
 PID to that cpuset's
 .I tasks
-file (with or without a trailing newline.)
+file (with or without a trailing newline).
 
 .B Warning:
 only one PID may be written to the
@@ -247,7 +247,7 @@ format of
 Flag (0 or 1).
 If set (1), the cpuset has exclusive use of
 its memory nodes (no sibling or cousin may overlap).
-Also if set (1), the cpuset is a \fBHardwall\fR cpuset (see below.)
+Also if set (1), the cpuset is a \fBHardwall\fR cpuset (see below).
 By default this is off (0).
 Newly created cpusets also initially default this to off (0).
 
@@ -261,7 +261,7 @@ of that cpuset's parent cpuset.
 .TP
 .IR cpuset.mem_hardwall " (since Linux 2.6.26)"
 Flag (0 or 1).
-If set (1), the cpuset is a \fBHardwall\fR cpuset (see below.)
+If set (1), the cpuset is a \fBHardwall\fR cpuset (see below).
 Unlike \fBmem_exclusive\fR,
 there is no constraint on whether cpusets
 marked \fBmem_hardwall\fR may have overlapping
@@ -889,7 +889,7 @@ Examples of the \fBMask Format\fR:
 40000000,00000000,00000000      # just bit 94 set
 00000001,00000000,00000000      # just bit 64 set
 000000ff,00000000               # bits 32-39 set
-00000000,000E3862               # 1,5,6,11-13,17-19 set
+00000000,000e3862               # 1,5,6,11-13,17-19 set
 .fi
 .RE
 .PP

@@ -39,10 +39,7 @@
 .\" 2008-11-19, mtk, document CLONE_NEWIPC
 .\" 2008-11-19, Jens Axboe, mtk, document CLONE_IO
 .\"
-.\" FIXME Document CLONE_NEWUSER, which is new in 2.6.23
-.\"       (also supported for unshare()?)
-.\"
-.TH CLONE 2 2014-05-28 "Linux" "Linux Programmer's Manual"
+.TH CLONE 2 2014-09-21 "Linux" "Linux Programmer's Manual"
 .SH NAME
 clone, __clone2 \- create a child process
 .SH SYNOPSIS
@@ -308,17 +305,17 @@ When an IPC namespace is destroyed
 (i.e., when the last process that is a member of the namespace terminates),
 all IPC objects in the namespace are automatically destroyed.
 
-Use of this flag requires: a kernel configured with the
-.B CONFIG_SYSVIPC
-and
-.B CONFIG_IPC_NS
-options and that the process be privileged
-.RB ( CAP_SYS_ADMIN ).
+Only a privileged process
+.RB ( CAP_SYS_ADMIN )
+can employ
+.BR CLONE_NEWIPC .
 This flag can't be specified in conjunction with
 .BR CLONE_SYSVSEM .
+
+For further information on IPC namespaces, see
+.BR namespaces (7).
 .TP
 .BR CLONE_NEWNET " (since Linux 2.6.24)"
-.\" FIXME Check when the implementation was completed
 (The implementation of this flag was completed only
 by about kernel version 2.6.29.)
 
@@ -326,7 +323,7 @@ If
 .B CLONE_NEWNET
 is set, then create the process in a new network namespace.
 If this flag is not set, then (as with
-.BR fork (2)),
+.BR fork (2))
 the process is created in the same network namespace as
 the calling process.
 This flag is intended for the implementation of containers.
@@ -341,7 +338,7 @@ directory trees, sockets, etc.).
 A physical network device can live in exactly one
 network namespace.
 A virtual network device ("veth") pair provides a pipe-like abstraction
-.\" FIXME Add pointer to veth(4) page when it is eventually completed
+.\" FIXME . Add pointer to veth(4) page when it is eventually completed
 that can be used to create tunnels between network namespaces,
 and can be used to create a bridge to a physical network device
 in another namespace.
@@ -350,51 +347,36 @@ When a network namespace is freed
 (i.e., when the last process in the namespace terminates),
 its physical network devices are moved back to the
 initial network namespace (not to the parent of the process).
+For further information on network namespaces, see
+.BR namespaces (7).
 
-Use of this flag requires: a kernel configured with the
-.B CONFIG_NET_NS
-option and that the process be privileged
-.RB ( CAP_SYS_ADMIN ).
+Only a privileged process
+.RB ( CAP_SYS_ADMIN )
+can employ
+.BR CLONE_NEWNET .
 .TP
 .BR CLONE_NEWNS " (since Linux 2.4.19)"
-Start the child in a new mount namespace.
-
-Every process lives in a mount namespace.
-The
-.I namespace
-of a process is the data (the set of mounts) describing the file hierarchy
-as seen by that process.
-After a
-.BR fork (2)
-or
-.BR clone ()
-where the
+If
 .B CLONE_NEWNS
-flag is not set, the child lives in the same mount
-namespace as the parent.
-The system calls
-.BR mount (2)
-and
-.BR umount (2)
-change the mount namespace of the calling process, and hence affect
-all processes that live in the same namespace, but do not affect
-processes in a different mount namespace.
-
-After a
-.BR clone ()
-where the
-.B CLONE_NEWNS
-flag is set, the cloned child is started in a new mount namespace,
+is set, the cloned child is started in a new mount namespace,
 initialized with a copy of the namespace of the parent.
-
-Only a privileged process (one having the \fBCAP_SYS_ADMIN\fP capability)
-may specify the
+If
 .B CLONE_NEWNS
-flag.
+is not set, the child lives in the same mount
+namespace as the parent.
+
+For further information on mount namespaces, see
+.BR namespaces (7).
+
+Only a privileged process
+.RB ( CAP_SYS_ADMIN )
+can employ
+.BR CLONE_NEWNS .
 It is not permitted to specify both
 .B CLONE_NEWNS
 and
 .B CLONE_FS
+.\" See https://lwn.net/Articles/543273/
 in the same
 .BR clone ()
 call.
@@ -411,73 +393,74 @@ If
 .B CLONE_NEWPID
 is set, then create the process in a new PID namespace.
 If this flag is not set, then (as with
-.BR fork (2)),
+.BR fork (2))
 the process is created in the same PID namespace as
 the calling process.
 This flag is intended for the implementation of containers.
 
-A PID namespace provides an isolated environment for PIDs:
-PIDs in a new namespace start at 1,
-somewhat like a standalone system, and calls to
-.BR fork (2),
-.BR vfork (2),
-or
-.BR clone ()
-will produce processes with PIDs that are unique within the namespace.
+For further information on PID namespaces, see
+.BR namespaces (7)
+and
+.BR pid_namespaces (7)
 
-The first process created in a new namespace
-(i.e., the process created using the
-.BR CLONE_NEWPID
-flag) has the PID 1, and is the "init" process for the namespace.
-Children that are orphaned within the namespace will be reparented
-to this process rather than
-.BR init (8).
-Unlike the traditional
-.B init
-process, the "init" process of a PID namespace can terminate,
-and if it does, all of the processes in the namespace are terminated.
-
-PID namespaces form a hierarchy.
-When a new PID namespace is created,
-the processes in that namespace are visible
-in the PID namespace of the process that created the new namespace;
-analogously, if the parent PID namespace is itself
-the child of another PID namespace,
-then processes in the child and parent PID namespaces will both be
-visible in the grandparent PID namespace.
-Conversely, the processes in the "child" PID namespace do not see
-the processes in the parent namespace.
-The existence of a namespace hierarchy means that each process
-may now have multiple PIDs:
-one for each namespace in which it is visible;
-each of these PIDs is unique within the corresponding namespace.
-(A call to
-.BR getpid (2)
-always returns the PID associated with the namespace in which
-the process lives.)
-
-After creating the new namespace,
-it is useful for the child to change its root directory
-and mount a new procfs instance at
-.I /proc
-so that tools such as
-.BR ps (1)
-work correctly.
-.\" mount -t proc proc /proc
-(If
-.BR CLONE_NEWNS
-is also included in
-.IR flags ,
-then it isn't necessary to change the root directory:
-a new procfs instance can be mounted directly over
-.IR /proc .)
-
-Use of this flag requires: a kernel configured with the
-.B CONFIG_PID_NS
-option and that the process be privileged
-.RB ( CAP_SYS_ADMIN ).
+Only a privileged process
+.RB ( CAP_SYS_ADMIN )
+can employ
+.BR CLONE_NEWPID .
 This flag can't be specified in conjunction with
-.BR CLONE_THREAD .
+.BR CLONE_THREAD
+or
+.BR CLONE_PARENT .
+.TP
+.BR CLONE_NEWUSER
+(This flag first became meaningful for
+.BR clone ()
+in Linux 2.6.23,
+the current
+.BR clone()
+semantics were merged in Linux 3.5,
+and the final pieces to make the user namespaces completely usable were
+merged in Linux 3.8.)
+
+If
+.B CLONE_NEWUSER
+is set, then create the process in a new user namespace.
+If this flag is not set, then (as with
+.BR fork (2))
+the process is created in the same user namespace as the calling process.
+
+For further information on user namespaces, see
+.BR namespaces (7)
+and
+.BR user_namespaces (7)
+
+Before Linux 3.8, use of
+.BR CLONE_NEWUSER
+required that the caller have three capabilities:
+.BR CAP_SYS_ADMIN ,
+.BR CAP_SETUID ,
+and
+.BR CAP_SETGID .
+.\" Before Linux 2.6.29, it appears that only CAP_SYS_ADMIN was needed
+Starting with Linux 3.8,
+no privileges are needed to create a user namespace.
+
+This flag can't be specified in conjunction with
+.BR CLONE_THREAD
+or
+.BR CLONE_PARENT .
+For security reasons,
+.\" commit e66eded8309ebf679d3d3c1f5820d1f2ca332c71
+.\" https://lwn.net/Articles/543273/
+.\" The fix actually went into 3.9 and into 3.8.3. However, user namespaces
+.\" were, for practical purposes, unusable in earlier 3.8.x because of the
+.\" various filesystems that didn't support userns.
+.BR CLONE_NEWUSER
+cannot be specified in conjunction with
+.BR CLONE_FS .
+
+For further information on user namespaces, see
+.BR user_namespaces (7).
 .TP
 .BR CLONE_NEWUTS " (since Linux 2.6.19)"
 If
@@ -486,7 +469,7 @@ is set, then create the process in a new UTS namespace,
 whose identifiers are initialized by duplicating the identifiers
 from the UTS namespace of the calling process.
 If this flag is not set, then (as with
-.BR fork (2)),
+.BR fork (2))
 the process is created in the same UTS namespace as
 the calling process.
 This flag is intended for the implementation of containers.
@@ -502,10 +485,13 @@ Changes made to the identifiers in a UTS namespace
 are visible to all other processes in the same namespace,
 but are not visible to processes in other UTS namespaces.
 
-Use of this flag requires: a kernel configured with the
-.B CONFIG_UTS_NS
-option and that the process be privileged
-.RB ( CAP_SYS_ADMIN ).
+Only a privileged process
+.RB ( CAP_SYS_ADMIN )
+can employ
+.BR CLONE_NEWUTS .
+
+For further information on UTS namespaces, see
+.BR namespaces (7).
 .TP
 .BR CLONE_PARENT " (since Linux 2.3.12)"
 If
@@ -617,10 +603,19 @@ altogether in Linux 2.6.38.
 If
 .B CLONE_SYSVSEM
 is set, then the child and the calling process share
-a single list of System\ V semaphore undo values (see
+a single list of System V semaphore adjustment
+.RI ( semadj )
+values (see
 .BR semop (2)).
-If this flag is not set, then the child has a separate undo list,
-which is initially empty.
+In this case, the shared list accumulates
+.I semadj
+values across all processes sharing the list,
+and semaphore adjustments are performed only when the last process
+that is sharing the list terminates (or ceases sharing the list using
+.BR unshare (2)).
+If this flag is not set, then the child has a separate
+.I semadj
+list that is initially empty.
 .TP
 .BR CLONE_THREAD " (since Linux 2.4.0-test8)"
 If
@@ -790,7 +785,7 @@ space of the calling process at the time of
 Memory writes or file mappings/unmappings performed by one of the
 processes do not affect the other, as with
 .BR fork (2).
-.SS The raw system call interface
+.SS C library/kernel ABI differences
 The raw
 .BR clone ()
 system call corresponds more closely to
@@ -913,10 +908,19 @@ was not.
 .\" (Since Linux 2.6.0-test6.)
 .TP
 .B EINVAL
+.\" commit e66eded8309ebf679d3d3c1f5820d1f2ca332c71
 Both
 .B CLONE_FS
 and
 .B CLONE_NEWNS
+were specified in
+.IR flags .
+.TP
+.BR EINVAL " (since Linux 3.9)"
+Both
+.B CLONE_NEWUSER
+and
+.B CLONE_FS
 were specified in
 .IR flags .
 .TP
@@ -929,10 +933,14 @@ were specified in
 .IR flags .
 .TP
 .B EINVAL
-Both
+One (or both) of
 .BR CLONE_NEWPID
-and
+or
+.BR CLONE_NEWUSER
+and one (or both) of
 .BR CLONE_THREAD
+or
+.BR CLONE_PARENT
 were specified in
 .IR flags .
 .TP
@@ -993,6 +1001,32 @@ was specified by an unprivileged process (process without \fBCAP_SYS_ADMIN\fP).
 .B EPERM
 .B CLONE_PID
 was specified by a process other than process 0.
+.TP
+.B EPERM
+.BR CLONE_NEWUSER
+was specified in
+.IR flags ,
+but either the effective user ID or the effective group ID of the caller
+does not have a mapping in the parent namespace (see
+.BR user_namespaces (7)).
+.TP
+.BR EPERM " (since Linux 3.9)"
+.\" commit 3151527ee007b73a0ebd296010f1c0454a919c7d
+.B CLONE_NEWUSER was specified in
+.I flags
+and the caller is in a chroot environment
+.\" FIXME What is the rationale for this restriction?
+(i.e., the caller's root directory does not match the root directory
+of the mount namespace in which it resides).
+.TP
+.BR EUSERS " (since Linux 3.11)"
+.B CLONE_NEWUSER
+was specified in
+.IR flags ,
+and the call would cause the limit on the number of
+nested user namespaces to be exceeded.
+See
+.BR user_namespaces (7).
 .SH VERSIONS
 There is no entry for
 .BR clone ()
@@ -1181,4 +1215,5 @@ main(int argc, char *argv[])
 .BR unshare (2),
 .BR wait (2),
 .BR capabilities (7),
+.BR namespaces (7),
 .BR pthreads (7)

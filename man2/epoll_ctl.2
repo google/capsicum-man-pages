@@ -17,7 +17,7 @@
 .\" <http://www.gnu.org/licenses/>.
 .\" %%%LICENSE_END
 .\"
-.TH EPOLL_CTL 2 2012-04-15 "Linux" "Linux Programmer's Manual"
+.TH EPOLL_CTL 2 2014-07-08 "Linux" "Linux Programmer's Manual"
 .SH NAME
 epoll_ctl \- control interface for an epoll descriptor
 .SH SYNOPSIS
@@ -154,6 +154,34 @@ The user must call
 with
 .B EPOLL_CTL_MOD
 to rearm the file descriptor with a new event mask.
+.TP
+.BR EPOLLWAKEUP " (since Linux 3.5)"
+.\" commit 4d7e30d98939a0340022ccd49325a3d70f7e0238
+If
+.B EPOLLONESHOT
+and
+.B EPOLLET
+are clear and the process has the
+.B CAP_BLOCK_SUSPEND
+capability,
+ensure that the system does not enter "suspend" or
+"hibernate" while this event is pending or being processed.
+The event is considered as being "processed" from the time
+when it is returned by a call to
+.BR epoll_wait (2)
+until the next call to
+.BR epoll_wait (2)
+on the same
+.BR epoll (7)
+file descriptor,
+the closure of that file descriptor,
+the removal of the event file descriptor with
+.BR EPOLL_CTL_DEL ,
+or the clearing of
+.B EPOLLWAKEUP
+for the event file descriptor with
+.BR EPOLL_CTL_MOD .
+See also BUGS.
 .SH RETURN VALUE
 When successful,
 .BR epoll_ctl ()
@@ -250,6 +278,33 @@ when using
 Applications that need to be portable to kernels before 2.6.9
 should specify a non-null pointer in
 .IR event .
+
+If
+.B EPOLLWAKEUP
+is specified in
+.IR flags ,
+but the caller does not have the
+.BR CAP_BLOCK_SUSPEND
+capability, then the
+.B EPOLLWAKEUP
+flag is
+.IR "silently ignored" .
+This unfortunate behavior is necessary because no validity
+checks were performed on the
+.IR flags
+argument in the original implementation, and the addition of the
+.B EPOLLWAKEUP
+with a check that caused the call to fail if the caller did not have the
+.B CAP_BLOCK_SUSPEND
+capability caused a breakage in at least one existing user-space
+application that happened to randomly (and uselessly) specify this bit.
+.\" commit a8159414d7e3af7233e7a5a82d1c5d85379bd75c (behavior change)
+.\" https://lwn.net/Articles/520198/
+A robust application should therefore double check that it has the
+.B CAP_BLOCK_SUSPEND
+capability if attempting to use the
+.B EPOLLWAKEUP
+flag.
 .SH SEE ALSO
 .BR epoll_create (2),
 .BR epoll_wait (2),

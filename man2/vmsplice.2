@@ -23,7 +23,7 @@
 .\" the source, must acknowledge the copyright and authors of this work.
 .\" %%%LICENSE_END
 .\"
-.TH VMSPLICE 2 2012-05-04 "Linux" "Linux Programmer's Manual"
+.TH VMSPLICE 2 2014-10-02 "Linux" "Linux Programmer's Manual"
 .SH NAME
 vmsplice \- splice user pages into a pipe
 .SH SYNOPSIS
@@ -98,7 +98,7 @@ but may be implemented in the future; see
 .B SPLICE_F_GIFT
 The user pages are a gift to the kernel.
 The application may not modify this memory ever,
-.\" FIXME Explain the following line in a little more detail:
+.\" FIXME . Explain the following line in a little more detail:
 or page cache and on-disk data may differ.
 Gifting pages to the kernel means that a subsequent
 .BR splice (2)
@@ -121,13 +121,19 @@ returns \-1 and
 is set to indicate the error.
 .SH ERRORS
 .TP
+.B EAGAIN
+.B SPLICE_F_NONBLOCK
+was specified in
+.IR flags ,
+and the operation would block.
+.TP
 .B EBADF
 .I fd
 either not valid, or doesn't refer to a pipe.
 .TP
 .B EINVAL
 .I nr_segs
-is 0 or greater than
+is greater than
 .BR IOV_MAX ;
 or memory not aligned if
 .B SPLICE_F_GIFT

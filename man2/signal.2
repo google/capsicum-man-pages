@@ -33,7 +33,7 @@
 .\"     various sections.
 .\" 2008-07-11, mtk: rewrote and expanded portability discussion.
 .\"
-.TH SIGNAL 2 2013-04-19 "Linux" "Linux Programmer's Manual"
+.TH SIGNAL 2 2014-08-19 "Linux" "Linux Programmer's Manual"
 .SH NAME
 signal \- ANSI C signal handling
 .SH SYNOPSIS
@@ -241,7 +241,7 @@ is defined;
 it is also implicitly defined if one defines
 .BR _GNU_SOURCE ,
 and can of course be explicitly defined.
-.sp
+.IP *
 On glibc 2 and later, if the
 .B _BSD_SOURCE
 feature test macro is not defined, then
@@ -264,17 +264,17 @@ see
 .\" System V semantics are also provided if one uses the separate
 .\" .BR sysv_signal (3)
 .\" function.
-.IP *
-The
-.BR signal ()
-function in Linux libc4 and libc5 provide System\ V semantics.
-If one on a libc5 system includes
-.I <bsd/signal.h>
-instead of
-.IR <signal.h> ,
-then
-.BR signal ()
-provides BSD semantics.
+.\" .IP *
+.\" The
+.\" .BR signal ()
+.\" function in Linux libc4 and libc5 provide System\ V semantics.
+.\" If one on a libc5 system includes
+.\" .I <bsd/signal.h>
+.\" instead of
+.\" .IR <signal.h> ,
+.\" then
+.\" .BR signal ()
+.\" provides BSD semantics.
 .SH SEE ALSO
 .BR kill (1),
 .BR alarm (2),

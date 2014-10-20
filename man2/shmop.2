@@ -38,7 +38,7 @@
 .\"
 .\" FIXME . Add an example program to this page.
 .\"
-.TH SHMOP 2 2014-04-28 "Linux" "Linux Programmer's Manual"
+.TH SHMOP 2 2014-07-08 "Linux" "Linux Programmer's Manual"
 .SH NAME
 shmat, shmdt \- System V shared memory operations
 .SH SYNOPSIS
@@ -240,10 +240,6 @@ from
 .I "char\ *"
 into
 .IR "void\ *" .
-(Linux libc4 and libc5 have the
-.I "char\ *"
-prototypes; glibc2 has
-.IR "void\ *" .)
 .SH NOTES
 .PP
 After a
@@ -278,18 +274,18 @@ many other implementations do not support it.
 The following system parameter affects
 .BR shmat ():
 .TP
-.\" FIXME A good explanation of the rationale for the existence
-.\" of SHMLBA would be useful here
 .B SHMLBA
 Segment low boundary address multiple.
-Must be page aligned.
-For the current implementation, the
+When explicitly specifying an attach address in a call to
+.BR shmat (),
+the caller should ensure that the address is a multiple of this value.
+This is necessary on some architectures,
+in order either to ensure good CPU cache performance or to ensure that
+different attaches of the same segment have consistent views
+within the CPU cache.
 .B SHMLBA
-value is
-.BR PAGE_SIZE .
-.\" FIXME That last sentence isn't true for all Linux
-.\" architectures (i.e., SHMLBA != PAGE_SIZE for some architectures)
-.\" -- MTK, Nov 04
+is normally some multiple of the system page size
+(on many Linux architectures, it is the same as the system page size).
 .PP
 The implementation places no intrinsic per-process limit on the
 number of shared memory segments

@@ -29,7 +29,7 @@
 .\"   <michael@cantor.informatik.rwth-aachen.de>: NFS details
 .\" Modified 2004-06-23 by Michael Kerrisk <mtk.manpages@gmail.com>
 .\"
-.TH CHMOD 2 2014-02-21 "Linux" "Linux Programmer's Manual"
+.TH CHMOD 2 2014-08-19 "Linux" "Linux Programmer's Manual"
 .SH NAME
 chmod, fchmod, fchmodat \- change permissions of a file
 .SH SYNOPSIS
@@ -335,6 +335,7 @@ library support was added to glibc in version 2.4.
 .BR fchmodat ():
 POSIX.1-2008.
 .SH NOTES
+.SS C library/kernel ABI differences
 The GNU C library
 .BR fchmodat ()
 wrapper function implements the POSIX-specified
@@ -343,6 +344,19 @@ This interface differs from the underlying Linux system call, which does
 .I not
 have a
 .I flags
+argument.
+.SS Glibc notes
+On older kernels where
+.BR fchmodat ()
+is unavailable, the glibc wrapper function falls back to the use of
+.BR chmod ().
+When
+.I pathname
+is a relative pathname,
+glibc constructs a pathname based on the symbolic link in
+.IR /proc/self/fd
+that corresponds to the
+.IR dirfd
 argument.
 .SH SEE ALSO
 .BR chown (2),

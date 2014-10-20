@@ -27,7 +27,7 @@
 .\"     Lewine's _POSIX Programmer's Guide_ (O'Reilly & Associates, 1991)
 .\"     386BSD man pages
 .\" Modified Sat Jul 24 19:29:54 1993 by Rik Faith (faith@cs.unc.edu)
-.TH GETGRENT 3  2013-06-21 "" "Linux Programmer's Manual"
+.TH GETGRENT 3  2014-10-02 "" "Linux Programmer's Manual"
 .SH NAME
 getgrent, setgrent, endgrent \- get group file entry
 .SH SYNOPSIS
@@ -93,10 +93,11 @@ The \fIgroup\fP structure is defined in \fI<grp.h>\fP as follows:
 .in +4n
 .nf
 struct group {
-    char   *gr_name;       /* group name */
-    char   *gr_passwd;     /* group password */
-    gid_t   gr_gid;        /* group ID */
-    char  **gr_mem;        /* group members */
+    char   *gr_name;        /* group name */
+    char   *gr_passwd;      /* group password */
+    gid_t   gr_gid;         /* group ID */
+    char  **gr_mem;         /* NULL-terminated array of pointers
+                               to names of group members */
 };
 .fi
 .in
@@ -128,6 +129,11 @@ or
 .BR free (3).)
 .SH ERRORS
 .TP
+.B EAGAIN
+The service was temporarily unavailable; try again later.
+For NSS backends in glibc this indicates a temporary error talking to the backend.
+The error may correct itself, retrying later is suggested.
+.TP
 .B EINTR
 A signal was caught.
 .TP
@@ -139,6 +145,11 @@ The calling process already has too many open files.
 .TP
 .B ENFILE
 Too many open files in the system.
+.TP
+.\" not in POSIX
+.B ENOENT
+A necessary input file cannot be found.
+For NSS backends in glibc this indicates the backend is not correctly configured.
 .TP
 .B ENOMEM
 .\" not in POSIX

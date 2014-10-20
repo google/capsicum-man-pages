@@ -41,7 +41,7 @@
 .\" 2011-09-20, Guillem Jover <guillem@hadrons.org>:
 .\"     Added text on dynamically allocating buffer + example program
 .\"
-.TH READLINK 2 2014-05-10 "Linux" "Linux Programmer's Manual"
+.TH READLINK 2 2014-10-15 "Linux" "Linux Programmer's Manual"
 .SH NAME
 readlink, readlinkat \- read value of a symbolic link
 .SH SYNOPSIS
@@ -136,15 +136,15 @@ Since Linux 2.6.39,
 .\" commit 65cfc6722361570bfe255698d9cd4dccaf47570d
 .I pathname
 can be an empty string,
-in which case the call operates on the file referred to by
+in which case the call operates on the symbolic link referred to by
 .IR dirfd
-(which may have been obtained using the
+(which should have have been obtained using
 .BR open (2)
+with the
 .B O_PATH
-flag).
-In this case,
-.I dirfd
-can refer to any type of file, not just a directory.
+and
+.B O_NOFOLLOW
+flags).
 .PP
 See
 .BR openat (2)
@@ -253,6 +253,19 @@ also addresses a common portability problem when using
 for the buffer size,
 as this constant is not guaranteed to be defined per POSIX
 if the system does not have such limit.
+.SS Glibc notes
+On older kernels where
+.BR readlinkat ()
+is unavailable, the glibc wrapper function falls back to the use of
+.BR readlink ().
+When
+.I pathname
+is a relative pathname,
+glibc constructs a pathname based on the symbolic link in
+.IR /proc/self/fd
+that corresponds to the
+.IR dirfd
+argument.
 .SH EXAMPLE
 The following program allocates the buffer needed by
 .BR readlink ()
@@ -307,6 +320,8 @@ main(int argc, char *argv[])
 
     printf("\(aq%s\(aq points to \(aq%s\(aq\\n", argv[1], linkname);
 
+    free(linkname);
+
     exit(EXIT_SUCCESS);
 }
 .fi
@@ -315,5 +330,6 @@ main(int argc, char *argv[])
 .BR lstat (2),
 .BR stat (2),
 .BR symlink (2),
+.BR realpath (3),
 .BR path_resolution (7),
 .BR symlink (7)

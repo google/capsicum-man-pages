@@ -28,7 +28,7 @@
 .\" Modified Thu Jul 25 14:43:46 MET DST 1996 by Michael Haardt
 .\"     <michael@cantor.informatik.rwth-aachen.de>
 .\"
-.TH GETUTENT 3 2014-05-28 "" "Linux Programmer's Manual"
+.TH GETUTENT 3 2014-08-19 "" "Linux Programmer's Manual"
 .SH NAME
 getutent, getutid, getutline, pututline, setutent, endutent,
 utmpname \- access utmp file entries
@@ -161,12 +161,11 @@ XPG2, SVr4.
 In XPG2 and SVID 2 the function
 .BR pututline ()
 is documented to return void, and that is what it does on many systems
-(AIX, HP-UX, Linux libc5).
+(AIX, HP-UX).
 HP-UX introduces a new function
 .BR _pututline ()
 with the prototype given above for
-.BR pututline ()
-(also found in Linux libc5).
+.BR pututline ().
 .LP
 All these functions are obsolete now on non-Linux systems.
 POSIX.1-2001, following SUSv1,

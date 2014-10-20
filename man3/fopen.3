@@ -240,7 +240,7 @@ function may also fail and set
 .I errno
 for any of the errors specified for the routines
 .BR open (2),
-.BR fclose (3)
+.BR fclose (3),
 and
 .BR fflush (3).
 .SH CONFORMING TO
@@ -288,7 +288,7 @@ is attempted only for a file opened for reading.
 .TP
 .B x
 .\" Since glibc 2.0?
-.\" FIXME C11 specifies this flag
+.\" FIXME . C11 specifies this flag
 Open the file exclusively
 (like the
 .B O_EXCL
@@ -333,7 +333,7 @@ When parsing for individual flag characters in
 .IR mode
 (i.e., the characters preceding the "ccs" specification),
 the glibc implementation of
-.\" FIXME http://sourceware.org/bugzilla/show_bug.cgi?id=12685
+.\" FIXME . http://sourceware.org/bugzilla/show_bug.cgi?id=12685
 .BR fopen ()
 and
 .BR freopen ()

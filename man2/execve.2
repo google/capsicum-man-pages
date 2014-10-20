@@ -34,7 +34,7 @@
 .\" 2007-09-14 Ollie Wild <aaw@google.com>, mtk
 .\"     Add text describing limits on command-line arguments + environment
 .\"
-.TH EXECVE 2 2014-06-13 "Linux" "Linux Programmer's Manual"
+.TH EXECVE 2 2014-10-02 "Linux" "Linux Programmer's Manual"
 .SH NAME
 execve \- execute program
 .SH SYNOPSIS
@@ -114,9 +114,7 @@ interpreter named in the PT_INTERP segment is used to load the needed
 shared libraries.
 This interpreter is typically
 .I /lib/ld-linux.so.2
-for binaries linked with glibc 2.
-(For binaries linked with the old Linux libc5, the interpreter was typically
-.IR /lib/ld-linux.so.1 .)
+for binaries linked with glibc.
 
 All process attributes are preserved during an
 .BR execve (),
@@ -731,10 +729,10 @@ program:
 
 .in +4n
 .nf
-.RB "$" " cat > script.sh"
-.B #! ./myecho script-arg
+.RB "$" " cat > script"
+.B #!./myecho script-arg
 .B ^D
-.RB "$" " chmod +x script.sh"
+.RB "$" " chmod +x script"
 .fi
 .in
 
@@ -742,10 +740,10 @@ We can then use our program to exec the script:
 
 .in +4n
 .nf
-.RB "$" " ./execve ./script.sh"
+.RB "$" " ./execve ./script"
 argv[0]: ./myecho
 argv[1]: script-arg
-argv[2]: ./script.sh
+argv[2]: ./script
 argv[3]: hello
 argv[4]: world
 .fi

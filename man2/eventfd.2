@@ -19,7 +19,7 @@
 .\"
 .\" 2008-10-10, mtk: describe eventfd2(), and EFD_NONBLOCK and EFD_CLOEXEC
 .\"
-.TH EVENTFD 2 2010-08-30 Linux "Linux Programmer's Manual"
+.TH EVENTFD 2 2014-07-08 Linux "Linux Programmer's Manual"
 .SH NAME
 eventfd \- create a file descriptor for event notification
 .SH SYNOPSIS
@@ -39,7 +39,7 @@ This counter is initialized with the value specified in the argument
 
 The following values may be bitwise ORed in
 .IR flags
-to change the behaviour of
+to change the behavior of
 .BR eventfd ():
 .TP
 .BR EFD_CLOEXEC " (since Linux 2.6.27)"
@@ -299,7 +299,7 @@ interface, these mechanisms could not be multiplexed via
 .BR poll (2),
 or
 .BR epoll (7).)
-.SS Underlying Linux system calls
+.SS C library/kernel ABI differences
 There are two underlying Linux system calls:
 .BR eventfd ()
 and the more recent

@@ -34,7 +34,7 @@
 .\" 2005-11-22 mtk, added Glibc Notes covering optional 'flag' and
 .\"           'width' components of conversion specifications.
 .\"
-.TH STRFTIME 3  2014-03-18 "GNU" "Linux Programmer's Manual"
+.TH STRFTIME 3  2014-08-19 "GNU" "Linux Programmer's Manual"
 .SH NAME
 strftime \- format date and time
 .SH SYNOPSIS
@@ -56,7 +56,7 @@ result in the character array
 .I s
 of size
 .IR max .
-.\" FIXME POSIX says: Local timezone information is used as though
+.\" FIXME . POSIX says: Local timezone information is used as though
 .\" strftime() called tzset().  But this doesn't appear to be the case
 .PP
 The format specification is a null-terminated string and may contain
@@ -339,11 +339,11 @@ would exceed
 bytes, then
 .BR strftime ()
 returns 0, and the contents of the array are undefined.
-(This behavior applies since at least libc 4.4.4;
-very old versions of libc, such as libc 4.4.1,
-would return
-.I max
-if the array was too small.)
+.\" (This behavior applies since at least libc 4.4.4;
+.\" very old versions of libc, such as libc 4.4.1,
+.\" would return
+.\" .I max
+.\" if the array was too small.)
 .LP
 Note that the return value 0 does not necessarily indicate an error.
 For example, in many locales

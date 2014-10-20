@@ -33,7 +33,7 @@
 .\" Modified 2001-10-10 by aeb, following Michael Kerrisk.
 .\" 2011-09-07, mtk, Added syncfs() documentation,
 .\"
-.TH SYNC 2 2014-04-06 "Linux" "Linux Programmer's Manual"
+.TH SYNC 2 2014-08-19 "Linux" "Linux Programmer's Manual"
 .SH NAME
 sync, syncfs \- commit buffer cache to disk
 .SH SYNOPSIS
@@ -100,11 +100,11 @@ SVr4, 4.3BSD, POSIX.1-2001.
 .BR syncfs ()
 is Linux-specific.
 .SH NOTES
-Since glibc 2.2.2 the Linux prototype for
+Since glibc 2.2.2, the Linux prototype for
 .BR sync ()
 is as listed above,
 following the various standards.
-In libc4, libc5, and glibc up to 2.2.1
+In glibc 2.2.1 and earlier,
 it was "int sync(void)", and
 .BR sync ()
 always returned 0.
@@ -120,4 +120,4 @@ large caches.)
 .BR bdflush (2),
 .BR fdatasync (2),
 .BR fsync (2),
-.BR sync (8)
+.BR sync (1)

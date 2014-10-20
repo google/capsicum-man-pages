@@ -83,7 +83,7 @@
 .\"	    commit c4062dfc425e94290ac427a98d6b4721dd2bc91f
 .\"	    Author: Erich E. Hoover <ehoover@mines.edu>
 .\"
-.TH IPV6 7 2012-12-16 "Linux" "Linux Programmer's Manual"
+.TH IPV6 7 2014-08-19 "Linux" "Linux Programmer's Manual"
 .SH NAME
 ipv6 \- Linux IPv6 protocol implementation
 .SH SYNOPSIS
@@ -349,7 +349,6 @@ The default value for this flag is defined by the contents of the file
 The default value for that file is 0 (false).
 .\" FLOWLABEL_MGR, FLOWINFO_SEND
 .SH ERRORS
-.\" FIXME document all errors.
 .TP
 .B ENODEV
 The user tried to
@@ -361,11 +360,6 @@ in the supplied
 structure is not a valid
 interface index.
 .SH VERSIONS
-The older
-.I libinet6
-libc5 based IPv6 API implementation for Linux is not described here
-and may vary in details.
-.PP
 Linux 2.4 will break binary compatibility for the
 .I sockaddr_in6
 for 64-bit

@@ -24,7 +24,7 @@
 .\"
 .\" 2007-07-05 mtk: Added details on underlying system call interfaces
 .\"
-.TH UNAME 2 2008-12-03 "Linux" "Linux Programmer's Manual"
+.TH UNAME 2 2014-09-21 "Linux" "Linux Programmer's Manual"
 .SH NAME
 uname \- get name and information about current kernel
 .SH SYNOPSIS
@@ -135,7 +135,7 @@ Part of the utsname information is also accessible via
 .IR osrelease ,
 .IR version ,
 .IR domainname }.
-.SS Underlying kernel interface
+.SS C library/kernel ABI differences
 .LP
 Over time, increases in the size of the
 .I utsname
@@ -167,4 +167,5 @@ invoking the most recent version of the system call provided by the kernel.
 .SH SEE ALSO
 .BR uname (1),
 .BR getdomainname (2),
-.BR gethostname (2)
+.BR gethostname (2),
+.BR namespaces (7)

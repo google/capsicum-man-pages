@@ -32,7 +32,7 @@
 .\" 2005-04-08, mtk, Noted kernel version numbers for semtimedop()
 .\" 2007-07-09, mtk, Added an EXAMPLE code segment.
 .\"
-.TH SEMOP 2 2014-05-10 "Linux" "Linux Programmer's Manual"
+.TH SEMOP 2 2014-09-21 "Linux" "Linux Programmer's Manual"
 .SH NAME
 semop, semtimedop \- System V semaphore operations
 .SH SYNOPSIS
@@ -449,7 +449,15 @@ request to
 the corresponding
 .I semadj
 values in all processes are cleared.
-.PP
+The
+.BR clone ()
+.B CLONE_SYSVSEM
+flag allows more than one process to share a
+.I semadj
+list; see
+.BR clone (2)
+for details.
+
 The \fIsemval\fP, \fIsempid\fP, \fIsemzcnt\fP, and \fIsemnct\fP values
 for a semaphore can all be retrieved using appropriate
 .BR semctl (2)

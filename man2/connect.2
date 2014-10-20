@@ -64,7 +64,7 @@
 .\" Modified 1998, 1999 by Andi Kleen
 .\" Modified 2004-06-23 by Michael Kerrisk <mtk.manpages@gmail.com>
 .\"
-.TH CONNECT 2 2014-05-10 "Linux" "Linux Programmer's Manual"
+.TH CONNECT 2 2014-09-06 "Linux" "Linux Programmer's Manual"
 .SH NAME
 connect \- initiate a connection on a socket
 .SH SYNOPSIS
@@ -223,6 +223,11 @@ Network is unreachable.
 .B ENOTSOCK
 The file descriptor is not associated with a socket.
 .TP
+.B EPROTOTYPE
+The socket type does not support the requested communications protocol.
+This error can occur, for example,
+on an attempt to connect a UNIX domain datagram socket to a stream socket.
+.TP
 .B ETIMEDOUT
 Timeout while attempting connection.
 The server may be too
@@ -262,6 +267,12 @@ Some POSIX confusion resulted in the present
 also used by glibc.
 See also
 .BR accept (2).
+
+If
+.B connect()
+fails, consider the state of the socket as unspecified.
+Portable applications should close the socket and create a new one for
+reconnecting.
 .SH EXAMPLE
 An example of the use of
 .BR connect ()

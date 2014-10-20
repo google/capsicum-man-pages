@@ -48,7 +48,7 @@
 .\" FIXME . Apr 08: The next POSIX revision has O_EXEC, O_SEARCH, and
 .\" O_TTYINIT.  Eventually these may need to be documented.  --mtk
 .\"
-.TH OPEN 2 2014-06-13 "Linux" "Linux Programmer's Manual"
+.TH OPEN 2 2014-10-02 "Linux" "Linux Programmer's Manual"
 .SH NAME
 open, openat, creat \- open and possibly create a file
 .SH SYNOPSIS
@@ -101,8 +101,8 @@ By default, the new file descriptor is set to remain open across an
 (i.e., the
 .B FD_CLOEXEC
 file descriptor flag described in
-.BR fcntl (2))
-is initially disabled; the
+.BR fcntl (2)
+is initially disabled); the
 .B O_CLOEXEC
 flag, described below, can be used to change this default.
 The file offset is set to the beginning of the file (see
@@ -576,7 +576,8 @@ When
 is specified in
 .IR flags ,
 flag bits other than
-.BR O_DIRECTORY
+.BR O_CLOEXEC ,
+.BR O_DIRECTORY ,
 and
 .BR O_NOFOLLOW
 are ignored.
@@ -602,7 +603,7 @@ Write operations on the file will complete according to the requirements of
 synchronized I/O
 .I file
 integrity completion
-(by contrast with contrast with the
+(by contrast with the
 synchronized I/O
 .I data
 integrity completion
@@ -983,8 +984,8 @@ The usual scenario here is that an application compiled
 on a 32-bit platform without
 .I -D_FILE_OFFSET_BITS=64
 tried to open a file whose size exceeds
-.I (2<<31)-1
-bits;
+.I (1<<31)-1
+bytes;
 see also
 .B O_LARGEFILE
 above.
@@ -1204,7 +1205,7 @@ Data integrity completion can reduce the number of disk operations
 that are required for applications that don't need the guarantees
 of file integrity completion.
 
-To understand the difference between the the two types of completion,
+To understand the difference between the two types of completion,
 consider two pieces of file metadata:
 the file last modification timestamp
 .RI ( st_mtime )
@@ -1453,7 +1454,7 @@ Likewise, applications should avoid mixing
 .BR mmap (2)
 of files with direct I/O to the same files.
 .LP
-The behaviour of
+The behavior of
 .B O_DIRECT
 with NFS will differ from local filesystems.
 Older kernels, or

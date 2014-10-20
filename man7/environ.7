@@ -31,7 +31,7 @@
 .\" Modified Wed Jan 24 06:37:24 2001 by Eric S. Raymond (esr@thyrsus.com)
 .\" Modified Thu Dec 13 23:53:27 2001 by Martin Schulze <joey@infodrom.org>
 .\"
-.TH ENVIRON 7 2014-06-13 "Linux" "Linux Programmer's Manual"
+.TH ENVIRON 7 2014-08-19 "Linux" "Linux Programmer's Manual"
 .SH NAME
 environ \- user environment
 .SH SYNOPSIS
@@ -47,10 +47,9 @@ The last pointer in this array has the value NULL.
 (This variable must be declared in the user program,
 but is declared in the header file
 .I <unistd.h>
-in case the header files came from libc4 or libc5, and
-in case they came from glibc and
+if the
 .B _GNU_SOURCE
-was defined.)
+feature test macro is defined.)
 This array of strings is made available to the process by the
 .BR exec (3)
 call that started the process.

@@ -11,11 +11,11 @@
 .\" May be distributed under the GNU General Public License
 .\" %%%LICENSE_END
 .\"
-.TH LDD 1 2012-07-16 "" "Linux Programmer's Manual"
+.TH LDD 1 2014-10-02 "" "Linux Programmer's Manual"
 .SH NAME
 ldd \- print shared library dependencies
 .SH SYNOPSIS
-.BR ldd " [OPTION]... FILE..."
+.BR ldd " [\fIoption\fP]... \fIfile\fP..."
 .SH DESCRIPTION
 .B ldd
 prints the shared libraries required by each program or shared library
@@ -71,23 +71,23 @@ report any missing objects or functions (ELF only).
 .TP
 .B \-\-help
 Usage information.
-.SH NOTES
-The standard version of
-.B ldd
-comes with glibc2.
-Libc5 came with an older version, still present
-on some systems.
-The long options are not supported by the libc5 version.
-On the other hand, the glibc2 version does not support
-.B \-V
-and only has the equivalent
-.BR \-\-version .
-.LP
-The libc5 version of this program will use the name of a library given
-on the command line as-is when it contains a \(aq/\(aq; otherwise it
-searches for the library in the standard locations.
-To run it
-on a shared library in the current directory, prefix the name with "./".
+.\" .SH NOTES
+.\" The standard version of
+.\" .B ldd
+.\" comes with glibc2.
+.\" Libc5 came with an older version, still present
+.\" on some systems.
+.\" The long options are not supported by the libc5 version.
+.\" On the other hand, the glibc2 version does not support
+.\" .B \-V
+.\" and only has the equivalent
+.\" .BR \-\-version .
+.\" .LP
+.\" The libc5 version of this program will use the name of a library given
+.\" on the command line as-is when it contains a \(aq/\(aq; otherwise it
+.\" searches for the library in the standard locations.
+.\" To run it
+.\" on a shared library in the current directory, prefix the name with "./".
 .SH BUGS
 .B ldd
 does not work on a.out shared libraries.
@@ -106,5 +106,7 @@ on one of these programs, the program will attempt to run with
 .\" David Engel.
 .\" Roland McGrath and Ulrich Drepper.
 .SH SEE ALSO
+.BR sprof (1),
+.BR pldd (1),
 .BR ld.so (8),
 .BR ldconfig (8)

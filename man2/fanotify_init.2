@@ -21,7 +21,7 @@
 .\" Formatted or processed versions of this manual, if unaccompanied by
 .\" the source, must acknowledge the copyright and authors of this work.
 .\" %%%LICENSE_END
-.TH FANOTIFY_INIT 2 2014-05-18 "Linux" "Linux Programmer's Manual"
+.TH FANOTIFY_INIT 2 2014-10-02 "Linux" "Linux Programmer's Manual"
 .SH NAME
 fanotify_init \- create and initialize fanotify group
 .SH SYNOPSIS
@@ -237,10 +237,18 @@ was introduced in version 2.6.36 of the Linux kernel and enabled in version
 .SH "CONFORMING TO"
 This system call is Linux-specific.
 .SH BUGS
-As of Linux 3.15,
+As of Linux 3.17,
 the following bug exists:
 .IP * 3
-.\" FIXME: Patch accepted to mm tree.
+.\" FIXME . Patch proposed: https://lkml.org/lkml/2014/9/24/967
+The
+.B O_CLOEXEC
+is ignored when passed in
+.IR event_f_flags .
+.PP
+The following bug was present in Linux kernels before version 3.14:
+.IP * 3
+.\" Fixed by commit 48149e9d3a7e924010a0daab30a6197b7d7b6580
 The
 .I event_f_flags
 argument is not checked for invalid flags.

@@ -23,7 +23,7 @@
 .\" the source, must acknowledge the copyright and authors of this work.
 .\" %%%LICENSE_END
 .\"
-.TH MQ_OPEN 3 2014-06-03 "Linux" "Linux Programmer's Manual"
+.TH MQ_OPEN 3 2014-10-02 "Linux" "Linux Programmer's Manual"
 .SH NAME
 mq_open \- open a message queue
 .SH SYNOPSIS
@@ -110,6 +110,7 @@ as for
 (Symbolic definitions for the permissions bits can be obtained by including
 .IR <sys/stat.h> .)
 The permissions settings are masked against the process umask.
+
 The
 .I attr
 argument specifies attributes for the queue.
@@ -120,6 +121,11 @@ If
 .I attr
 is NULL, then the queue is created with implementation-defined
 default attributes.
+Since Linux 3.5, two
+.I /proc
+files can be used to control these defaults; see
+.BR mq_overview (7)
+for details.
 .SH RETURN VALUE
 On success,
 .BR mq_open ()

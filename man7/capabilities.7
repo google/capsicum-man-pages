@@ -45,7 +45,7 @@
 .\"     other capabilities where the permitted or inheritable bit is set.
 .\" 2011-09-07, mtk/Serge hallyn: Add CAP_SYSLOG
 .\"
-.TH CAPABILITIES 7 2014-05-21 "Linux" "Linux Programmer's Manual"
+.TH CAPABILITIES 7 2014-09-21 "Linux" "Linux Programmer's Manual"
 .SH NAME
 capabilities \- overview of Linux capabilities
 .SH DESCRIPTION
@@ -74,6 +74,11 @@ and the operations or behaviors that each capability permits:
 .BR CAP_AUDIT_CONTROL " (since Linux 2.6.11)"
 Enable and disable kernel auditing; change auditing filter rules;
 retrieve auditing status and filtering rules.
+.TP
+.BR CAP_AUDIT_READ " (since Linux 3.16)"
+.\" commit a29b694aa1739f9d76538e34ae25524f9c549d59
+.\" commit 3a101b8de0d39403b2c7e5c23fd0b005668acf48
+Allow reading the audit log via a multicast netlink socket.
 .TP
 .BR CAP_AUDIT_WRITE " (since Linux 2.6.11)"
 Write records to kernel auditing log.
@@ -143,7 +148,7 @@ set the set-group-ID bit for a file whose GID does not match
 the filesystem or any of the supplementary GIDs of the calling process.
 .TP
 .B CAP_IPC_LOCK
-.\" FIXME As at Linux 3.2, there are some strange uses of this capability
+.\" FIXME . As at Linux 3.2, there are some strange uses of this capability
 .\" in other places; they probably should be replaced with something else.
 Lock memory
 .RB ( mlock (2),
@@ -161,7 +166,7 @@ This includes use of the
 .BR ioctl (2)
 .B KDSIGACCEPT
 operation.
-.\" FIXME CAP_KILL also has an effect for threads + setting child
+.\" FIXME . CAP_KILL also has an effect for threads + setting child
 .\"       termination signal to other than SIGCHLD: without this
 .\"       capability, the termination signal reverts to SIGCHLD
 .\"       if the child does an exec().  What is the rationale
@@ -246,7 +251,9 @@ bind to any address for transparent proxying.
 .TP
 .B CAP_SETGID
 Make arbitrary manipulations of process GIDs and supplementary GID list;
-forge GID when passing socket credentials via UNIX domain sockets.
+forge GID when passing socket credentials via UNIX domain sockets;
+write a group ID mapping in a user namespace (see
+.BR user_namespaces (7)).
 .TP
 .BR CAP_SETFCAP " (since Linux 2.6.24)"
 Set file capabilities.
@@ -278,7 +285,9 @@ Make arbitrary manipulations of process UIDs
 .BR setreuid (2),
 .BR setresuid (2),
 .BR setfsuid (2));
-make forged UID when passing socket credentials via UNIX domain sockets.
+forge UID when passing socket credentials via UNIX domain sockets;
+write a user ID mapping in a user namespace (see
+.BR user_namespaces (7)).
 .\" FIXME CAP_SETUID also an effect in exec(); document this.
 .TP
 .B CAP_SYS_ADMIN
@@ -350,7 +359,9 @@ employ
 flags that create new namespaces with
 .BR clone (2)
 and
-.BR unshare (2);
+.BR unshare (2)
+(but, since Linux 3.8,
+creating user namespaces does not require any capability);
 .IP *
 call
 .BR perf_event_open (2);
@@ -360,7 +371,12 @@ access privileged
 event information;
 .IP *
 call
-.BR setns (2);
+.BR setns (2)
+(requires
+.B CAP_SYS_ADMIN
+in the
+.I target
+namespace);
 .IP *
 call
 .BR fanotify_init (2);
@@ -451,6 +467,7 @@ to be migrated to arbitrary nodes;
 .\" migrate_pages(2):
 .\"     do_migrate_pages(mm, &old, &new,
 .\"         capable(CAP_SYS_NICE) ? MPOL_MF_MOVE_ALL : MPOL_MF_MOVE);
+.\" Document this.
 .IP *
 apply
 .BR move_pages (2)
@@ -914,7 +931,7 @@ Removing capabilities from the bounding set is supported only if file
 capabilities are compiled into the kernel.
 In kernels before Linux 2.6.33,
 file capabilities were an optional feature configurable via the
-CONFIG_SECURITY_FILE_CAPABILITIES
+.B CONFIG_SECURITY_FILE_CAPABILITIES
 option.
 Since Linux 2.6.33, the configuration option has been removed
 and file capabilities are always part of the kernel.
@@ -1097,6 +1114,9 @@ prctl(PR_SET_SECUREBITS,
         SECBIT_NOROOT_LOCKED);
 .fi
 .in
+.SS Interaction with user namespaces
+For a discussion of the interaction of capabilities and user namespaces, see
+.BR user_namespaces (7).
 .SH CONFORMING TO
 .PP
 No standards govern capabilities, but the Linux capability implementation
@@ -1105,7 +1125,8 @@ is based on the withdrawn POSIX.1e draft standard; see
 .UE .
 .SH NOTES
 Since kernel 2.5.27, capabilities are an optional kernel component,
-and can be enabled/disabled via the CONFIG_SECURITY_CAPABILITIES
+and can be enabled/disabled via the
+.B CONFIG_SECURITY_CAPABILITIES
 kernel configuration option.
 
 The
@@ -1174,6 +1195,7 @@ created on the system.
 .BR capsetp (3),
 .BR libcap (3),
 .BR credentials (7),
+.BR user_namespaces (7),
 .BR pthreads (7),
 .BR getcap (8),
 .BR setcap (8)

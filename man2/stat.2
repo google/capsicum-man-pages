@@ -37,7 +37,7 @@
 .\" 2007-06-08 mtk: Added example program
 .\" 2007-07-05 mtk: Added details on underlying system call interfaces
 .\"
-.TH STAT 2 2014-05-10 "Linux" "Linux Programmer's Manual"
+.TH STAT 2 2014-08-19 "Linux" "Linux Programmer's Manual"
 .SH NAME
 stat, fstat, lstat, fstatat \- get file status
 .SH SYNOPSIS
@@ -235,7 +235,7 @@ is changed by file accesses, for example, by
 .BR execve (2),
 .BR mknod (2),
 .BR pipe (2),
-.BR utime (2)
+.BR utime (2),
 and
 .BR read (2)
 (of more than zero bytes).
@@ -249,7 +249,7 @@ The field
 is changed by file modifications, for example, by
 .BR mknod (2),
 .BR truncate (2),
-.BR utime (2)
+.BR utime (2),
 and
 .BR write (2)
 (of more than zero bytes).
@@ -337,7 +337,7 @@ if (S_ISREG(sb.st_mode)) {
 .fi
 .PP
 The definitions of most of the above file type test macros
-are provided if any of the following feature test macros are defined:
+are provided if any of the following feature test macros is defined:
 .BR _BSD_SOURCE
 (in glibc 2.19 and earlier),
 .BR _SVID_SOURCE

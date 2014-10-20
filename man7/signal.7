@@ -43,7 +43,7 @@
 .\"     Added section on stop/cont signals interrupting syscalls.
 .\" 2008-10-05, mtk: various additions
 .\"
-.TH SIGNAL 7  2014-06-13 "Linux" "Linux Programmer's Manual"
+.TH SIGNAL 7  2014-10-15 "Linux" "Linux Programmer's Manual"
 .SH NAME
 signal \- overview of signals
 .SH DESCRIPTION
@@ -676,7 +676,7 @@ Socket interfaces:
 .BR send (2),
 .BR sendto (2),
 and
-.\" FIXME What about sendmmsg()?
+.\" FIXME . What about sendmmsg()?
 .BR sendmsg (2),
 unless a timeout has been set on the socket (see below).
 .IP *
@@ -697,6 +697,10 @@ and
 .B FUTEX_WAIT
 (since Linux 2.6.22; beforehand, always failed with
 .BR EINTR ).
+.IP *
+.BR pthread_mutex_lock (3),
+.BR pthread_cond_wait (3),
+and related APIs.
 .IP *
 POSIX semaphore interfaces:
 .BR sem_wait (3)
@@ -739,7 +743,7 @@ has been set on the socket using
 .BR send (2),
 .BR sendto (2),
 and
-.\" FIXME What about sendmmsg()?
+.\" FIXME . What about sendmmsg()?
 .BR sendmsg (2).
 .IP *
 Interfaces used to wait for signals:
@@ -819,7 +823,7 @@ has been set on the socket using
 .BR send (2),
 .BR sendto (2),
 and
-.\" FIXME What about sendmmsg()?
+.\" FIXME . What about sendmmsg()?
 .BR sendmsg (2),
 if a send timeout
 .RB ( SO_SNDTIMEO )

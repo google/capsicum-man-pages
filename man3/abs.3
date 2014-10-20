@@ -31,7 +31,7 @@
 .\" Modified Sat Jul 24 21:45:37 1993, Rik Faith (faith@cs.unc.edu)
 .\" Modified Sat Dec 16 15:02:59 2000, Joseph S. Myers
 .\"
-.TH ABS 3  2013-06-21 "GNU" "Linux Programmer's Manual"
+.TH ABS 3  2014-08-19 "GNU" "Linux Programmer's Manual"
 .SH NAME
 abs, labs, llabs, imaxabs \- compute the absolute value of an integer
 .SH SYNOPSIS
@@ -109,8 +109,7 @@ is not defined.
 .PP
 The
 .BR llabs ()
-function is included in glibc since version 2.0, but
-is not in libc5 or libc4.
+function is included in glibc since version 2.0.
 The
 .BR imaxabs ()
 function is included in
@@ -122,16 +121,15 @@ to be declared, it may be necessary to define
 \fB_ISOC99_SOURCE\fP or \fB_ISOC9X_SOURCE\fP (depending on the
 version of glibc) before including any standard headers.
 .PP
+By default,
 GCC handles
-.BR abs ()
-and
-.BR labs ()
-as built-in functions.
-GCC 3.0 also handles
+.BR abs (),
+.BR labs (),
+and (since GCC 3.0)
 .BR llabs ()
 and
 .BR imaxabs ()
-as built-ins.
+as built-in functions.
 .SH SEE ALSO
 .BR cabs (3),
 .BR ceil (3),

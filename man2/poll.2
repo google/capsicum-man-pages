@@ -28,7 +28,7 @@
 .\" 2006-07-01, mtk, Added POLLRDHUP + various other wording and
 .\"	formatting changes.
 .\"
-.TH POLL 2 2014-05-10 "Linux" "Linux Programmer's Manual"
+.TH POLL 2 2014-09-06 "Linux" "Linux Programmer's Manual"
 .SH NAME
 poll, ppoll \- wait for some event on a file descriptor
 .SH SYNOPSIS
@@ -83,7 +83,8 @@ file descriptor for a single
 .BR poll ()
 call: simply negate the
 .I fd
-field.)
+field.
+Note, however, that this technique can't be used to ignore file descriptor 0.)
 
 The field
 .I events
@@ -166,7 +167,10 @@ There is urgent data to read (e.g., out-of-band data on TCP socket;
 pseudoterminal master in packet mode has seen state change in slave).
 .TP
 .B POLLOUT
-Writing now will not block.
+Writing is now possible, though a write larger that the available space
+in a socket or pipe will still block (unless
+.B O_NONBLOCK
+is set).
 .TP
 .BR POLLRDHUP " (since Linux 2.6.17)"
 Stream socket peer closed connection,
@@ -359,7 +363,7 @@ For a discussion of what may happen if a file descriptor being monitored by
 .BR poll ()
 is closed in another thread, see
 .BR select (2).
-.SS Linux notes
+.SS C library/kernel ABI differences
 The Linux
 .BR ppoll ()
 system call modifies its
@@ -373,6 +377,19 @@ Thus, the glibc
 function does not modify its
 .I timeout_ts
 argument.
+
+The raw
+.BR ppoll ()
+system call has a fifth argument,
+.IR "size_t sigsetsize" ,
+which specifies the size in bytes of the
+.IR sigmask
+argument.
+The glibc
+.BR ppoll ()
+wrapper function specifies this argument as a fixed value
+(equal to
+.IR sizeof(sigset_t) ).
 .SH BUGS
 See the discussion of spurious readiness notifications under the
 BUGS section of

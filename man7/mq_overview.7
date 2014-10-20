@@ -23,7 +23,7 @@
 .\" the source, must acknowledge the copyright and authors of this work.
 .\" %%%LICENSE_END
 .\"
-.TH MQ_OVERVIEW 7 2009-09-27 "Linux" "Linux Programmer's Manual"
+.TH MQ_OVERVIEW 7 2014-09-21 "Linux" "Linux Programmer's Manual"
 .SH NAME
 mq_overview \- overview of POSIX message queues
 .SH DESCRIPTION
@@ -137,7 +137,32 @@ to link against the real-time library,
 .IR librt .
 .SS /proc interfaces
 The following interfaces can be used to limit the amount of
-kernel memory consumed by POSIX message queues:
+kernel memory consumed by POSIX message queues and to set
+the default attributes for new message queues:
+.TP
+.IR /proc/sys/fs/mqueue/msg_default " (since Linux 3.5)"
+This file defines the value used for a new queue's
+.I mq_maxmsg
+setting when the queue is created with a call to
+.BR mq_open (3)
+where
+.I attr
+is specified as NULL.
+The default value for this file is 10.
+The minimum and maximum are as for
+.IR /proc/sys/fs/mqueue/msg_max .
+A new queue's default
+.I mq_maxmsg
+value will be the smaller of
+.IR msg_default
+and
+.IR msg_max .
+Up until Linux 2.6.28, the default
+.I mq_maxmsg
+was 10;
+from Linux 2.6.28 to Linux 3.4, the default was the value defined for the
+.I msg_max
+limit.
 .TP
 .I /proc/sys/fs/mqueue/msg_max
 This file can be used to view and change the ceiling value for the
@@ -151,14 +176,57 @@ The default value for
 is 10.
 The minimum value is 1 (10 in kernels before 2.6.28).
 The upper limit is
-.BR HARD_MAX :
-.IR "(131072\ /\ sizeof(void\ *))"
-(32768 on Linux/86).
-This limit is ignored for privileged processes
+.BR HARD_MSGMAX .
+The
+.I msg_max
+limit is ignored for privileged processes
 .RB ( CAP_SYS_RESOURCE ),
 but the
-.BR HARD_MAX
+.BR HARD_MSGMAX
 ceiling is nevertheless imposed.
+
+The definition of
+.BR HARD_MSGMAX
+has changed across kernel versions:
+.RS
+.IP * 3
+Up to Linux 2.6.32:
+.IR "131072\ /\ sizeof(void\ *)"
+.IP *
+Linux 2.6.33 to 3.4:
+.IR "(32768\ *\ sizeof(void\ *) / 4)"
+.IP *
+Since Linux 3.5:
+.\" commit 5b5c4d1a1440e94994c73dddbad7be0676cd8b9a
+65,536
+.RE
+.TP
+.IR /proc/sys/fs/mqueue/msgsize_default " (since Linux 3.5)"
+This file defines the value used for a new queue's
+.I mq_msgsize
+setting when the queue is created with a call to
+.BR mq_open (3)
+where
+.I attr
+is specified as NULL.
+The default value for this file is 8192 (bytes).
+The minimum and maximum are as for
+.IR /proc/sys/fs/mqueue/msgsize_max .
+If
+.IR msgsize_default
+exceeds
+.IR msgsize_max ,
+a new queue's default
+.I mq_msgsize
+value is capped to the
+.I msgsize_max
+limit.
+Up until Linux 2.6.28, the default
+.I mq_msgsize
+was 8192;
+from Linux 2.6.28 to Linux 3.4, the default was the value defined for the
+.I msgsize_max
+limit.
 .TP
 .I /proc/sys/fs/mqueue/msgsize_max
 This file can be used to view and change the ceiling on the
@@ -173,21 +241,37 @@ is 8192 bytes.
 The minimum value is 128 (8192 in kernels before 2.6.28).
 The upper limit for
 .I msgsize_max
-is 1,048,576 (in kernels before 2.6.28, the upper limit was
-.BR INT_MAX ;
-that is, 2,147,483,647 on Linux/86).
-This limit is ignored for privileged processes
-.RB ( CAP_SYS_RESOURCE ).
+has varied across kernel versions:
+.RS
+.IP * 3
+Before Linux 2.6.28, the upper limit is
+.BR INT_MAX .
+.IP *
+From Linux 2.6.28 to 3.4, the limit is 1,048,576.
+.IP *
+Since Linux 3.5, the limit is 16,777,216
+.RB ( HARD_MSGSIZEMAX ).
+.RE
+.IP
+The
+.I msgsize_max
+limit is ignored for privileged process
+.RB ( CAP_SYS_RESOURCE ),
+but, since Linux 3.5, the
+.BR HARD_MSGSIZEMAX
+ceiling is enforced for privileged processes.
 .TP
 .I /proc/sys/fs/mqueue/queues_max
 This file can be used to view and change the system-wide limit on the
 number of message queues that can be created.
-Only privileged processes
-.RB ( CAP_SYS_RESOURCE )
-can create new message queues once this limit has been reached.
 The default value for
 .I queues_max
-is 256; it can be changed to any value in the range 0 to INT_MAX.
+is 256.
+No ceiling is imposed on the
+.I queues_max
+limit; privileged processes
+.RB ( CAP_SYS_RESOURCE )
+can exceed the limit (but see BUGS).
 .SS Resource limit
 The
 .B RLIMIT_MSGQUEUE
@@ -260,6 +344,10 @@ and can be monitored using
 or
 .BR epoll (7).
 This is not portable.
+.SS IPC namespaces
+For a discussion of the interaction of System V IPC objects and
+IPC namespaces, see
+.BR namespaces (7).
 .SH CONFORMING TO
 POSIX.1-2001.
 .SH NOTES
@@ -278,6 +366,15 @@ lists (ACLs) for POSIX message queues.
 .SH EXAMPLE
 An example of the use of various message queue functions is shown in
 .BR mq_notify (3).
+.SH BUGS
+In Linux versions 3.5 to 3.14, the kernel imposed a ceiling of 1024
+.RB ( HARD_QUEUESMAX )
+on the value to which the
+.I queues_max
+limit could be raised,
+and the ceiling was enforced even for privileged processes.
+This ceiling value was removed in Linux 3.14,
+and patches to stable kernels 3.5.x to 3.13.x also removed the ceiling.
 .SH SEE ALSO
 .BR getrlimit (2),
 .BR mq_getsetattr (2),
@@ -290,4 +387,5 @@ An example of the use of various message queue functions is shown in
 .BR mq_receive (3),
 .BR mq_send (3),
 .BR mq_unlink (3),
-.BR epoll (7)
+.BR epoll (7),
+.BR namespaces (7)

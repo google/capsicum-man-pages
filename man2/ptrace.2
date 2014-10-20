@@ -41,7 +41,7 @@
 .\"    (Thanks to Blaisorblade, Daniel Jacobowitz and others who helped.)
 .\" 2011-09, major update by Denys Vlasenko <vda.linux@googlemail.com>
 .\"
-.TH PTRACE 2 2014-02-20 "Linux" "Linux Programmer's Manual"
+.TH PTRACE 2 2014-08-19 "Linux" "Linux Programmer's Manual"
 .SH NAME
 ptrace \- process trace
 .SH SYNOPSIS
@@ -263,7 +263,7 @@ in the tracer.
 As for
 .BR PTRACE_POKEUSER ,
 some general-purpose register modifications may be disallowed.
-.\" FIXME In the preceding sentence, which modifications are disallowed,
+.\" FIXME . In the preceding sentence, which modifications are disallowed,
 .\" and when they are disallowed, how does user space discover that fact?
 .RI ( addr
 is ignored.)
@@ -949,7 +949,7 @@ Example:
         /* r can still be 0 here! */
     }
 .fi
-.\" FIXME:
+.\" FIXME .
 .\"     waitid usage? WNOWAIT?
 .\"     describe how wait notifications queue (or not queue)
 .LP
@@ -1454,7 +1454,7 @@ or
 .SS PTRACE_SINGLESTEP, PTRACE_SYSEMU, PTRACE_SYSEMU_SINGLESTEP stops
 [Details of these kinds of stops are yet to be documented.]
 .\"
-.\" FIXME
+.\" FIXME .
 .\" document stops occurring with PTRACE_SINGLESTEP, PTRACE_SYSEMU,
 .\" PTRACE_SYSEMU_SINGLESTEP
 .SS Informational and restarting ptrace commands
@@ -1566,8 +1566,7 @@ may race and the concurrent
 .B SIGSTOP
 may be lost.
 .\"
-.\" FIXME: Describe how to attach to a thread which is already
-.\"        group-stopped.
+.\" FIXME . Describe how to attach to a thread which is already group-stopped.
 .LP
 Since attaching sends
 .B SIGSTOP
@@ -1660,7 +1659,7 @@ Yet another complication is to be sure that
 the tracee is not already ptrace-stopped,
 because no signal delivery happens while it is\(emnot even
 .BR SIGSTOP .
-.\" FIXME: Describe how to detach from a group-stopped tracee so that it
+.\" FIXME . Describe how to detach from a group-stopped tracee so that it
 .\"        doesn't run, but continues to wait for SIGCONT.
 .LP
 If the tracer dies, all tracees are automatically detached and restarted,
@@ -1901,7 +1900,7 @@ cannot send signals to or those running
 set-user-ID/set-group-ID programs, for obvious reasons.
 Alternatively, the process may already be being traced,
 or (on kernels before 2.6.26) be
-.BR init (8)
+.BR init (1)
 (PID 1).
 .TP
 .B ESRCH
@@ -1926,21 +1925,9 @@ setting unused/ignored arguments to
 or
 .IR "(void\ *)\ 0".
 .LP
-At the system call level, the
-.BR PTRACE_PEEKTEXT ,
-.BR PTRACE_PEEKDATA ,
-and
-.BR PTRACE_PEEKUSER
-requests have a different API: they store the result
-at the address specified by the
-.I data
-parameter, and the return value is the error flag.
-The glibc wrapper function provides the API given in DESCRIPTION above,
-with the result being returned via the function return value.
-.LP
 In Linux kernels before 2.6.26,
 .\" See commit 00cd5c37afd5f431ac186dd131705048c0a11fdb
-.BR init (8),
+.BR init (1),
 the process with PID 1, may not be traced.
 .LP
 The layout of the contents of memory and the USER area are
@@ -1960,6 +1947,18 @@ Its behavior differs significantly on other flavors of UNIX.
 In any case, use of
 .BR ptrace ()
 is highly specific to the operating system and architecture.
+.SS C library/kernel ABI differences
+At the system call level, the
+.BR PTRACE_PEEKTEXT ,
+.BR PTRACE_PEEKDATA ,
+and
+.BR PTRACE_PEEKUSER
+requests have a different API: they store the result
+at the address specified by the
+.I data
+parameter, and the return value is the error flag.
+The glibc wrapper function provides the API given in DESCRIPTION above,
+with the result being returned via the function return value.
 .SH BUGS
 On hosts with 2.6 kernel headers,
 .B PTRACE_SETOPTIONS
@@ -2004,7 +2003,7 @@ One possible workaround is to
 .B PTRACE_DETACH
 the thread group leader instead of restarting it in this case.
 Last confirmed on 2.6.38.6.
-.\"  FIXME: ^^^ need to test/verify this scenario
+.\"  FIXME . need to test/verify this scenario
 .LP
 A
 .B SIGKILL

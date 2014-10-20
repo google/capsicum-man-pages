@@ -61,7 +61,7 @@
 .\" 2008-05-07, mtk / Peter Zijlstra, Added description of RLIMIT_RTTIME
 .\" 2010-11-06, mtk: Added documentation of prlimit()
 .\"
-.TH GETRLIMIT 2 2014-05-28 "Linux" "Linux Programmer's Manual"
+.TH GETRLIMIT 2 2014-10-02 "Linux" "Linux Programmer's Manual"
 .SH NAME
 getrlimit, setrlimit, prlimit \- get/set resource limits
 .SH SYNOPSIS
@@ -129,7 +129,7 @@ The maximum size of the process's virtual memory (address space) in bytes.
 .\" since 2.0.27 / 2.1.12
 This limit affects calls to
 .BR brk (2),
-.BR mmap (2)
+.BR mmap (2),
 and
 .BR mremap (2),
 which fail with the error
@@ -145,9 +145,10 @@ Since the value is a \fIlong\fP, on machines with a 32-bit \fIlong\fP
 either this limit is at most 2 GiB, or this resource is unlimited.
 .TP
 .B RLIMIT_CORE
-Maximum size of
+Maximum size of a
 .I core
-file.
+file (see
+.BR core (5)).
 When 0 no core dump files are created.
 When nonzero, larger dumps are truncated to this size.
 .TP
@@ -249,8 +250,19 @@ Each message queue that the user creates counts (until it is removed)
 against this limit according to the formula:
 .nf
 
-    bytes = attr.mq_maxmsg * sizeof(struct msg_msg *) +
-            attr.mq_maxmsg * attr.mq_msgsize
+    Since Linux 3.5:
+        bytes = attr.mq_maxmsg * sizeof(struct msg_msg) +
+                min(attr.mq_maxmsg, MQ_PRIO_MAX) *
+                      sizeof(struct posix_msg_tree_node)+
+                                /* For overhead */
+                attr.mq_maxmsg * attr.mq_msgsize;
+                                /* For message data */
+
+    Linux 3.4 and earlier:
+        bytes = attr.mq_maxmsg * sizeof(struct msg_msg *) +
+                                /* For overhead */
+                attr.mq_maxmsg * attr.mq_msgsize;
+                                /* For message data */
 
 .fi
 where
@@ -258,11 +270,16 @@ where
 is the
 .I mq_attr
 structure specified as the fourth argument to
-.BR mq_open (3).
+.BR mq_open (3),
+and the
+.I msg_msg
+and
+.I posix_msg_tree_node
+structures are kernel-internal structures.
 
-The first addend in the formula, which includes
-.I "sizeof(struct msg_msg\ *)"
-(4 bytes on Linux/i386), ensures that the user cannot
+The "overhead" addend in the formula accounts for overhead
+bytes required by the implementation
+and ensures that the user cannot
 create an unlimited number of zero-length messages (such messages
 nevertheless each consume some system memory for bookkeeping overhead).
 .TP
@@ -381,6 +398,15 @@ command-line arguments and environment variables; for details, see
 .\" commit c022a0acad534fd5f5d5f17280f6d4d135e74e81
 .\" Author: Jiri Slaby <jslaby@suse.cz>
 .\" Date:   Tue May 4 18:03:50 2010 +0200
+.\"
+.\"     rlimits: implement prlimit64 syscall
+.\"
+.\" commit 6a1d5e2c85d06da35cdfd93f1a27675bfdc3ad8c
+.\" Author: Jiri Slaby <jslaby@suse.cz>
+.\" Date:   Wed Mar 24 17:06:58 2010 +0100
+.\"
+.\"     rlimits: add rlimit64 structure
+.\"
 The Linux-specific
 .BR prlimit ()
 system call combines and extends the functionality of
@@ -429,7 +455,7 @@ must match the real user ID of the caller
 .I and
 the real, effective, and saved set group IDs of the target process
 must match the real group ID of the caller.
-.\" FIXME this permission check is strange
+.\" FIXME . this permission check is strange
 .\" Asked about this on LKML, 7 Nov 2010
 .\"     "Inconsistent credential checking in prlimit() syscall"
 .SH RETURN VALUE
@@ -532,13 +558,16 @@ For backward compatibility, glibc also provides
 .BR vlimit ().
 All new applications should be written using
 .BR setrlimit ().
+.SS C library/ kernel ABI differences
+Since version 2.13, the glibc
+.BR getrlimit ()
+and
+.BR setrlimit ()
+wrapper functions no longer invoke the corresponding system calls,
+but instead employ
+.BR prlimit (),
+for the reasons described in BUGS.
 .SH BUGS
-.\" FIXME prlimit() does not suffer
-.\" https://bugzilla.kernel.org/show_bug.cgi?id=5042
-.\" http://sources.redhat.com/bugzilla/show_bug.cgi?id=12201
-.\" Since versions 2.13, glibc has library implementations of
-.\" getrlimit() and setrlimit() that use prlimit() to work around
-.\" this bug.
 In older Linux kernels, the
 .B SIGXCPU
 and
@@ -594,7 +623,7 @@ do not change the
 soft limit in this manner,
 and the Linux behavior is probably not standards conformant;
 portable applications should avoid relying on this Linux-specific behavior.
-.\" FIXME https://bugzilla.kernel.org/show_bug.cgi?id=50951
+.\" FIXME . https://bugzilla.kernel.org/show_bug.cgi?id=50951
 The Linux-specific
 .BR RLIMIT_RTTIME
 limit exhibits the same behavior when the soft limit is encountered.
@@ -607,6 +636,70 @@ when
 .I rlim\->rlim_cur
 was greater than
 .IR rlim\->rlim_max .
+.\"
+.SS Representation of """large""" resource limit values on 32-bit platforms
+The glibc
+.BR getrlimit ()
+and
+.BR setrlimit ()
+wrapper functions use a 64-bit
+.IR rlim_t
+data type, even on 32-bit platforms.
+However, the
+.I rlim_t
+data type used in the
+.BR getrlimit ()
+and
+.BR setrlimit ()
+system calls is a (32-bit)
+.IR "unsigned long" .
+Furthermore, in Linux versions before 2.6.36,
+the kernel represents resource limits on 32-bit platforms as
+.IR "unsigned long" .
+However, a 32-bit data type is not wide enough.
+.\" https://bugzilla.kernel.org/show_bug.cgi?id=5042
+.\" http://sources.redhat.com/bugzilla/show_bug.cgi?id=12201
+The most pertinent limit here is
+.BR RLIMIT_FSIZE ,
+which specifies the maximum size to which a file can grow:
+to be useful, this limit must be represented using a type
+that is as wide as the type used to
+represent file offsets\(emthat is, as wide as a 64-bit
+.BR off_t
+(assuming a program compiled with
+.IR _FILE_OFFSET_BITS=64 ).
+
+To work around this kernel limitation,
+if a program tried to set a resource limit to a value larger than
+can be represented in a 32-bit
+.IR "unsigned long" ,
+then the glibc
+.BR setrlimit ()
+wrapper function silently converted the limit value to
+.BR RLIM_INFINITY .
+In other words, the requested resource limit setting was silently ignored.
+
+This problem was addressed in Linux 2.6.36 with two principal changes:
+.IP * 3
+the addition of a new kernel representation of resource limits that
+uses 64 bits, even on 32-bit platforms;
+.IP *
+the addition of the
+.BR prlimit ()
+system call, which employs 64-bit values for its resource limit arguments.
+.PP
+Since version 2.13,
+.\" https://www.sourceware.org/bugzilla/show_bug.cgi?id=12201
+glibc works around the limitations of the
+.BR getrlimit ()
+and
+.BR setrlimit ()
+system calls by implementing
+.BR setrlimit ()
+and
+.BR getrlimit ()
+as wrapper functions that call
+.BR prlimit ().
 .SH EXAMPLE
 The program below demonstrates the use of
 .BR prlimit ().

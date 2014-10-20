@@ -29,7 +29,7 @@
 .\" Modified 2004-06-23 by Michael Kerrisk <mtk.manpages@gmail.com>
 .\" Modified 2005-04-04, as per suggestion by Michael Hardt for rename.2
 .\"
-.TH LINK 2 2014-05-10 "Linux" "Linux Programmer's Manual"
+.TH LINK 2 2014-08-19 "Linux" "Linux Programmer's Manual"
 .SH NAME
 link, linkat \- make a new name for a file
 .SH SYNOPSIS
@@ -382,6 +382,26 @@ is dereferenced if it is a symbolic link.
 For precise control over the treatment of symbolic links when
 creating a link, use
 .BR linkat (2).
+.SS Glibc notes
+On older kernels where
+.BR linkat ()
+is unavailable, the glibc wrapper function falls back to the use of
+.BR link (),
+unless the
+.B AT_SYMLINK_FOLLOW
+is specified.
+When
+.I oldpath
+and
+.I newpath
+are relative pathnames,
+glibc constructs pathnames based on the symbolic links in
+.IR /proc/self/fd
+that correspond to the
+.I olddirfd
+and
+.IR newdirfd
+arguments.
 .SH BUGS
 On NFS filesystems, the return code may be wrong in case the NFS server
 performs the link creation and dies before it can say so.

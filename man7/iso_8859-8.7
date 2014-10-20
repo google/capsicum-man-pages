@@ -24,17 +24,15 @@
 .\"
 .\" Eli Zaretskii <eliz@gnu.org> made valuable suggestions
 .\"
-.TH ISO_8859-8 7 2014-02-16 "Linux" "Linux Programmer's Manual"
+.TH ISO_8859-8 7 2014-10-02 "Linux" "Linux Programmer's Manual"
 .SH NAME
 iso_8859-8 \- ISO 8859-8 character set encoded in octal, decimal,
 and hexadecimal
 .SH DESCRIPTION
 The ISO 8859 standard includes several 8-bit extensions to the ASCII
 character set (also known as ISO 646-IRV).
-ISO 8859-8, or "ISO Hebrew" encodes the
-characters used in Modern Hebrew (or Ivrit).
-Neither short vowels nor diacritical marks are included,
-and Yiddish is not provided for.
+ISO 8859-8 encodes the
+characters used in Modern Hebrew.
 .SS ISO 8859 alphabets
 The full set of ISO 8859 alphabets includes:
 .TS
@@ -60,8 +58,6 @@ The following table displays the characters in ISO 8859-8, which
 are printable and unlisted in the
 .BR ascii (7)
 manual page.
-.\" The fourth column will only show the proper glyphs
-.\" in an environment configured for ISO 8859-8.
 .TS
 l l l c lp-1.
 Oct	Dec	Hex	Char	Description
@@ -129,5 +125,9 @@ _
 .TE
 .SH NOTES
 ISO 8859-8 was also known as ISO-IR-138.
+ISO 8859-8 includes neither short vowels nor diacritical marks,
+and Yiddish is not provided for.
 .SH SEE ALSO
-.BR ascii (7)
+.BR ascii (7),
+.BR charsets (7),
+.BR utf-8 (7)

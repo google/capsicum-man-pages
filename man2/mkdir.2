@@ -8,7 +8,7 @@
 .\" Public License. It comes with NO WARRANTY.
 .\" %%%LICENSE_END
 .\"
-.TH MKDIR 2 2014-02-21 "Linux" "Linux Programmer's Manual"
+.TH MKDIR 2 2014-08-19 "Linux" "Linux Programmer's Manual"
 .SH NAME
 mkdir, mkdirat \- create a directory
 .SH SYNOPSIS
@@ -209,7 +209,7 @@ SVr4, BSD, POSIX.1-2001, POSIX.1-2008.
 .BR mkdirat ():
 POSIX.1-2008.
 .SH NOTES
-Under Linux apart from the permission bits, only the
+Under Linux, apart from the permission bits, only the
 .B S_ISVTX
 mode bit is honored.
 That is, under Linux the created directory actually gets mode
@@ -220,6 +220,19 @@ See also
 There are many infelicities in the protocol underlying NFS.
 Some of these affect
 .BR mkdir ().
+.SS Glibc notes
+On older kernels where
+.BR mkdirat ()
+is unavailable, the glibc wrapper function falls back to the use of
+.BR mkdir ().
+When
+.I pathname
+is a relative pathname,
+glibc constructs a pathname based on the symbolic link in
+.IR /proc/self/fd
+that corresponds to the
+.IR dirfd
+argument.
 .SH SEE ALSO
 .BR mkdir (1),
 .BR chmod (2),

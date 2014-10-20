@@ -22,7 +22,7 @@
 .\" the source, must acknowledge the copyright and authors of this work.
 .\" %%%LICENSE_END
 .\"
-.TH FSEEKO 3  2014-03-20 "" "Linux Programmer's Manual"
+.TH FSEEKO 3  2014-10-02 "" "Linux Programmer's Manual"
 .SH NAME
 fseeko, ftello \- seek to or report file position
 .SH SYNOPSIS
@@ -73,19 +73,15 @@ is of type
 instead of
 .IR long .
 .LP
-On many architectures both
+On some architectures, both
 .IR off_t
 and
 .I long
-are 32-bit types,
-but compilation with
-.RS
-.nf
-
-#define _FILE_OFFSET_BITS 64
-.fi
-.RE
-.PP
+are 32-bit types, but defining
+.BR _FILE_OFFSET_BITS
+with the value 64 (before including
+.I any
+header files)
 will turn
 .I off_t
 into a 64-bit type.
@@ -101,11 +97,11 @@ is set to indicate the error.
 .SH ERRORS
 See the ERRORS in
 .BR fseek (3).
+.SH VERSIONS
+These functions are available under glibc since version 2.1.
 .SH CONFORMING TO
 SUSv2, POSIX.1-2001.
 .SH NOTES
 These functions are found on System V-like systems.
-They are not present in libc4, libc5, glibc 2.0
-but are available since glibc 2.1.
 .SH SEE ALSO
 .BR fseek (3)

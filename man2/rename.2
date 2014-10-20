@@ -30,7 +30,7 @@
 .\" Modified Thu Mar  3 09:49:35 2005 by Michael Haardt <michael@moria.de>
 .\" 2007-03-25, mtk, added various text to DESCRIPTION.
 .\"
-.TH RENAME 2 2014-05-08 "Linux" "Linux Programmer's Manual"
+.TH RENAME 2 2014-08-19 "Linux" "Linux Programmer's Manual"
 .SH NAME
 rename, renameat, renameat2 \- change the name or location of a file
 .SH SYNOPSIS
@@ -65,7 +65,7 @@ _XOPEN_SOURCE\ >=\ 700 || _POSIX_C_SOURCE\ >=\ 200809L
 .TP
 Before glibc 2.10:
 _ATFILE_SOURCE
-.\" FIXME need to define FTMs for renameat2(), once it hits glibc
+.\" FIXME . need to define FTMs for renameat2(), once it hits glibc
 .RE
 .ad
 .PD
@@ -121,7 +121,7 @@ If
 refers to a symbolic link, the link is renamed; if
 .I newpath
 refers to a symbolic link, the link will be overwritten.
-.SS renameat ()
+.SS renameat()
 The
 .BR renameat ()
 system call operates in exactly the same way as
@@ -401,7 +401,7 @@ library support was added to glibc in version 2.4.
 
 .BR renameat2 ()
 was added to Linux in kernel 3.15.
-.\" FIXME glibc support is pending.
+.\" FIXME . glibc support is pending.
 .SH CONFORMING TO
 .BR rename ():
 4.3BSD, C89, C99, POSIX.1-2001, POSIX.1-2008.
@@ -409,8 +409,26 @@ was added to Linux in kernel 3.15.
 .BR renameat ():
 POSIX.1-2008.
 
-.BR renameat2()
+.BR renameat2 ()
 is Linux-specific.
+.SH NOTES
+.SS Glibc notes
+On older kernels where
+.BR renameat ()
+is unavailable, the glibc wrapper function falls back to the use of
+.BR rename ().
+When
+.I oldpath
+and
+.I newpath
+are relative pathnames,
+glibc constructs pathnames based on the symbolic links in
+.IR /proc/self/fd
+that correspond to the
+.I olddirfd
+and
+.IR newdirfd
+arguments.
 .SH BUGS
 On NFS filesystems, you can not assume that if the operation
 failed, the file was not renamed.

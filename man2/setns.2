@@ -5,7 +5,7 @@
 .\" Licensed under the GPLv2
 .\" %%%LICENSE_END
 .\"
-.TH SETNS 2 2013-01-01 "Linux" "Linux Programmer's Manual"
+.TH SETNS 2 2014-09-21 "Linux" "Linux Programmer's Manual"
 .SH NAME
 setns \- reassociate thread with a namespace
 .SH SYNOPSIS
@@ -24,7 +24,7 @@ The
 argument is a file descriptor referring to one of the namespace entries in a
 .I /proc/[pid]/ns/
 directory; see
-.BR proc (5)
+.BR namespaces (7)
 for further information on
 .IR /proc/[pid]/ns/ .
 The calling thread will be reassociated with the corresponding namespace,
@@ -41,15 +41,27 @@ This argument can have one of the following values:
 .BR 0
 Allow any type of namespace to be joined.
 .TP
-.BR CLONE_NEWIPC
+.BR CLONE_NEWIPC " (since Linux 3.0)"
 .I fd
 must refer to an IPC namespace.
 .TP
-.BR CLONE_NEWNET
+.BR CLONE_NEWNET " (since Linux 3.0)"
 .I fd
 must refer to a network namespace.
 .TP
-.BR CLONE_NEWUTS
+.BR CLONE_NEWNS " (since Linux 3.8)"
+.I fd
+must refer to a mount namespace.
+.TP
+.BR CLONE_NEWPID " (since Linux 3.8)"
+.I fd
+must refer to a PID namespace.
+.TP
+.BR CLONE_NEWUSER " (since Linux 3.8)"
+.I fd
+must refer to a user namespace.
+.TP
+.BR CLONE_NEWUTS " (since Linux 3.0)"
 .I fd
 must refer to a UTS namespace.
 .PP
@@ -67,6 +79,62 @@ and wants to ensure that the namespace is of a particular type.
 .IR fd
 if the file descriptor was opened by another process and, for example,
 passed to the caller via a UNIX domain socket.)
+
+.B CLONE_NEWPID
+behaves somewhat differently from the other
+.I nstype
+values:
+reassociating the calling thread with a PID namespace only changes
+the PID namespace that child processes of the caller will be created in;
+it does not change the PID namespace of the caller itself.
+Reassociating with a PID namespace is only allowed if the
+PID namespace specified by
+.IR fd
+is a descendant (child, grandchild, etc.)
+of the PID namespace of the caller.
+For further details on PID namespaces, see
+.BR pid_namespaces (7).
+
+A process reassociating itself with a user namespace must have the
+.B CAP_SYS_ADMIN
+.\" See kernel/user_namespace.c:userns_install() [3.8 source]
+capability in the target user namespace.
+Upon successfully joining a user namespace,
+a process is granted all capabilities in that namespace,
+regardless of its user and group IDs.
+A multithreaded process may not change user namespace with
+.BR setns ().
+It is not permitted to use
+.BR setns ()
+to reenter the caller's current user namespace.
+This prevents a caller that has dropped capabilities from regaining
+those capabilities via a call to
+.BR setns ().
+For security reasons,
+.\" commit e66eded8309ebf679d3d3c1f5820d1f2ca332c71
+.\" https://lwn.net/Articles/543273/
+a process can't join a new user namespace if it is sharing
+filesystem-related attributes
+(the attributes whose sharing is controlled by the
+.BR clone (2)
+.B CLONE_FS
+flag) with another process.
+For further details on user namespaces, see
+.BR user_namespaces (7).
+
+A process may not be reassociated with a new mount namespace if it is
+multithreaded.
+.\" Above check is in fs/namespace.c:mntns_install() [3.8 source]
+Changing the mount namespace requires that the caller possess both
+.B CAP_SYS_CHROOT
+and
+.BR CAP_SYS_ADMIN
+capabilities in its own user namespace and
+.BR CAP_SYS_ADMIN
+in the target mount namespace.
+See
+.BR user_namespaces (7)
+for details on the interaction of user namespaces and mount namespaces.
 .SH RETURN VALUE
 On success,
 .IR setns ()
@@ -83,16 +151,32 @@ is not a valid file descriptor.
 .B EINVAL
 .I fd
 refers to a namespace whose type does not match that specified in
-.IR nstype ,
-or there is problem with reassociating the
+.IR nstype .
+.TP
+.B EINVAL
+There is problem with reassociating
 the thread with the specified namespace.
+.TP
+.B EINVAL
+The caller attempted to join the user namespace
+in which it is already a member.
+.TP
+.B EINVAL
+.\" commit e66eded8309ebf679d3d3c1f5820d1f2ca332c71
+The caller shares filesystem
+.RB ( CLONE_FS )
+state (in particular, the root directory)
+with other processes and tried to join a new user namespace.
+.TP
+.B EINVAL
+.\" See kernel/user_namespace.c::userns_install() [kernel 3.15 sources]
+The caller is multithreaded and tried to join a new user namespace.
 .TP
 .B ENOMEM
 Cannot allocate sufficient memory to change the specified namespace.
 .TP
 .B EPERM
-The calling thread did not have the required privilege
-.RB ( CAP_SYS_ADMIN )
+The calling thread did not have the required capability
 for this operation.
 .SH VERSIONS
 The
@@ -185,20 +269,21 @@ main(int argc, char *argv[])
         exit(EXIT_FAILURE);
     }
 
-    fd = open(argv[1], O_RDONLY);   /* Get descriptor for namespace */
+    fd = open(argv[1], O_RDONLY);  /* Get descriptor for namespace */
     if (fd == \-1)
         errExit("open");
 
-    if (setns(fd, 0) == \-1)         /* Join that namespace */
+    if (setns(fd, 0) == \-1)        /* Join that namespace */
         errExit("setns");
 
-    execvp(argv[2], &argv[2]);      /* Execute a command in namespace */
+    execvp(argv[2], &argv[2]);     /* Execute a command in namespace */
     errExit("execvp");
 }
 .fi
 .SH SEE ALSO
 .BR clone (2),
 .BR fork (2),
+.BR unshare (2),
 .BR vfork (2),
-.BR proc (5),
+.BR namespaces (7),
 .BR unix (7)

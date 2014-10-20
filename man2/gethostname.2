@@ -29,7 +29,7 @@
 .\" Modified 2004-06-17 by mtk
 .\" Modified 2008-11-27 by mtk
 .\"
-.TH GETHOSTNAME 2 2010-09-26 "Linux" "Linux Programmer's Manual"
+.TH GETHOSTNAME 2 2014-08-19 "Linux" "Linux Programmer's Manual"
 .SH NAME
 gethostname, sethostname \- get/set hostname
 .SH SYNOPSIS
@@ -137,7 +137,7 @@ On Linux,
 .B HOST_NAME_MAX
 is defined with the value 64, which has been the limit since Linux 1.0
 (earlier kernels imposed a limit of 8 bytes).
-.SS Glibc notes
+.SS C library/kernel ABI differences
 The GNU C library does not employ the
 .BR gethostname ()
 system call; instead, it implements

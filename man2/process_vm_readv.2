@@ -26,7 +26,7 @@
 .\"
 .\" Commit fcf634098c00dd9cd247447368495f0b79be12d1
 .\"	
-.TH PROCESS_VM_READV 2 2014-05-05 "Linux" "Linux Programmer's Manual"
+.TH PROCESS_VM_READV 2 2014-08-19 "Linux" "Linux Programmer's Manual"
 .SH NAME
 process_vm_readv, process_vm_writev \- transfer data between process address spaces
 .SH SYNOPSIS
@@ -335,7 +335,7 @@ main(void)
     local[1].iov_base = buf2;
     local[1].iov_len = 10;
     remote[0].iov_base = (void *) 0x10000;
-    remote[1].iov_len = 20;
+    remote[0].iov_len = 20;
 
     nread = process_vm_readv(pid, local, 2, remote, 1, 0);
     if (nread != 20)

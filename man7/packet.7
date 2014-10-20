@@ -9,14 +9,14 @@
 .\"
 .\" $Id: packet.7,v 1.13 2000/08/14 08:03:45 ak Exp $
 .\"
-.TH PACKET  7 2014-04-28 "Linux" "Linux Programmer's Manual"
+.TH PACKET  7 2014-08-19 "Linux" "Linux Programmer's Manual"
 .SH NAME
 packet \- packet interface on device level
 .SH SYNOPSIS
 .nf
 .B #include <sys/socket.h>
 .br
-.B #include <netpacket/packet.h>
+.B #include <linux/if_packet.h>
 .br
 .B #include <net/ethernet.h>     /* the L2 protocols */
 .sp
@@ -535,18 +535,6 @@ is a new feature in Linux 2.2.
 Earlier Linux versions supported only
 .BR SOCK_PACKET .
 .PP
-The include file
-.I <netpacket/packet.h>
-is present since glibc 2.1.
-Older systems need:
-.sp
-.in +4n
-.nf
-#include <asm/types.h>
-#include <linux/if_packet.h>
-#include <linux/if_ether.h>  /* The L2 protocols */
-.fi
-.in
 .SH NOTES
 For portable programs it is suggested to use
 .B AF_PACKET
@@ -623,8 +611,7 @@ The suggested workaround is to use:
 
 .fi
 .in
-This is fixed in later glibc versions and also does not occur on
-libc5 systems.
+This is fixed in later glibc versions.
 
 The IEEE 802.2/803.3 LLC handling could be considered as a bug.
 
