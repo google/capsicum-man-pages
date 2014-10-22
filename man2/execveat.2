@@ -28,11 +28,11 @@ execveat \- execute program relative to a directory file descriptor
 .SH SYNOPSIS
 .B #include <unistd.h>
 .sp
-.BI "int execve(int " fd ", const char *" pathname ","
+.BI "int execveat(int " fd ", const char *" pathname ","
 .br
-.BI "           char *const " argv "[],  char *const " envp "[],"
+.BI "             char *const " argv "[],  char *const " envp "[],"
 .br
-.BI "           int " flags);
+.BI "             int " flags);
 .SH DESCRIPTION
 The
 .BR execveat ()
