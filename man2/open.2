@@ -706,7 +706,7 @@ in a fully formed state (using
 as described above).
 .RE
 .IP
-.B O_TMPFILE " (since Linux 3.??)"
+.B O_TMPFILE
 requires support by the underlying filesystem;
 only a subset of Linux filesystems provide that support.
 In the initial implementation, support was provided in
@@ -716,7 +716,7 @@ XFS support was added
 .\" commit ab29743117f9f4c22ac44c13c1647fb24fb2bafe
 in Linux 3.15.
 .TP
-.B O_BENEATH
+.B O_BENEATH " (since Linux 3.??)"
 Ensure that the
 .I pathname
 is beneath the current working directory (for
