@@ -485,9 +485,22 @@ Monitoring mounts offers the capability to monitor a whole directory tree.
 The event queue can overflow.
 In this case, events are lost.
 .SH BUGS
-As of Linux 3.15,
+As of Linux 3.17,
 the following bugs exist:
 .IP * 3
+On Linux, a filesystem object may be accessible through multiple paths,
+for example, a part of a filesystem may be remounted using using the
+.IR \-\-bind
+option of
+.BR mount (8).
+A listener that marked a mount will be notified only of events that were
+triggered for a filesystem object using the same mount.
+Any other event will pass unnoticed.
+.IP *
+Calling
+.BR fallocate (2)
+does not create any fanotify events.
+.IP *
 .\" FIXME . A patch was proposed.
 When an event is generated,
 no check is made to see whether the user ID of the
