@@ -137,6 +137,7 @@ in
 The
 .I file creation flags
 are
+.BR O_BENEATH ,
 .BR O_CLOEXEC ,
 .BR O_CREAT ,
 .BR O_DIRECTORY ,
@@ -200,6 +201,43 @@ See
 .BR fcntl (2)
 for further details.
 See also BUGS, below.
+.TP
+.B O_BENEATH " (since Linux 4.??)"
+Ensure that the
+.I pathname
+is beneath the current working directory (for
+.BR open (2))
+or the
+.I dirfd
+(for
+.BR openat (2)).
+If the
+.I pathname
+is absolute or contains a path component of "..", the
+.BR open ()
+fails with the error
+.BR ENOTBENEATH.
+This occurs even if ".." path component would not actually
+escape the original directory; for example, a
+.I pathname
+of "subdir/../filename" would be rejected.
+Path components that are symbolic links to absolute paths, or that are
+relative paths containing a ".." component, will also cause the
+.BR open ()
+operation to fail with the error
+.BR ENOTBENEATH.
+
+This feature allows applications to be sure that the opened file is
+within the specified directory, regardless of the original source of the
+.I pathname
+argument.
+Some security-conscious programs may further ensure
+this by imposing a system call filter (with
+.BR seccomp (2))
+that requires this flag for all
+.BR open ()
+operations, so that the program cannot open files outside of
+specified directories even if subverted.
 .TP
 .BR O_CLOEXEC " (since Linux 2.6.23)"
 .\" NOTE! several other man pages refer to this text
@@ -963,6 +1001,13 @@ Insufficient kernel memory was available.
 was to be created but the device containing
 .I pathname
 has no room for the new file.
+.TP
+.B ENOTBENEATH
+The
+.B O_BENEATH
+flag was specified and the
+.I pathname
+was not beneath the relevant directory.
 .TP
 .B ENOTDIR
 A component used as a directory in
