@@ -730,7 +730,7 @@ If the
 is absolute or contains a path component of "..", the
 .BR open ()
 fails with the error
-.BR EACCES.
+.BR EPERM.
 This occurs even if ".." path component would not actually
 escape the original directory; for example, a
 .I pathname
@@ -739,7 +739,7 @@ Path components that are symbolic links to absolute paths, or that are
 relative paths containing a ".." component, will also cause the
 .BR open ()
 operation to fail with the error
-.BR EACCES.
+.BR EPERM.
 .TP
 .B O_TRUNC
 If the file already exists and is a regular file and the access mode allows
@@ -817,11 +817,7 @@ The requested access to the file is not allowed, or search permission
 is denied for one of the directories in the path prefix of
 .IR pathname ,
 or the file did not exist yet and write access to the parent directory
-is not allowed, or the
-.B O_BENEATH
-flag was specified and the
-.I pathname
-was not beneath the relevant directory.
+is not allowed.
 (See also
 .BR path_resolution (7).)
 .TP
@@ -1004,6 +1000,13 @@ flag was specified, but the effective user ID of the caller
 .\" Strictly speaking, it's the filesystem UID... (MTK)
 did not match the owner of the file and the caller was not privileged
 .RB ( CAP_FOWNER ).
+.TP
+.B EPERM
+The
+.B O_BENEATH
+flag was specified and the
+.I pathname
+was not beneath the relevant directory.
 .TP
 .B EROFS
 .I pathname
