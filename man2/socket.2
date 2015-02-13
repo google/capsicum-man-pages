@@ -40,7 +40,7 @@
 .\" Modified 2002-07-17 by Michael Kerrisk <mtk.manpages@gmail.com>
 .\" Modified 2004-06-17 by Michael Kerrisk <mtk.manpages@gmail.com>
 .\"
-.TH SOCKET 2 2013-12-31 "Linux" "Linux Programmer's Manual"
+.TH SOCKET 2 2015-02-01 "Linux" "Linux Programmer's Manual"
 .SH NAME
 socket \- create an endpoint for communication
 .SH SYNOPSIS
@@ -115,6 +115,11 @@ T}:T{
 Low level packet interface
 T}:T{
 .BR packet (7)
+T}
+T{
+.B AF_ALG
+T}:T{
+Interface to kernel crypto API
 T}
 .TE
 .PP
@@ -194,7 +199,7 @@ on how to map protocol name strings to protocol numbers.
 .PP
 Sockets of type
 .B SOCK_STREAM
-are full-duplex byte streams, similar to pipes.
+are full-duplex byte streams.
 They do not preserve
 record boundaries.
 A stream socket must be in
@@ -378,6 +383,12 @@ families.
 However, already the BSD man page promises: "The protocol
 family generally is the same as the address family", and subsequent
 standards use AF_* everywhere.
+
+The
+.B AF_ALG
+protocol type was added in Linux 2.6.38.
+More information on this interface is provided in the kernel source file,
+.IR Documentation/crypto/crypto-API-userspace.txt .
 .SH EXAMPLE
 An example of the use of
 .BR socket ()

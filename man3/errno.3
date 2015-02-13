@@ -28,7 +28,7 @@
 .\" 2006-02-09 Kurt Wall, mtk
 .\"     Added non-POSIX errors
 .\"
-.TH ERRNO 3 2014-09-06 "" "Linux Programmer's Manual"
+.TH ERRNO 3 2015-01-22 "" "Linux Programmer's Manual"
 .SH NAME
 errno \- number of last error
 .SH SYNOPSIS
@@ -274,7 +274,11 @@ Too many levels of symbolic links (POSIX.1)
 Wrong medium type
 .TP
 .B EMFILE
-Too many open files (POSIX.1)
+Too many open files (POSIX.1);
+commonly caused by exceeding the
+.BR RLIMIT_NOFILE
+resource limit described in
+.BR getrlimit (2)
 .TP
 .B EMLINK
 Too many links (POSIX.1)

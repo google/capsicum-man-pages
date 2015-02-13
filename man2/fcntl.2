@@ -4,6 +4,7 @@
 .\" and Copyright (C) 1998 Jamie Lokier;
 .\" and Copyright (C) 2002-2010, 2014 Michael Kerrisk;
 .\" and Copyright (C) 2014 Jeff Layton
+.\" and Copyright (C) 2014 David Herrmann
 .\"
 .\" %%%LICENSE_START(VERBATIM)
 .\" Permission is granted to make and distribute verbatim copies of this
@@ -58,8 +59,10 @@
 .\"     Document F_SETOWN_EX and F_GETOWN_EX
 .\" 2010-06-17, Michael Kerrisk
 .\"	Document F_SETPIPE_SZ and F_GETPIPE_SZ.
+.\" 2014-07-08, David Herrmann <dh.herrmann@gmail.com>
+.\"     Document F_ADD_SEALS and F_GET_SEALS
 .\"
-.TH FCNTL 2 2014-09-06 "Linux" "Linux Programmer's Manual"
+.TH FCNTL 2 2015-01-22 "Linux" "Linux Programmer's Manual"
 .SH NAME
 fcntl \- manipulate file descriptor
 .SH SYNOPSIS
@@ -1298,6 +1301,146 @@ of buffer space currently used to store data produces the error
 .BR F_GETPIPE_SZ " (\fIvoid\fP; since Linux 2.6.35)"
 Return (as the function result) the capacity of the pipe referred to by
 .IR fd .
+.\"
+.SS File Sealing
+File seals limit the set of allowed operations on a given file.
+For each seal that is set on a file,
+a specific set of operations will fail with
+.B EPERM
+on this file from now on.
+The file is said to be sealed.
+The default set of seals depends on the type of the underlying
+file and filesystem.
+For an overview of file sealing, a discussion of its purpose,
+and some code examples, see
+.BR memfd_create (2).
+
+Currently, only the
+.I tmpfs
+filesystem supports sealing.
+On other filesystems, all
+.BR fcntl (2)
+operations that operate on seals will return
+.BR EINVAL .
+
+Seals are a property of an inode.
+Thus, all open file descriptors referring to the same inode share
+the same set of seals.
+Furthermore, seals can never be removed, only added.
+.TP
+.BR F_ADD_SEALS " (\fIint\fP; since Linux 3.17)"
+Add the seals given in the bit-mask argument
+.I arg
+to the set of seals of the inode referred to by the file descriptor
+.IR fd .
+Seals cannot be removed again.
+Once this call succeeds, the seals are enforced by the kernel immediately.
+If the current set of seals includes
+.BR F_SEAL_SEAL
+(see below), then this call will be rejected with
+.BR EPERM .
+Adding a seal that is already set is a no-op, in case
+.B F_SEAL_SEAL
+is not set already.
+In order to place a seal, the file descriptor
+.I fd
+must be writable.
+.TP
+.BR F_GET_SEALS " (\fIvoid\fP; since Linux 3.17)"
+Return (as the function result) the current set of seals
+of the inode referred to by
+.IR fd .
+If no seals are set, 0 is returned.
+If the file does not support sealing, \-1 is returned and
+.I errno
+is set to
+.BR EINVAL .
+.PP
+The following seals are available:
+.TP
+.BR F_SEAL_SEAL
+If this seal is set, any further call to
+.BR fcntl (2)
+with
+.B F_ADD_SEALS
+will fail with
+.BR EPERM .
+Therefore, this seal prevents any modifications to the set of seals itself.
+If the initial set of seals of a file includes
+.BR F_SEAL_SEAL ,
+then this effectively causes the set of seals to be constant and locked.
+.TP
+.BR F_SEAL_SHRINK
+If this seal is set, the file in question cannot be reduced in size.
+This affects
+.BR open (2)
+with the
+.B O_TRUNC
+flag as well as
+.BR truncate (2)
+and
+.BR ftruncate (2).
+Those calls will fail with
+.B EPERM
+if you try to shrink the file in question.
+Increasing the file size is still possible.
+.TP
+.BR F_SEAL_GROW
+If this seal is set, the size of the file in question cannot be increased.
+This affects
+.BR write (2)
+beyond the end of the file,
+.BR truncate (2),
+.BR ftruncate (2),
+and
+.BR fallocate (2).
+These calls will fail with
+.B EPERM
+if you use them to increase the file size.
+If you keep the size or shrink it, those calls still work as expected.
+.TP
+.BR F_SEAL_WRITE
+If this seal is set, you cannot modify the contents of the file.
+Note that shrinking or growing the size of the file is
+still possible and allowed.
+.\" One or more other seals are typically used with F_SEAL_WRITE
+.\" because, given a file with the F_SEAL_WRITE seal set, then,
+.\" while it would no longer be possinle to (say) write zeros into
+.\" the last 100 bytes of a file, it would still be possible
+.\" to (say) shrink the file by 100 bytes using ftruncate(), and
+.\" then increase the file size by 100 bytes, which would have
+.\" the effect of replacing the last hundred bytes by zeros.
+.\"
+Thus, this seal is normally used in combination with one of the other seals.
+This seal affects
+.BR write (2)
+and
+.BR fallocate (2)
+(only in combination with the
+.B FALLOC_FL_PUNCH_HOLE
+flag).
+Those calls will fail with
+.B EPERM
+if this seal is set.
+Furthermore, trying to create new shared, writable memory-mappings via
+.BR mmap (2)
+will also fail with
+.BR EPERM .
+
+Setting
+.B F_SEAL_WRITE
+via
+.BR fcntl (2)
+with
+.B F_ADD_SEALS
+will fail with
+.B EBUSY
+if any writable, shared mapping exists.
+Such mappings must be unmapped before you can add this seal.
+Furthermore, if there are any asynchronous I/O operations
+.RB ( io_submit (2))
+pending on the file,
+all outstanding writes will be discarded.
 .SH RETURN VALUE
 For a successful call, the return value depends on the operation:
 .TP 0.9i
@@ -1325,6 +1468,11 @@ behavior.
 .BR F_GETPIPE_SZ ", " F_SETPIPE_SZ
 The pipe capacity.
 .TP
+.BR F_GET_SEALS
+A bit mask identifying the seals that have been set
+for the inode referred to by
+.IR fd .
+.TP
 All other commands
 Zero.
 .PP
@@ -1342,12 +1490,35 @@ another process.
 .TP
 .B EBADF
 .I fd
-is not an open file descriptor, or the command was
+is not an open file descriptor
+.TP
+.B EBADF
+.I cmd
+is
 .B F_SETLK
 or
 .B F_SETLKW
 and the file descriptor open mode doesn't match with the
 type of lock requested.
+.TP
+.BR EBUSY
+.I cmd
+is
+.BR F_SETPIPE_SZ
+and the new pipe capacity specified in
+.I arg
+is smaller than the amount of buffer space currently
+used to store data in the pipe.
+.TP
+.B EBUSY
+.I cmd
+is
+.BR F_ADD_SEALS ,
+.IR arg
+includes
+.BR F_SEAL_WRITE ,
+and there exists a writable, shared mapping on the file referred to by
+.IR fd .
 .TP
 .B EDEADLK
 It was detected that the specified
@@ -1359,13 +1530,23 @@ command would cause a deadlock.
 is outside your accessible address space.
 .TP
 .B EINTR
-For
-.BR F_SETLKW ,
-the command was interrupted by a signal; see
+.I cmd
+is
+.BR F_SETLKW
+or
+.BR F_OFD_SETLKW
+and the operation was interrupted by a signal; see
 .BR signal (7).
-For
-.BR F_GETLK " and " F_SETLK ,
-the command was interrupted by a signal before the lock was checked or
+.TP
+.B EINTR
+.I cmd
+is
+.BR F_GETLK ,
+.BR F_SETLK ,
+.BR F_OFD_GETLK ,
+or
+.BR F_OFD_SETLK ,
+and the operation was interrupted by a signal before the lock was checked or
 acquired.
 Most likely when locking a remote file (e.g., locking over
 NFS), but can sometimes happen locally.
@@ -1376,12 +1557,40 @@ The value specified in
 is not recognized by this kernel.
 .TP
 .B EINVAL
-For
-.BR F_DUPFD ,
+.I cmd
+is
+.BR F_ADD_SEALS
+and
 .I arg
-is negative or is greater than the maximum allowable value.
-For
-.BR F_SETSIG ,
+includes an unrecognized sealing bit.
+.TP
+.BR EINVAL
+.I cmd
+is
+.BR F_ADD_SEALS
+or
+.BR F_GET_SEALS
+and the filesystem containing the inode referred to by
+.I fd
+does not support sealing.
+.TP
+.B EINVAL
+.I cmd
+is
+.BR F_DUPFD
+and
+.I arg
+is negative or is greater than the maximum allowable value
+(see the discussion of
+.BR RLIMIT_NOFILE
+in
+.BR getrlimit (2)).
+.TP
+.B EINVAL
+.I cmd
+is
+.BR F_SETSIG
+and
 .I arg
 is not an allowable signal number.
 .TP
@@ -1397,9 +1606,10 @@ and
 was not specified as zero.
 .TP
 .B EMFILE
-For
-.BR F_DUPFD ,
-the process already has the maximum number of file descriptors open.
+.I cmd
+is
+.BR F_DUPFD
+and the process already has the maximum number of file descriptors open.
 .TP
 .B ENOLCK
 Too many segment locks open, lock table is full, or a remote locking
@@ -1417,6 +1627,16 @@ does not refer to a directory.
 Attempted to clear the
 .B O_APPEND
 flag on a file that has the append-only attribute set.
+.TP
+.B EPERM
+.I cmd
+was
+.BR F_ADD_SEALS ,
+but
+.I fd
+was not open for writing
+or the current set of seals on the file already includes
+.BR F_SEAL_SEAL .
 .SH CONFORMING TO
 SVr4, 4.3BSD, POSIX.1-2001.
 Only the operations
@@ -1476,6 +1696,12 @@ are Linux-specific (and one must define
 .BR _GNU_SOURCE
 to obtain their definitions),
 but work is being done to have them included in the next version of POSIX.1.
+
+.BR F_ADD_SEALS
+and
+.BR F_GET_SEALS
+are Lnux-specific.
+.\" FIXME . Once glibc adds support, add a note about FTM requirements
 .SH NOTES
 The errors returned by
 .BR dup2 (2)

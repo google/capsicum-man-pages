@@ -38,7 +38,7 @@
 .\"		the start of optstring
 .\" Modified 2006-12-15, mtk, Added getopt() example program.
 .\"
-.TH GETOPT 3  2014-05-09 "GNU" "Linux Programmer's Manual"
+.TH GETOPT 3  2015-02-01 "GNU" "Linux Programmer's Manual"
 .SH NAME
 getopt, getopt_long, getopt_long_only,
 optarg, optind, opterr, optopt \- Parse command-line options
@@ -413,7 +413,8 @@ main(int argc, char *argv[])
         }
     }
 
-    printf("flags=%d; tfnd=%d; optind=%d\\n", flags, tfnd, optind);
+    printf("flags=%d; tfnd=%d; nsecs=%d; optind=%d\\n",
+            flags, tfnd, nsecs, optind);
 
     if (optind >= argc) {
         fprintf(stderr, "Expected argument after options\\n");
@@ -513,4 +514,5 @@ main(int argc, char **argv)
 }
 .fi
 .SH SEE ALSO
+.BR getopt (1),
 .BR getsubopt (3)

@@ -48,7 +48,7 @@
 .\" FIXME . Apr 08: The next POSIX revision has O_EXEC, O_SEARCH, and
 .\" O_TTYINIT.  Eventually these may need to be documented.  --mtk
 .\"
-.TH OPEN 2 2014-10-02 "Linux" "Linux Programmer's Manual"
+.TH OPEN 2 2015-01-22 "Linux" "Linux Programmer's Manual"
 .SH NAME
 open, openat, creat \- open and possibly create a file
 .SH SYNOPSIS
@@ -908,7 +908,11 @@ but not
 .BR O_PATH .
 .TP
 .B EMFILE
-The process already has the maximum number of files open.
+The process already has the maximum number of files open
+(see the description of
+.BR RLIMIT_NOFILE
+in
+.BR getrlimit (2)).
 .TP
 .B ENAMETOOLONG
 .I pathname
@@ -1001,6 +1005,9 @@ flag was specified, but the effective user ID of the caller
 did not match the owner of the file and the caller was not privileged
 .RB ( CAP_FOWNER ).
 .TP
+.B EPERM
+The operation was prevented by a file seal; see
+.BR fcntl (2).
 .B EPERM
 The
 .B O_BENEATH
@@ -1311,6 +1318,7 @@ operations.
 and the other system calls and library functions that take
 a directory file descriptor argument
 (i.e.,
+.BR execveat (2),
 .BR faccessat (2),
 .BR fanotify_mark (2),
 .BR fchmodat (2),
@@ -1346,11 +1354,24 @@ of the directory prefix given to
 .BR open ()
 could be changed in parallel with the call to
 .BR open ().
+Suppose, for example, that we wish to create the file
+.I path/to/xxx.dep
+if the file
+.I path/to/xxx
+exists.
+The problem is that between the existence check and the file creation step,
+.I path
+or
+.I to
+(which might be symbolic links)
+could be modified to point to a different location.
 Such races can be avoided by
 opening a file descriptor for the target directory,
 and then specifying that file descriptor as the
 .I dirfd
-argument of
+argument of (say)
+.BR fstatat (2)
+and
 .BR openat ().
 
 Second,

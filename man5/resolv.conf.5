@@ -20,7 +20,7 @@
 .\"
 .\" Added ndots remark by Bernhard R. Link - debian bug #182886
 .\"
-.TH RESOLV.CONF 5 2014-02-22 "" "Linux Programmer's Manual"
+.TH RESOLV.CONF 5 2014-12-31 "" "Linux Programmer's Manual"
 .UC 4
 .SH NAME
 resolv.conf \- resolver configuration file
@@ -266,7 +266,7 @@ close the socket and open a new one before sending the second request.
 sets RES_NOTLDQUERY in
 .IR _res.options .
 This option causes
-.BR res_nsearch()
+.BR res_nsearch ()
 to not attempt to resolve an unqualified name
 as if it were a top level domain (TLD).
 This option can cause problems if the site has ``localhost'' as a TLD

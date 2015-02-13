@@ -35,7 +35,7 @@
 .\"	Language and formatting clean-ups
 .\"	Added notes on /proc files
 .\"
-.TH SHMGET 2 2014-10-02 "Linux" "Linux Programmer's Manual"
+.TH SHMGET 2 2015-01-10 "Linux" "Linux Programmer's Manual"
 .SH NAME
 shmget \- allocates a System V shared memory segment
 .SH SYNOPSIS
@@ -209,7 +209,7 @@ but a shared memory segment already exists for
 A new segment was to be created and
 .I size
 is less than
-.B SHMIN
+.B SHMMIN
 or greater than
 .BR SHMMAX .
 .TP
@@ -283,9 +283,8 @@ The following limits on shared memory segment resources affect the
 call:
 .TP
 .B SHMALL
-System-wide limit on the number of
-.I pages
-of shared memory.
+System-wide limit on the total amount of shared memory,
+measured in units of the system page size.
 
 On Linux, this limit can be read and modified via
 .IR /proc/sys/kernel/shmall .
@@ -381,6 +380,7 @@ was perhaps unfortunate,
 .B IPC_NEW
 would more clearly show its function.
 .SH SEE ALSO
+.BR memfd_create (2),
 .BR shmat (2),
 .BR shmctl (2),
 .BR shmdt (2),

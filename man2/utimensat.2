@@ -23,7 +23,7 @@
 .\" the source, must acknowledge the copyright and authors of this work.
 .\" %%%LICENSE_END
 .\"
-.TH UTIMENSAT 2 2014-01-24 "Linux" "Linux Programmer's Manual"
+.TH UTIMENSAT 2 2015-01-22 "Linux" "Linux Programmer's Manual"
 .SH NAME
 utimensat, futimens \- change file timestamps with nanosecond precision
 .SH SYNOPSIS
@@ -457,6 +457,18 @@ is implemented as:
 
     utimensat(fd, NULL, times, 0);
 .fi
+
+If both
+.I tv_nsec
+fields are specified as
+.BR UTIME_OMIT ,
+then the Linux implementation of
+.BR utimensat ()
+succeeds even if the file referred to by
+.IR dirfd
+and
+.I pathname
+does not exist.
 .SH BUGS
 Several bugs afflict
 .BR utimensat ()

@@ -42,7 +42,7 @@
 .\" Modified 2000-07-22 by Nicolás Lichtmaier <nick@debian.org>
 .\" Modified 2001-10-16 by John Levon <moz@compsoc.man.ac.uk>
 .\"
-.TH FFLUSH 3  2013-07-15 "GNU" "Linux Programmer's Manual"
+.TH FFLUSH 3  2015-02-01 "GNU" "Linux Programmer's Manual"
 .SH NAME
 fflush \- flush a stream
 .SH SYNOPSIS
@@ -55,10 +55,13 @@ For output streams,
 forces a write of all user-space buffered data for the given output or update
 .I stream
 via the stream's underlying write function.
-For input streams,
+
+For input streams associated with seekable files
+(e.g., disk files, but not pipes or terminals),
 .BR fflush ()
 discards any buffered data that has been fetched from the underlying file,
 but has not been consumed by the application.
+
 The open status of the stream is unaffected.
 .PP
 If the
@@ -68,6 +71,8 @@ argument is NULL,
 flushes
 .I all
 open output streams.
+.\" mtk: POSIX specifies that only output streams are flushed for this case.
+.\" Also verified for glibc by experiment.
 .PP
 For a nonlocking counterpart, see
 .BR unlocked_stdio (3).
@@ -81,7 +86,7 @@ is set to indicate the error.
 .SH ERRORS
 .TP
 .B EBADF
-.I Stream
+.I stream
 is not an open stream, or is not open for writing.
 .PP
 The function
@@ -98,13 +103,12 @@ function is thread-safe.
 .SH CONFORMING TO
 C89, C99, POSIX.1-2001, POSIX.1-2008.
 
-The standards do not specify the behavior for input streams.
-Most other implementations behave the same as Linux.
-.\" Verified on: Solaris 8.
+POSIX.1-2001 did not specify the behavior for flushing of input streams,
+but the behavior is specified in POSIX.1-2008.
 .SH NOTES
 Note that
 .BR fflush ()
-only flushes the user-space buffers provided by the C library.
+flushes only the user-space buffers provided by the C library.
 To ensure that the data is physically stored on disk
 the kernel buffers must be flushed too, for example, with
 .BR sync (2)

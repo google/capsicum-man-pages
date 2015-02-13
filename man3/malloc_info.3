@@ -22,14 +22,14 @@
 .\" the source, must acknowledge the copyright and authors of this work.
 .\" %%%LICENSE_END
 .\"
-.TH MALLOC_INFO 3  2013-04-19 "GNU" "Linux Programmer's Manual"
+.TH MALLOC_INFO 3  2015-01-22 "GNU" "Linux Programmer's Manual"
 .SH NAME
 malloc_info \- export malloc state to a stream
 .SH SYNOPSIS
 .nf
 .B #include <malloc.h>
 .sp
-.BI "int malloc_info(int " options ", FILE *" fp );
+.BI "int malloc_info(int " options ", FILE *" stream );
 .fi
 .SH DESCRIPTION
 The
@@ -38,7 +38,7 @@ function exports an XML string that describes the current state
 of the memory-allocation
 implementation in the caller.
 The string is printed on the file stream
-.IR fp .
+.IR stream .
 The exported string includes information about all arenas (see
 .BR malloc (3)).
 

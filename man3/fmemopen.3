@@ -7,7 +7,7 @@
 .\"
 .\" 2008-12-04, Petr Baudis <pasky@suse.cz>: Document open_wmemstream()
 .\"
-.TH FMEMOPEN 3 2014-04-06 "GNU" "Linux Programmer's Manual"
+.TH FMEMOPEN 3 2015-01-22 "GNU" "Linux Programmer's Manual"
 .SH NAME
 fmemopen, open_memstream, open_wmemstream \-  open memory as stream
 .SH SYNOPSIS
@@ -93,14 +93,18 @@ bytes to the buffer result in an error.
 (By default, such errors will be visible only when the
 .I stdio
 buffer is flushed.
-Disabling buffering with
-.I setbuf(fp,\ NULL)
-may be useful to detect errors at the time of an output operation.
+Disabling buffering with the following call
+may be useful to detect errors at the time of an output operation:
+
+    setbuf(stdream, NULL);
+
 Alternatively, the caller can explicitly set
 .I buf
 as the stdio stream buffer, at the same time informing stdio
-of the buffer's size, using
-.IR "setbuffer(fp, buf, size)" .)
+of the buffer's size, using:
+
+    setbuffer(stream, buf, size);
+
 .\" See http://sourceware.org/bugzilla/show_bug.cgi?id=1995
 .\" and
 .\" http://sources.redhat.com/ml/libc-alpha/2006-04/msg00064.html
@@ -108,8 +112,8 @@ of the buffer's size, using
 In a stream opened for reading,
 null bytes (\(aq\\0\(aq) in the buffer do not cause read
 operations to return an end-of-file indication.
-A read from the buffer will only indicate end-of-file
-when the file pointer advances
+A read from the buffer will indicate end-of-file
+only when the file pointer advances
 .I size
 bytes past the start of the buffer.
 .PP

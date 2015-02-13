@@ -35,7 +35,7 @@
 .\" 2005-03-11, mtk, modified pselect() text (it is now a system
 .\"     call in 2.6.16.
 .\"
-.TH SELECT 2 2014-08-19 "Linux" "Linux Programmer's Manual"
+.TH SELECT 2 2015-01-22 "Linux" "Linux Programmer's Manual"
 .SH NAME
 select, pselect, FD_CLR, FD_ISSET, FD_SET, FD_ZERO \-
 synchronous I/O multiplexing
@@ -328,7 +328,13 @@ A signal was caught; see
 .TP
 .B EINVAL
 .I nfds
-is negative or the value contained within
+is negative or exceeds the
+.BR RLIMIT_NOFILE
+resource limit (see
+.BR getrlimit (2)).
+.TP
+.B EINVAL
+the value contained within
 .I timeout
 is invalid.
 .TP
@@ -589,6 +595,7 @@ main(void)
 .BR poll (2),
 .BR read (2),
 .BR recv (2),
+.BR restart_syscall (2),
 .BR send (2),
 .BR sigprocmask (2),
 .BR write (2),

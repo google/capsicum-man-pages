@@ -73,7 +73,7 @@
 .\"        commit c9bee3b7fdecb0c1d070c7b54113b3bdfb9a3d36
 .\"        Author: Eric Dumazet <edumazet@google.com>
 .\"
-.TH TCP  7 2014-03-31 "Linux" "Linux Programmer's Manual"
+.TH TCP  7 2015-01-10 "Linux" "Linux Programmer's Manual"
 .SH NAME
 tcp \- TCP protocol
 .SH SYNOPSIS
@@ -352,7 +352,7 @@ this is the initial MSS used by the connection.
 .TP
 .IR tcp_bic " (Boolean; default: disabled; Linux 2.4.27/2.6.6 to 2.6.13)"
 Enable BIC TCP congestion control algorithm.
-BIC-TCP is a sender-side only change that ensures a linear RTT
+BIC-TCP is a sender-side-only change that ensures a linear RTT
 fairness under large windows while offering both scalability and
 bounded TCP-friendliness.
 The protocol combines two schemes
@@ -780,10 +780,11 @@ building larger TSO frames.
 .TP
 .IR tcp_tw_recycle " (Boolean; default: disabled; since Linux 2.4)"
 .\" Since 2.3.15
-Enable fast recycling of TIME_WAIT sockets.
-Enabling this option is not
-recommended since this causes problems when working
-with NAT (Network Address Translation).
+Enable fast recycling of TIME_WAIT sockets. Enabling this option is
+not recommended for devices communicating with the general Internet
+or using NAT (Network Address Translation). Since some NAT gateways
+pass through IP timestamp values, one IP can appear to have
+non-increasing timestamps. See RFC 1323 (PAWS), RFC 6191.
 .\"
 .\" The following is from 2.6.12: Documentation/networking/ip-sysctl.txt
 .TP
@@ -798,7 +799,7 @@ It should not be changed without advice/request of technical experts.
 .IR tcp_vegas_cong_avoid  " (Boolean; default: disabled; Linux 2.2 to 2.6.13)"
 .\" Since 2.1.8; removed in 2.6.13
 Enable TCP Vegas congestion avoidance algorithm.
-TCP Vegas is a sender-side only change to TCP that anticipates
+TCP Vegas is a sender-side-only change to TCP that anticipates
 the onset of congestion by estimating the bandwidth.
 TCP Vegas adjusts the sending rate by modifying the congestion window.
 TCP Vegas should provide less packet loss, but it is
@@ -808,7 +809,7 @@ not as aggressive as TCP Reno.
 .TP
 .IR tcp_westwood " (Boolean; default: disabled; Linux 2.4.26/2.6.3 to 2.6.13)"
 Enable TCP Westwood+ congestion control algorithm.
-TCP Westwood+ is a sender-side only modification of the TCP Reno
+TCP Westwood+ is a sender-side-only modification of the TCP Reno
 protocol stack that optimizes the performance of TCP congestion control.
 It is based on end-to-end bandwidth estimation to set
 congestion window and slow start threshold after a congestion episode.
@@ -1061,7 +1062,7 @@ Otherwise, failure may take up to 20 minutes with
 the current system defaults in a normal WAN environment.
 
 This option can be set during any state of a TCP connection,
-but is only effective during the synchronized states of a connection
+but is effective only during the synchronized states of a connection
 (ESTABLISHED, FIN-WAIT-1, FIN-WAIT-2, CLOSE-WAIT, CLOSING, and LAST-ACK).
 Moreover, when used with the TCP keepalive
 .RB ( SO_KEEPALIVE )

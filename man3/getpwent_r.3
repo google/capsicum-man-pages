@@ -21,7 +21,7 @@
 .\" <http://www.gnu.org/licenses/>.
 .\" %%%LICENSE_END
 .\"
-.TH GETPWENT_R 3 2010-10-21 "GNU" "Linux Programmer's Manual"
+.TH GETPWENT_R 3 2015-01-22 "GNU" "Linux Programmer's Manual"
 .SH NAME
 getpwent_r, fgetpwent_r \- get passwd file entry reentrantly
 .SH SYNOPSIS
@@ -32,7 +32,7 @@ getpwent_r, fgetpwent_r \- get passwd file entry reentrantly
 .br
 .BI "               size_t " buflen ", struct passwd **" pwbufp );
 .sp
-.BI "int fgetpwent_r(FILE *" fp ", struct passwd *" pwbuf ", char *" buf ,
+.BI "int fgetpwent_r(FILE *" stream ", struct passwd *" pwbuf ", char *" buf ,
 .br
 .BI "                size_t " buflen ", struct passwd **" pwbufp );
 .fi
@@ -58,8 +58,8 @@ and
 .BR fgetpwent (3).
 The former reads the next passwd entry from the stream initialized by
 .BR setpwent (3).
-The latter reads the next passwd entry from the stream
-.IR fp .
+The latter reads the next passwd entry from
+.IR stream .
 .PP
 The \fIpasswd\fP structure is defined in
 .I <pwd.h>
@@ -119,7 +119,7 @@ Try again with larger buffer.
 These functions are GNU extensions, done in a style resembling
 the POSIX version of functions like
 .BR getpwnam_r (3).
-Other systems use prototype
+Other systems use the prototype
 .sp
 .nf
 .in +4n

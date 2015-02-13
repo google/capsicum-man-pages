@@ -25,7 +25,7 @@
 .\" 2005-04-08 mtk, noted kernel version and added BUGS
 .\" 2010-10-09, mtk, document arm_fadvise64_64()
 .\"
-.TH POSIX_FADVISE 2 2014-05-03 "Linux" "Linux Programmer's Manual"
+.TH POSIX_FADVISE 2 2014-12-31 "Linux" "Linux Programmer's Manual"
 .SH NAME
 posix_fadvise \- predeclare an access pattern for file data
 .SH SYNOPSIS
@@ -97,8 +97,11 @@ An invalid value was specified for \fIadvice\fP.
 .TP
 .B ESPIPE
 The specified file descriptor refers to a pipe or FIFO.
-(Linux actually
-returns
+.RB ( ESPIPE
+is the error specified by POSIX,
+but before kernel version 2.16,
+.\" commit 87ba81dba431232548ce29d5d224115d0c2355ac
+Linux returned
 .B EINVAL
 in this case.)
 .SH VERSIONS
@@ -109,6 +112,13 @@ the underlying system call is called
 Library support has been provided since glibc version 2.2,
 via the wrapper function
 .BR posix_fadvise ().
+
+Since Linux 3.18,
+.\" commit d3ac21cacc24790eb45d735769f35753f5b56ceb
+support for the underlying system call is optional,
+depending on the setting of the
+.B CONFIG_ADVISE_SYSCALLS
+configuration option.
 .SH CONFORMING TO
 POSIX.1-2001.
 Note that the type of the
@@ -143,6 +153,14 @@ files.
 A program may periodically request the kernel to free cached data
 that has already been used, so that more useful cached pages are not
 discarded instead.
+
+Requests to discard partial pages are ignored.
+It is preferable to preserve needed data than discard unneeded data.
+If the application requires that data be considered for discarding then
+.I offset
+and
+.I len
+must be page-aligned.
 
 Pages that have not yet been written out will be unaffected, so if the
 application wishes to guarantee that pages will be released, it should

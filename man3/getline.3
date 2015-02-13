@@ -23,7 +23,7 @@
 .\" the source, must acknowledge the copyright and authors of this work.
 .\" %%%LICENSE_END
 .\"
-.TH GETLINE 3  2014-08-19 "GNU" "Linux Programmer's Manual"
+.TH GETLINE 3  2015-01-22 "GNU" "Linux Programmer's Manual"
 .SH NAME
 getline, getdelim \- delimited string input
 .SH SYNOPSIS
@@ -150,22 +150,22 @@ They were standardized in POSIX.1-2008.
 int
 main(void)
 {
-    FILE *fp;
+    FILE *stream;
     char *line = NULL;
     size_t len = 0;
     ssize_t read;
 
-    fp = fopen("/etc/motd", "r");
-    if (fp == NULL)
+    stream = fopen("/etc/motd", "r");
+    if (stream == NULL)
         exit(EXIT_FAILURE);
 
-    while ((read = getline(&line, &len, fp)) != \-1) {
+    while ((read = getline(&line, &len, stream)) != \-1) {
         printf("Retrieved line of length %zu :\en", read);
         printf("%s", line);
     }
 
     free(line);
-    fclose(fp);
+    fclose(stream);
     exit(EXIT_SUCCESS);
 }
 .fi

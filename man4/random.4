@@ -16,7 +16,7 @@
 .\"     Add a Usage subsection that recommends most users to use
 .\"     /dev/urandom, and emphasizes parsimonious usage of /dev/random.
 .\"
-.TH RANDOM 4 2013-03-15 "Linux" "Linux Programmer's Manual"
+.TH RANDOM 4 2015-02-01 "Linux" "Linux Programmer's Manual"
 .SH NAME
 random, urandom \- kernel random number source devices
 .SH SYNOPSIS
@@ -44,17 +44,43 @@ pool.
 high quality randomness such as one-time pad or key generation.
 When the entropy pool is empty, reads from \fI/dev/random\fP will block
 until additional environmental noise is gathered.
+If
+.BR open (2)
+is called for
+.I /dev/random
+with flag
+.BR O_NONBLOCK ,
+a subsequent
+.BR read (2)
+will not block if the requested number of bytes is not available.
+Instead, the available bytes are returned.
+If no byte is available
+.BR read (2)
+will return -1 and
+.I errno
+will be set to
+.BR EAGAIN .
 .LP
 A read from the \fI/dev/urandom\fP device will not block
 waiting for more entropy.
-As a result, if there is not sufficient entropy in the
-entropy pool, the returned values are theoretically vulnerable to a
+If there is not sufficient entropy, a pseudorandom number generator is used
+to create the requested bytes.
+As a result, in this case the returned values are theoretically vulnerable to a
 cryptographic attack on the algorithms used by the driver.
 Knowledge of how to do this is not available in the current unclassified
 literature, but it is theoretically possible that such an attack may
 exist.
 If this is a concern in your application, use \fI/dev/random\fP
 instead.
+.B O_NONBLOCK
+has no effect when opening
+.IR /dev/urandom .
+When calling
+.BR read (2)
+for device
+.I /dev/urandom
+signals will not be handled until after the requested random bytes
+have been generated.
 .LP
 Writing to \fI/dev/random\fP or \fI/dev/urandom\fP will update the
 entropy pool with the data written, but this will not result in a
@@ -280,6 +306,7 @@ wall clock) to the pools.
 .\" The kernel's random number generator was written by
 .\" Theodore Ts'o (tytso@athena.mit.edu).
 .SH SEE ALSO
+.BR getrandom (2),
 .BR mknod (1)
 .br
 RFC\ 1750, "Randomness Recommendations for Security"

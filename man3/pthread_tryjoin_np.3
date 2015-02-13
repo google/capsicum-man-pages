@@ -23,7 +23,7 @@
 .\" the source, must acknowledge the copyright and authors of this work.
 .\" %%%LICENSE_END
 .\"
-.TH PTHREAD_TRYJOIN_NP 3 2010-09-10 "Linux" "Linux Programmer's Manual"
+.TH PTHREAD_TRYJOIN_NP 3 2015-01-10 "Linux" "Linux Programmer's Manual"
 .SH NAME
 pthread_tryjoin_np, pthread_timedjoin_np \- try to join with a
 terminated thread
@@ -97,12 +97,20 @@ can in addition fail with the following error:
 had not yet terminated at the time of the call.
 .PP
 .BR pthread_timedjoin_np ()
-can in addition fail with the following error:
+can in addition fail with the following errors:
 .TP
 .BR ETIMEDOUT
 The call timed out before
 .I thread
 terminated.
+.TP
+.BR EINVAL
+.I abstime
+value is invalid
+.RI ( tv_sec
+is less than 0 or
+.IR tv_nsec
+is greater than 1e9).
 .PP
 .BR pthread_timedjoin_np ()
 never returns the error

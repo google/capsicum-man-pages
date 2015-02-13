@@ -28,7 +28,7 @@
 .\" the source, must acknowledge the copyright and authors of this work.
 .\" %%%LICENSE_END
 .\"
-.TH SYSCALLS 2 2014-10-02 "Linux" "Linux Programmer's Manual"
+.TH SYSCALLS 2 2015-01-22 "Linux" "Linux Programmer's Manual"
 .SH NAME
 syscalls \- Linux system calls
 .SH SYNOPSIS
@@ -151,7 +151,7 @@ The list of system calls that are available as at kernel 3.15
 .\"
 .ad l
 .TS
-l l l
+l2 le l
 ---
 l l l.
 \fBSystem call\fP	\fBKernel\fP	\fBNotes\fP
@@ -173,6 +173,7 @@ Deprecated (does nothing)
 since 2.6
 T}
 \fBbind\fP(2)	2.0	See notes on \fBsocketcall\fP(2)
+\fBbpf\fP(2)	3.18
 \fBbrk\fP(2)	1.0
 \fBcacheflush\fP(2)	1.2	Not on x86
 \fBcapget\fP(2)	2.2
@@ -195,7 +196,7 @@ T}
 \fBclose\fP(2)	1.0
 \fBconnect\fP(2)	2.0	See notes on \fBsocketcall\fP(2)
 \fBcreat\fP(2)	1.0
-\fBcreate_module\fP(2)		Removed in 2.6
+\fBcreate_module\fP(2)	1.0	Removed in 2.6
 \fBdelete_module\fP(2)	1.0
 \fBdup\fP(2)	1.0
 \fBdup2\fP(2)	1.0
@@ -208,6 +209,7 @@ T}
 \fBeventfd\fP(2)	2.6.22
 \fBeventfd2\fP(2)	2.6.27
 \fBexecve\fP(2)	1.0
+\fBexecveat\fP(2)	3.19
 \fBexit\fP(2)	1.0
 \fBexit_group\fP(2)	2.6
 \fBfaccessat\fP(2)	2.6.16
@@ -241,12 +243,12 @@ T}
 \fBfstatat64\fP(2)	2.6.16
 \fBfstatfs\fP(2)	1.0
 \fBfstatfs64\fP(2)	2.6
-\fBfsync\fP(2)	1.0	1.0
+\fBfsync\fP(2)	1.0
 \fBftruncate\fP(2)	1.0
 \fBftruncate64\fP(2)	2.4
 \fBfutex\fP(2)	2.6
 \fBfutimesat\fP(2)	2.6.16
-\fBget_kernel_syms\fP(2)		Removed in 2.6
+\fBget_kernel_syms\fP(2)	1.0	Removed in 2.6
 \fBget_mempolicy\fP(2)	2.6.6
 \fBget_robust_list\fP(2)	2.6.17
 \fBget_thread_area\fP(2)	2.6
@@ -387,9 +389,9 @@ T}
 \fBpciconfig_write\fP(2)	2.0.26; 2.2	Not on x86
 .\" , PowerPC, ARM; not x86
 \fBperf_event_open\fP(2)	2.6.31	T{
-Was called perf_counter_open()
+Was perf_counter_open() in
 .br
-in 2.6.31; renamed in 2.6.32
+2.6.31; renamed in 2.6.32
 T}
 \fBpersonality\fP(2)	1.2
 \fBperfctr\fP(2)	2.2	Sparc; removed in 2.6.34
@@ -399,7 +401,7 @@ T}
 \fBpipe2\fP(2)	2.6.27
 \fBpivot_root\fP(2)	2.4
 \fBpoll\fP(2)	2.0.36; 2.2
-\fBppc_rtas\fP(2)		PowerPC only
+\fBppc_rtas\fP(2)	2.6.2	PowerPC only
 \fBppoll\fP(2)	2.6.16
 \fBprctl\fP(2)	2.2
 \fBpread64\fP(2)		T{
@@ -452,6 +454,8 @@ T}
 \fBrt_sigtimedwait\fP(2)	2.2
 \fBrt_tgsigqueueinfo\fP(2)	2.6.31
 \fBs390_runtime_instr\fP(2)	3.7	s390 only
+\fBs390_pci_mmio_read\fP(2)	3.19	s390 only
+\fBs390_pci_mmio_write\fP(2)	3.19	s390 only
 \fBsched_get_priority_max\fP(2)	2.0
 \fBsched_get_priority_min\fP(2)	2.0
 \fBsched_getaffinity\fP(2)	2.6
@@ -510,7 +514,7 @@ T}
 \fBsettimeofday\fP(2)	1.0
 \fBsetuid\fP(2)	1.0
 \fBsetuid32\fP(2)	2.4
-\fBsetup\fP(2)		Removed in 2.2
+\fBsetup\fP(2)	1.0	Removed in 2.2
 \fBsetxattr\fP(2)	2.6; 2.4.18
 \fBsgetmask\fP(2)	1.0
 \fBshmat\fP(2)	2.0	See notes on \fBipc\fP(2)
@@ -540,18 +544,14 @@ T}
 \fBstatfs\fP(2)	1.0
 \fBstatfs64\fP(2)	2.6
 \fBstime\fP(2)	1.0
-\fBsubpage_prot\fP(2)	2.6.25	PowerPC if
-		CONFIG_PPC_64K_PAGES
+\fBsubpage_prot\fP(2)	2.6.25	PowerPC only
 \fBswapoff\fP(2)	1.0
 \fBswapon\fP(2)	1.0
 \fBsymlink\fP(2)	1.0
 \fBsymlinkat\fP(2)	2.6.16
 \fBsync\fP(2)	1.0
 \fBsync_file_range\fP(2)	2.6.17
-\fBsync_file_range2\fP(2)	2.6.22	T{
-Architecture-specific
-variant of \fBsync_file_range\fP(2)
-T}
+\fBsync_file_range2\fP(2)	2.6.22
 .\" PowerPC, ARM, tile
 .\" First appeared on ARM, as arm_sync_file_range(), but later renamed
 .\" \fBsys_debug_setcontext\fP(2)	???	PowerPC if CONFIG_PPC32
@@ -590,7 +590,7 @@ T}
 \fButime\fP(2)	1.0
 \fButimensat\fP(2)	2.6.22
 \fButimes\fP(2)	2.2
-\fButrap_install\fP(2)	2.2	Sparc
+\fButrap_install\fP(2)	2.2	Sparc only
 .\" FIXME . document utrap_install()
 .\" There's a man page for Solaris 5.11
 \fBvfork\fP(2)	2.2
@@ -845,5 +845,6 @@ and similarly
 .BR intro (2),
 .BR syscall (2),
 .BR unimplemented (2),
+.BR errno (3),
 .BR libc (7),
 .BR vdso (7)

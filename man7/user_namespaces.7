@@ -26,7 +26,7 @@
 .\"
 .TH USER_NAMESPACES 7 2014-09-21 "Linux" "Linux Programmer's Manual"
 .SH NAME
-user_namespaces \- overview of Linux user_namespaces
+user_namespaces \- overview of Linux user namespaces
 .SH DESCRIPTION
 For an overview of namespaces, see
 .BR namespaces (7).
@@ -34,7 +34,7 @@ For an overview of namespaces, see
 User namespaces isolate security-related identifiers and attributes,
 in particular,
 user IDs and group IDs (see
-.BR credentials (7),
+.BR credentials (7)),
 the root directory,
 keys (see
 .BR keyctl (2)),
@@ -292,7 +292,7 @@ flags
 and the "atime" flags
 .RB ( MS_NOATIME ,
 .BR MS_NODIRATIME ,
-.BR MS_RELATIME)
+.BR MS_RELATIME )
 settings become locked
 .\" commit 9566d6742852c527bf5af38af5cbb878dad75705
 .\" Author: Eric W. Biederman <ebiederm@xmission.com>
@@ -572,7 +572,7 @@ in
 
 The cases where unmapped IDs are mapped in this fashion include
 system calls that return user IDs
-.RB ( getuid (2)
+.RB ( getuid (2),
 .BR getgid (2),
 and similar),
 credentials passed over a UNIX domain socket,

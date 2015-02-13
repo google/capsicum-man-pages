@@ -43,8 +43,10 @@
 .\"	out of this page into separate pages.
 .\" 2010-06-11 Andi Kleen, add hwpoison signal extensions
 .\" 2010-06-11 mtk, improvements to discussion of various siginfo_t fields.
+.\" 2015-01-17, Kees Cook <keescook@chromium.org>
+.\"	Added notes on ptrace SIGTRAP and SYS_SECCOMP.
 .\"
-.TH SIGACTION 2 2014-04-27 "Linux" "Linux Programmer's Manual"
+.TH SIGACTION 2 2015-01-22 "Linux" "Linux Programmer's Manual"
 .SH NAME
 sigaction \- examine and change a signal action
 .SH SYNOPSIS
@@ -116,10 +118,12 @@ and
 .PP
 The
 .I sa_restorer
-element is obsolete and should not be used.
-POSIX does not specify a
+field is not intended for application use.
+(POSIX does not specify a
 .I sa_restorer
-element.
+field.)
+Some further details of purpose of this field can be found in
+.BR sigreturn (2).
 .PP
 .I sa_handler
 specifies the action to be associated with
@@ -238,6 +242,15 @@ See
 .BR signal (7)
 for a discussion of system call restarting.
 .TP
+.BR SA_RESTORER
+.IR "Not intended for application use" .
+This flag is used by C libraries to indicate that the
+.IR sa_restorer
+field contains the address of a "signal trampoline".
+See
+.BR sigreturn (2)
+for more details.
+.TP
 .BR SA_SIGINFO " (since Linux 2.2)"
 The signal handler takes three arguments, not one.
 In this case,
@@ -254,37 +267,44 @@ The
 .I siginfo_t
 argument to
 .I sa_sigaction
-is a struct with the following elements:
+is a struct with the following fields:
 .sp
 .in +4n
 .nf
 siginfo_t {
-    int      si_signo;    /* Signal number */
-    int      si_errno;    /* An errno value */
-    int      si_code;     /* Signal code */
-    int      si_trapno;   /* Trap number that caused
-                             hardware-generated signal
-                             (unused on most architectures) */
+    int      si_signo;     /* Signal number */
+    int      si_errno;     /* An errno value */
+    int      si_code;      /* Signal code */
+    int      si_trapno;    /* Trap number that caused
+                              hardware-generated signal
+                              (unused on most architectures) */
 .\" FIXME
-.\" The siginfo_t 'si_trapno' filed seems to be used only on SPARC and Alpha;
+.\" The siginfo_t 'si_trapno' field seems to be used only on SPARC and Alpha;
 .\" this page could use a little more detail on its purpose there.
-    pid_t    si_pid;      /* Sending process ID */
-    uid_t    si_uid;      /* Real user ID of sending process */
-    int      si_status;   /* Exit value or signal */
-    clock_t  si_utime;    /* User time consumed */
-    clock_t  si_stime;    /* System time consumed */
-    sigval_t si_value;    /* Signal value */
-    int      si_int;      /* POSIX.1b signal */
-    void    *si_ptr;      /* POSIX.1b signal */
-    int      si_overrun;  /* Timer overrun count; POSIX.1b timers */
-    int      si_timerid;  /* Timer ID; POSIX.1b timers */
+    pid_t    si_pid;       /* Sending process ID */
+    uid_t    si_uid;       /* Real user ID of sending process */
+    int      si_status;    /* Exit value or signal */
+    clock_t  si_utime;     /* User time consumed */
+    clock_t  si_stime;     /* System time consumed */
+    sigval_t si_value;     /* Signal value */
+    int      si_int;       /* POSIX.1b signal */
+    void    *si_ptr;       /* POSIX.1b signal */
+    int      si_overrun;   /* Timer overrun count;
+                              POSIX.1b timers */
+    int      si_timerid;   /* Timer ID; POSIX.1b timers */
 .\" In the kernel: si_tid
-    void    *si_addr;     /* Memory location which caused fault */
-    long     si_band;     /* Band event (was \fIint\fP in
-                             glibc 2.3.2 and earlier) */
-    int      si_fd;       /* File descriptor */
-    short    si_addr_lsb; /* Least significant bit of address
-                             (since Linux 2.6.32) */
+    void    *si_addr;      /* Memory location which caused fault */
+    long     si_band;      /* Band event (was \fIint\fP in
+                              glibc 2.3.2 and earlier) */
+    int      si_fd;        /* File descriptor */
+    short    si_addr_lsb;  /* Least significant bit of address
+                              (since Linux 2.6.32) */
+    void    *si_call_addr; /* Address of system call instruction
+                              (since Linux 3.5) */
+    int      si_syscall;   /* Number of attempted system call
+                              (since Linux 3.5) */
+    unsigned int si_arch;  /* Architecture of attempted system call
+                              (since Linux 3.5) */
 }
 .fi
 .in
@@ -398,10 +418,6 @@ and
 fill in
 .I si_addr
 with the address of the fault.
-.\" FIXME . SIGTRAP also sets the following for ptrace_notify() ?
-.\"     info.si_code = exit_code;
-.\"     info.si_pid = task_pid_vnr(current);
-.\"     info.si_uid = current_uid();  /* Real UID */
 On some architectures,
 these signals also fill in the
 .I si_trapno
@@ -420,7 +436,22 @@ For example, if a full page was corrupted,
 .I si_addr_lsb
 contains
 .IR log2(sysconf(_SC_PAGESIZE)) .
-.B BUS_MCERR_*
+When
+.BR SIGTRAP
+is delivered in response to a
+.BR ptrace (2)
+event (PTRACE_EVENT_foo),
+.I si_addr
+is not populated, but
+.I si_pid
+and
+.I si_uid
+are populated with the respective process ID and user ID responsible for
+delivering the trap.
+In the case of
+.BR seccomp (2),
+the tracee will be shown as delivering the event.
+.B BUS_MCEERR_*
 and
 .I si_addr_lsb
 are Linux-specific extensions.
@@ -438,33 +469,58 @@ field by
 The
 .I si_fd
 field indicates the file descriptor for which the I/O event occurred.
+.IP *
+.BR SIGSYS ,
+generated (since Linux 3.5)
+.\" commit a0727e8ce513fe6890416da960181ceb10fbfae6
+when a seccomp filter returns
+.BR SECCOMP_RET_TRAP ,
+fills in
+.IR si_call_addr ,
+.IR si_syscall ,
+.IR si_arch ,
+.IR si_errno ,
+and other fields as described in
+.BR seccomp (2).
 .PP
 .I si_code
-is a value (not a bit mask)
-indicating why this signal was sent.
-The following list shows the values which can be placed in
+is a value (not a bit mask) indicating why this signal was sent.
+For a
+.BR ptrace (2)
+event,
+.I si_code
+will contain
+.BR SIGTRAP
+and have the ptrace event in the high byte:
+
+.nf
+    (SIGTRAP | PTRACE_EVENT_foo << 8).
+.fi
+
+For a regular signal, the following list shows the values which can be
+placed in
 .I si_code
 for any signal, along with reason that the signal was generated.
 .RS 4
-.TP 15
+.TP
 .B SI_USER
-.BR kill (2)
+.BR kill (2).
 .TP
 .B SI_KERNEL
 Sent by the kernel.
 .TP
 .B SI_QUEUE
-.BR sigqueue (3)
+.BR sigqueue (3).
 .TP
 .B SI_TIMER
-POSIX timer expired
+POSIX timer expired.
 .TP
-.B SI_MESGQ
-POSIX message queue state changed (since Linux 2.6.6); see
-.BR mq_notify (3)
+.BR SI_MESGQ " (since Linux 2.6.6)"
+POSIX message queue state changed; see
+.BR mq_notify (3).
 .TP
 .B SI_ASYNCIO
-AIO completed
+AIO completed.
 .TP
 .B SI_SIGIO
 Queued
@@ -475,11 +531,10 @@ fills in
 .I si_code
 as described below).
 .TP
-.B SI_TKILL
+.BR SI_TKILL " (since Linux 2.4.19)"
 .BR tkill (2)
 or
-.BR tgkill (2)
-(since Linux 2.4.19)
+.BR tgkill (2).
 .\" SI_DETHREAD is defined in 2.6.9 sources, but isn't implemented
 .\" It appears to have been an idea that was tried during 2.5.6
 .\" through to 2.5.24 and then was backed out.
@@ -491,30 +546,30 @@ for a
 .B SIGILL
 signal:
 .RS 4
-.TP 15
+.TP
 .B ILL_ILLOPC
-illegal opcode
+Illegal opcode.
 .TP
 .B ILL_ILLOPN
-illegal operand
+Illegal operand.
 .TP
 .B ILL_ILLADR
-illegal addressing mode
+Illegal addressing mode.
 .TP
 .B ILL_ILLTRP
-illegal trap
+Illegal trap.
 .TP
 .B ILL_PRVOPC
-privileged opcode
+Privileged opcode.
 .TP
 .B ILL_PRVREG
-privileged register
+Privileged register.
 .TP
 .B ILL_COPROC
-coprocessor error
+Coprocessor error.
 .TP
 .B ILL_BADSTK
-internal stack error
+Internal stack error.
 .RE
 .PP
 The following values can be placed in
@@ -523,30 +578,30 @@ for a
 .B SIGFPE
 signal:
 .RS 4
-.TP 15
+.TP
 .B FPE_INTDIV
-integer divide by zero
+Integer divide by zero.
 .TP
 .B FPE_INTOVF
-integer overflow
+Integer overflow.
 .TP
 .B FPE_FLTDIV
-floating-point divide by zero
+Floating-point divide by zero.
 .TP
 .B FPE_FLTOVF
-floating-point overflow
+Floating-point overflow.
 .TP
 .B FPE_FLTUND
-floating-point underflow
+Floating-point underflow.
 .TP
 .B FPE_FLTRES
-floating-point inexact result
+Floating-point inexact result.
 .TP
 .B FPE_FLTINV
-floating-point invalid operation
+Floating-point invalid operation.
 .TP
 .B FPE_FLTSUB
-subscript out of range
+Subscript out of range.
 .RE
 .PP
 The following values can be placed in
@@ -555,12 +610,12 @@ for a
 .B SIGSEGV
 signal:
 .RS 4
-.TP 15
+.TP
 .B SEGV_MAPERR
-address not mapped to object
+Address not mapped to object.
 .TP
 .B SEGV_ACCERR
-invalid permissions for mapped object
+Invalid permissions for mapped object.
 .RE
 .PP
 The following values can be placed in
@@ -569,15 +624,15 @@ for a
 .B SIGBUS
 signal:
 .RS 4
-.TP 15
+.TP
 .B BUS_ADRALN
-invalid address alignment
+Invalid address alignment.
 .TP
 .B BUS_ADRERR
-nonexistent physical address
+Nonexistent physical address.
 .TP
 .B BUS_OBJERR
-object-specific hardware error
+Object-specific hardware error.
 .TP
 .BR BUS_MCEERR_AR " (since Linux 2.6.32)"
 Hardware memory error consumed on a machine check; action required.
@@ -592,18 +647,18 @@ for a
 .B SIGTRAP
 signal:
 .RS 4
-.TP 15
+.TP
 .B TRAP_BRKPT
-process breakpoint
+Process breakpoint.
 .TP
 .B TRAP_TRACE
-process trace trap
+Process trace trap.
 .TP
 .BR TRAP_BRANCH " (since Linux 2.4)"
-process taken branch trap
+Process taken branch trap.
 .TP
 .BR TRAP_HWBKPT " (since Linux 2.4)"
-hardware breakpoint/watchpoint
+Hardware breakpoint/watchpoint.
 .RE
 .PP
 The following values can be placed in
@@ -612,24 +667,24 @@ for a
 .B SIGCHLD
 signal:
 .RS 4
-.TP 15
+.TP
 .B CLD_EXITED
-child has exited
+Child has exited.
 .TP
 .B CLD_KILLED
-child was killed
+Child was killed.
 .TP
 .B CLD_DUMPED
-child terminated abnormally
+Child terminated abnormally.
 .TP
 .B CLD_TRAPPED
-traced child has trapped
+Traced child has trapped.
 .TP
 .B CLD_STOPPED
-child has stopped
+Child has stopped.
 .TP
-.B CLD_CONTINUED
-stopped child has continued (since Linux 2.6.9)
+.BR CLD_CONTINUED " (since Linux 2.6.9)"
+Stopped child has continued.
 .RE
 .PP
 The following values can be placed in
@@ -638,24 +693,37 @@ for a
 .BR SIGIO / SIGPOLL
 signal:
 .RS 4
-.TP 15
+.TP
 .B POLL_IN
-data input available
+Data input available.
 .TP
 .B POLL_OUT
-output buffers available
+Output buffers available.
 .TP
 .B POLL_MSG
-input message available
+Input message available.
 .TP
 .B POLL_ERR
-I/O error
+I/O error.
 .TP
 .B POLL_PRI
-high priority input available
+High priority input available.
 .TP
 .B POLL_HUP
-device disconnected
+Device disconnected.
+.RE
+.PP
+The following value can be placed in
+.I si_code
+for a
+.BR SIGSYS
+signal:
+.RS 4
+.TP
+.BR SYS_SECCOMP " (since Linux 3.5)"
+Triggered by a
+.BR seccomp (2)
+filter rule.
 .RE
 .SH RETURN VALUE
 .BR sigaction ()
@@ -796,10 +864,12 @@ See
 .BR killpg (2),
 .BR pause (2),
 .BR restart_syscall (2),
+.BR seccomp (2)
 .BR sigaltstack (2),
 .BR signal (2),
 .BR signalfd (2),
 .BR sigpending (2),
+.BR sigreturn (2),
 .BR sigprocmask (2),
 .BR sigsuspend (2),
 .BR wait (2),

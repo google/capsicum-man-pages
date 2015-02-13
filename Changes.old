@@ -21482,7 +21482,7 @@ New and rewritten pages
 
 pthread_sigqueue.3
     Michael Kerrisk
-        New page documenting ptrhead_sigqueue()
+        New page documenting pthread_sigqueue()
             pthread_sigqueue() is new in glibc 2.11 (requires a kernel with
             rt_tgsigqueinfo(), added in Linux 2.6.31).
 
@@ -21860,7 +21860,7 @@ time.2
 
 timerfd_create.2
     Michael Kerrisk  [Josh Triplett]
-        Note behavior when timerdfd_settime() old_value is NULL
+        Note behavior when timerfd_settime() old_value is NULL
         See http://bugs.debian.org/cgi-bin/bugreport.cgi?641513
     Tomislav Jonjic
         Fix small error in description of timerfd_settime()
@@ -26483,7 +26483,7 @@ listxattr.2
 
 lseek.2
     Michael Kerrisk  [Andreas Jaeger]
-        _GNU_SOURCE must be defined to get SEEK_DATE and SEEK_HOLE definitions
+        _GNU_SOURCE must be defined to get SEEK_DATA and SEEK_HOLE definitions
             See http://sourceware.org/bugzilla/show_bug.cgi?id=15312
 
 mmap.2
@@ -30579,7 +30579,7 @@ feature_test_macros.7
         Remove mention of bogus _ISOC95_SOURCE macro
             The _ISOC95_SOURCE macro is defined in <features.h>, but it
             does nothing. So remove discussion of it, and move some of
-            the discussion of C95 under the ISOC99_SOURCE subhead.
+            the discussion of C95 under the _ISOC99_SOURCE subhead.
     Michael Kerrisk  [Carlos O'Donell]
         Add packaging note for _BSD_SOURCE/_SVID_SOURCE/_DEFAULT_SOURCE
             To compile warning-free across glibc < 2.20 and glibc >= 2.20
@@ -30716,7 +30716,7 @@ New and changed links
 
 name_to_handle_at.2
     Michael Kerrisk
-        New link to new open_by_name_at(2) page
+        New link to new open_by_handle_at(2) page
 
 
 Global changes
@@ -33027,10 +33027,10 @@ inotify.7
     Heinrich Schuchardt  [Michael Kerrisk]
         BUGS: Note possible bug triggered by watch descriptor reuse
             Watch descriptor IDs are returned by inotify_add_watch().
-            When calling inotify_rm_watch() an IN_IGNORE is placed on the
+            When calling inotify_rm_watch() an IN_IGNORED is placed on the
             inotify queue pointing to the ID of the removed watch.
 
-            inotify_add_watchi() should not return a watch descriptor ID for
+            inotify_add_watch() should not return a watch descriptor ID for
             which events are still on the queue but should return an
             unused ID.
 
@@ -34168,3 +34168,1038 @@ unix.7
             * Note the "buggy" behavior for pathname sockets when
               the supplied pathname is 108 bytes (after a report by
               Tetsuo Handa).
+
+
+==================== Changes in man-pages-3.76 ====================
+
+Released: 2014-12-31, Munich
+
+
+Contributors
+------------
+
+The following people contributed patches/fixes or (noted in brackets
+in the changelog below) reports, notes, and ideas that have been
+incorporated in changes in this release:
+
+Adam Jiang <jiang.adam@gmail.com>
+Andrea Balboni <andrea.balboni@unimore.it>
+Andreas Schwab <schwab@suse.de>
+Bernhard Walle <bernhard@bwalle.de>
+Carlos O'Donell <carlos@redhat.com>
+David Wragg <david@wragg.org>
+Florian Westphal <fw@strlen.de>
+Heinrich Schuchardt <xypron.glpk@gmx.de>
+Huxiaoxiang <huxiaoxiang@huawei.com>
+Jan Chaloupka <jchaloup@redhat.com>
+Jonathan Wakely <jwakely@redhat.com>
+Jonny Grant <jg@jguk.org>
+Josh Triplett <josh@joshtriplett.org>
+Kamezawa Hiroyuki <kamezawa.hiroyu@jp.fujitsu.com>
+Laurent Georget <laurent.georget@supelec.fr>
+Manuel López-Ibáñez <lopezibanez@gmail.com>
+Marko Myllynen <myllynen@redhat.com>
+Ma Shimiao <mashimiao.fnst@cn.fujitsu.com>
+Mel Gorman <mgorman@suse.de>
+Michael Gehring <mg@ebfe.org>
+Michael Haardt <michael@moria.de>
+Michael Kerrisk <mtk.manpages@gmail.com>
+Mike Frysinger <vapier@gentoo.org>
+Rasmus Villemoes <rv@rasmusvillemoes.dk>
+Richard Weinberger <richard@nod.at>
+Rich Felker <dalias@libc.org>
+Scott Harvey <scott.harvey@stonybrook.edu>
+Siddhesh Poyarekar <siddhesh.poyarekar@gmail.com>
+Simon Newton <nomis52@gmail.com>
+Simon Paillard <spaillard@debian.org>
+Sven Hoexter <sven@stormbind.net>
+Tobias Werth <werth@cs.fau.de>
+Weijie Yang <weijie.yang.kh@gmail.com>
+Will Newton <will.newton@linaro.org>
+Yuri Kozlov <yuray@komyakino.ru>
+刘湃 <liupai_work@163.com>
+尹杰 <writalnaie@gmail.com>
+
+Apologies if I missed anyone!
+
+
+New and rewritten pages
+-----------------------
+
+adjtimex.2
+    Laurent Georget
+        Add fields in struct timex description
+            This patch updates the man page with the new fields added in
+            struct timex since last edition of the man page.
+    Laurent Georget [Michael Kerrisk]
+        Document ADJ_TAI
+    Michael Kerrisk
+        Improve description of ADJ_OFFSET_SINGLESHOT
+    Michael Kerrisk
+        Add brief documentation of ADJ_MICRO and ADJ_NANO
+    Michael Kerrisk
+        Reformat return value list
+            And remove numeric values, since they're not needed
+    Michael Kerrisk
+        Other 'modes' bits are ignored on ADJ_OFFSET_*
+            Other bits in 'modes' are ignored if modes contains
+            ADJ_OFFSET_SINGLESHOT or ADJ_OFFSET_SS_READ.
+    Michael Kerrisk
+        Add nanosecond details
+            Fixes https://bugzilla.kernel.org/show_bug.cgi?id=61171.
+    Michael Kerrisk
+        Document ADJ_OFFSET_SS_READ
+    Michael Kerrisk
+        Reformat 'times' flags as list
+            And remove numeric values, since they're not needed.
+    Michael Kerrisk
+        Note effect of ADJ_NANO for ADJ_SETOFFSET
+    Michael Kerrisk
+        Add comment noting that timex structure contains padding bytes
+    Michael Kerrisk
+        Add more details to description of 'tai' field
+    Michael Kerrisk
+        Note meaning of "PLL" abbreviation
+    Michael Kerrisk
+        Clarify which 'timex' field is used by each 'modes' bit
+    Michael Kerrisk
+        Document timex 'status' bits
+    Michael Kerrisk
+        Clarify treatment of other 'modes' bits for ADJ_OFFSET_*
+    Michael Kerrisk
+        Update RFC number: RFC 5905 obsoletes RFC 1305
+    Michael Kerrisk
+        Briefly document ADJ_SETOFFSET
+    Michael Kerrisk
+        Note PPS (pulse per second) fields in timex structure
+
+sigreturn.2
+    Michael Kerrisk
+        Add (a lot) more detail on the signal trampoline
+            And rewrite much of the page.
+
+
+Newly documented interfaces in existing pages
+---------------------------------------------
+
+proc.5
+    Bernhard Walle
+        Document /proc/thread-self
+            /proc/thread-self has been introduced in Linux 3.17 with
+            commit 0097875bd41528922fb3bb5f348c53f17e00e2fd.
+    Sven Hoexter [Michael Kerrisk, Kamezawa Hiroyuki]
+        Document "VmSwap" field of /proc/[pid]/status
+    Florian Westphal
+        Document /proc/net/netfilter/nfnetlink_queue
+
+
+Changes to individual pages
+---------------------------
+
+localedef.1
+    Marko Myllynen
+        Mention default path for compiled files
+
+clock_nanosleep.2
+    Michael Kerrisk
+        Note that 'clock_id' can also be a CPU clock ID
+
+epoll_ctl.2
+    Michael Kerrisk
+        Regular files and directories can't be monitored with epoll_ctl()
+
+ioctl.2
+    Heinrich Schuchardt
+        Rename 'd' argument to 'fd' in text
+            In most other manpages file descriptors are called 'fd'.
+            This patches renames attribute 'd' to 'fd'.
+
+madvise.2
+    Michael Kerrisk
+        VERSIONS: Support for madvise() is now configurable
+            Support for this system call now depends on the
+            CONFIG_ADVISE_SYSCALLS configuration option.
+
+open.2
+    Michael Kerrisk
+        Enhance rationale discussion for openat() and friends
+
+posix_fadvise.2
+    Mel Gorman
+        Document the behavior of partial page discard requests
+            It is not obvious from the interface that "partial page discard"
+            requests are ignored. It should be spelled out.
+    Michael Kerrisk  [Weijie Yang]
+        ERRORS: Since 2.6.16, the kernel correctly deals with the ESPIPE case
+    Michael Kerrisk
+        Support for fadvise64() is now configurable
+            Support for this system call now depends on the
+            CONFIG_ADVISE_SYSCALLS configuration option.
+
+prctl.2
+    Andreas Schwab
+        Correct description of null-termination in PR_GET_NAME and PR_SET_NAME
+            The size of the process name has always been at most 16 byte
+            _including_ the null terminator.  This also means that the
+            name returned by PR_GET_NAME is always null-terminated.
+    Michael Kerrisk
+        PR_SET_NAME silently truncates strings that exceed 16 bytes
+
+restart_syscall.2
+    Michael Kerrisk
+        Add some text explaining why restart_syscall() exists
+
+sched_setaffinity.2
+    Michael Kerrisk
+        NOTES: Add paragraph on how to discover set of CPUs available on system
+    Michael Kerrisk
+        SEE ALSO: add nproc(1) and lscpu(1)
+
+select.2
+    Michael Kerrisk
+        SEE ALSO: add restart_syscall(2)
+
+semop.2
+    Michael Kerrisk
+        Add note that interrupted semtimedop() returns 'timeout' unchanged
+    Michael Kerrisk
+        Remove information about semtimedop() EAGAIN that is repeated elsewhere
+    Michael Kerrisk
+        Add subsection head for semtimedop()
+
+setsid.2
+    Michael Kerrisk
+        Rewrite some pieces and add some details
+            Among other changes, add an explanation of why setsid() can't
+            be called from a process group leader
+
+sgetmask.2
+    Michael Kerrisk
+        Since 3.16, support for these system calls is configurable
+            Support for these calls is now dependent on the setting of the
+            CONFIG_SGETMASK_SYSCALL option.
+
+sigaction.2
+    Michael Kerrisk
+        Document SA_RESTORER
+    Michael Kerrisk
+        Add some detail on the sa_restorer field
+    Michael Kerrisk
+        SEE ALSO: add sigreturn(2)
+
+splice.2
+    Michael Kerrisk
+        Reformat description of 'fd_in' and 'off_in' to improve readability
+
+syscall.2
+    Michael Kerrisk
+        SEE ALSO: add errno(3)
+
+syscalls.2
+    Michael Kerrisk
+        SEE ALSO: add errno(3)
+    Michael Kerrisk
+        3.19 adds execveat()
+    Michael Kerrisk
+        Add bpf(2) to list
+
+tee.2
+    Michael Kerrisk
+        Add shell session demonstrating use of the example program
+
+tkill.2
+    Michael Kerrisk  [Rich Felker]
+        Remove bogus text saying tgid==-1 makes tgkill() equivalent to tkill()
+
+abort.3
+    Michael Kerrisk
+        Note that SIGABRT is raised as though raise(3) is called
+            Also note that abort() is POSIX.1-2008 compliant.
+
+cmsg.3
+    David Wragg
+        Ensure buf is suitably aligned in sending example
+            Inspection of the definition of CMSG_FIRSTHDR (both in glibc and
+            the suggested definition in RFC3542) shows that it yields the
+            msg_control field.  So when sending, the pointer placed in
+            msg_control should be suitably aligned as a struct cmsghdr.
+            In the sending example, buf was declared as a bare char array,
+            and so is not necessarily suitably aligned.
+
+            The solution here involves placing buf inside a union, and is
+            based on the sockets/scm_rights_send.c sample from The Linux
+            Programming Interface "dist" source code collection.
+
+exp10.3
+    Michael Kerrisk
+        Before glibc 2.19, exp() did not give ERANGE error on underflow
+            http://sources.redhat.com/bugzilla/show_bug.cgi?id=6787
+
+ftw.3
+    Michael Kerrisk
+        FTW_CHDIR has no effect on the 'fpath' argument passed to fn()
+
+getopt.3
+    Michael Kerrisk  [Jonny Grant]
+        Ensure that 'nsecs' is used
+
+ilogb.3
+    Michael Kerrisk  [Will Newton]
+        Since glibc 2.16, ilogb() does correctly diagnose domain errors
+
+memcmp.3
+    Michael Haardt
+        Document return value for n==0 case
+    Michael Haardt
+        Warn against use of memcmp() for comparing security-critical data
+
+mq_open.3
+    Michael Kerrisk
+        Document the O_CLOEXEC flag
+    Michael Kerrisk
+        Place 'flags' constants in alphabetical order
+
+pow.3
+    Manuel López-Ibáñez
+        Add note on performance characteristics of pow()
+
+pthread_setschedparam.3
+    Simon Newton
+        Fix logic error in example program
+            The example program will crash if -A is used, since 'attr'
+            is uninitialized.
+
+                $ ./a.out  -A
+                *** Error in `./a.out': free(): invalid pointer: 0xb779c3c4 ***
+                Aborted (core dumped)
+    刘湃
+        Small fixes to example program
+
+sigvec.3
+    Michael Kerrisk
+        Starting with version 2.21, glibc no longer exports sigvec()
+
+sysconf.3
+    Josh Triplett
+        Document _SC_NGROUPS_MAX
+            Already documented in getgroups(2), but not in sysconf(3).
+
+termios.3
+    Michael Kerrisk
+        SEE ALSO: add tset(1)
+
+tgamma.3
+    Michael Kerrisk
+        Since glibc 2.18, errno is correctly set to EDOM when (x == -infinity))
+
+wordexp.3
+    Carlos O'Donell
+        Make it clear that WRDE_NOCMD prevents command substitution
+            The use of WRDE_NOCMD prevents command substitution. If the flag
+            WRDE_NOCMD is set then no command substitution shall occur and
+            the error WRDE_CMDSUB will be returned if such substitution is
+            requested when processing the words.
+
+            The manual page as-is makes it seem like the command substitution
+            occurs, and an error is returned *after* the substitution.
+            This patch clarifies that.
+
+locale.5
+    Marko Myllynen
+        Describe the formats of values
+            locale(5) describes what a locale should define but doesn't
+            spell out how (in what format). The patch attempts to address
+            this, it also has few trivial additional enhancements.
+
+            * Reference to locale(7) for category descriptions.
+            * Clarify first_workday in NOTES a bit.
+            * Add upstream BZ reference for two missing LC_ADDRESS fields.
+    Marko Myllynen
+        Fix miscoded character
+
+resolv.conf.5
+    Jan Chaloupka
+        Add missing no-tld-query option
+            Based on commit [1], the no-tld-query option exists for
+            resolv.conf configuration file.  Description of this option
+            is provided in [2]. This patch just copies this option
+            into resolv.conf.5 man page. Plus changes 'a' member
+            into 'an' before 'unqualified name as if it ...'
+            on the third line of [2]. Based on [3], this option
+            was added in glibc 2.14 as solving [4] bug.
+
+            [1] https://sourceware.org/git/?p=glibc.git;a=commitdiff;h=f87dfb1f11c01f2ccdc40d81e134cd06b32e28e8
+            [2] http://www.daemon-systems.org/man/resolv.conf.5.html man page.
+            [3] https://sourceware.org/git/?p=glibc.git;a=blob;f=NEWS;h=952f32af17e7fb49c4c1a305de673a13075bfaf5;hb=f87dfb1f11c01f2ccdc40d81e134cd06b32e28e8
+            [4] https://sourceware.org/bugzilla/show_bug.cgi?id=12734
+
+credentials.7
+    Josh Triplett
+        Cross-reference getgroups(2)
+            Since credentials.7 discusses supplementary GIDs, it should
+            reference getgroups(2).
+
+fanotify.7
+    Heinrich Schuchardt
+        Allow relative paths in example
+            The current example code requires passing an absolute
+            path to the mount to be watched.
+
+            By passing AT_FDCWD to fanotify_mark it can use both
+            absolute and relative paths.
+    Heinrich Schuchardt
+        fallocate(2) creates no events
+            fallocate(2) should create FAN_MODIFY events but does not.
+    Heinrich Schuchardt [Michael Kerrisk]
+        fanotify notifies only events generated on the same mount
+            Unfortunately, fanotify does not inform listeners for all paths
+            under which a touched filesystem object is visible, but only the
+            listener using the same path as the process touching the
+            filesystem object.
+    Heinrich Schuchardt
+        Update BUGS to note bugs still not fixed in 3.17
+            I bumped the Linux version number in the BUGS section to 3.17.
+
+inotify.7
+    Heinrich Schuchardt
+        fallocate(2) does not trigger inotify events
+            Calling fallocate(2) does not result in inotify events.
+
+locale.7
+    Marko Myllynen
+        Improve LOCPATH description
+            LOCPATH is ignored by privileged programs.
+
+            Add locale archive references.
+
+            Add FILES section.
+
+man-pages.7
+    Michael Kerrisk  [Laurent Georget]
+        Clarify that SEE ALSO entries may refer to pages from other projects
+
+signal.7
+    Michael Kerrisk
+        Mention other "slow devices"
+            Reads from eventfd(2), signalfd(2), timerfd(2), inotify(7),
+            and fanotify(7) file descriptors are also slow operations
+            that are restartable.
+    Michael Kerrisk
+        Fix SO_RECVTIMEO/ SO_SENDTIMEO confusion in text
+    Michael Kerrisk
+        Since Linux 3.8, reads on inotify(7) file descriptors are restartable
+    Michael Kerrisk
+        inotify(7) reads no longer show the odd EINTR error after SIGCONT
+            Since kernel 3.7, reads from inotify(7) file descriptors no longer
+            show the (Linux oddity) behavior of failing with EINTR when the
+            process resumes after a stop signal + SIGCONT.
+    Michael Kerrisk
+        SEE ALSO: add sigreturn(2)
+
+unix.7
+    Michael Kerrisk  [Scott Harvey]
+        Fix buglet in code snippet in BUGS section
+
+ld.so.8
+    Carlos O'Donell
+        Add --inhibit-cache option
+            The dynamic loader has 6 options, only 5 are documented.
+            This patch documents the sixth option i.e. `--inhibit-cache`.
+    Jonathan Wakely  [Siddhesh Poyarekar]
+        Correct documentation of $ORIGIN
+            As noted by Siddhesh:
+
+                The ld.so man page says:
+
+                    $ORIGIN (or equivalently ${ORIGIN})
+                        This expands to the directory containing the
+                        application executable.  Thus, an application located
+                        in somedir/app could be compiled with
+
+                This is incorrect since it expands to the directory containing
+                the DSO and not the application executable.  This seems like
+                deliberate behaviour in dl-object.c, so it needs to be fixed in
+                the man page.
+
+            See http://stackoverflow.com/questions/26280738/what-is-the-equivalent-of-loader-path-for-rpath-specification-on-linux/26281226#26281226
+
+
+
+==================== Changes in man-pages-3.77 ====================
+
+Released: 2015-01-10, Munich
+
+
+Contributors
+------------
+
+The following people contributed patches/fixes or (noted in brackets
+in the changelog below) reports, notes, and ideas that have been
+incorporated in changes in this release:
+
+Akihiro Motoki <amotoki@gmail.com>
+Alexandre Bique <bique.alexandre@gmail.com>
+Andre Majorel <aym-xunil@teaser.fr>
+Andy Lutomirski <luto@amacapital.net>
+Daniel Borkmann <dborkman@redhat.com>
+Dave Hansen <dave.hansen@intel.com>
+Elie De Brauwer <eliedebrauwer@gmail.com>
+Heinrich Schuchardt <xypron.glpk@gmx.de>
+Ignat Loskutov <ignat.loskutov@gmail.com>
+Jeff Epler <jepler@unpythonic.net>
+Jérôme Pouiller <jezz@sysmic.org>
+Kees Cook <keescook@chromium.org>
+Laurent Georget <laurent.georget@supelec.fr>
+Masanari Iida <standby24x7@gmail.com>
+Michael Haardt <michael@moria.de>
+Michael Kerrisk <mtk.manpages@gmail.com>
+Mike Frysinger <vapier@gentoo.org>
+Richard Cochran <richardcochran@gmail.com>
+Stephan Mueller <stephan.mueller@atsec.com>
+Troy Davis <troy@yort.com>
+Vince Weaver <vincent.weaver@maine.edu>
+Will Drewry <wad@chromium.org>
+
+Apologies if I missed anyone!
+
+
+New and rewritten pages
+-----------------------
+
+seccomp.2
+    Kees Cook, Michael Kerrisk, Will Drewry  [Andy Lutomirski]
+        New page documenting seccomp(2)
+            Combines documentation from prctl, in-kernel seccomp_filter.txt
+            and dropper.c, along with details specific to the new system call.
+
+
+Newly documented interfaces in existing pages
+---------------------------------------------
+
+netlink.7
+    Stephan Mueller  [Michael Kerrisk]
+        Add NETLINK_CRYPTO
+
+
+Changes to individual pages
+---------------------------
+
+adjtimex.2
+    Laurent Georget  [Richard Cochran, Jeff Epler]
+        Clarify the 'ppm scaling' used in struct timex
+            This patch makes explicit and clarifies the unit used for
+            the fields "freq", "ppsfreq" and "stabil" in struct timex.
+    Michael Kerrisk  [Masanari Iida]
+        Note that TIME_ERROR is the modern synonym for TIME_BAD
+
+perf_event_open.2
+    Vince Weaver
+        Clarify the PERF_FLAG_FD_* flags
+            This change clarifies the behavior of the PERF_FLAG_FD_OUTPUT and
+            PERF_FLAG_FD_NO_GROUP flags to perf_event_open(), and removes
+            the related FIXME comments.
+
+            While writing tests to validate the behavior of these flags I
+            discovered that PERF_FLAG_FD_OUTPUT has been broken since the
+            2.6.35 kernel release.
+
+prctl.2
+    Dave Hansen [Michael Kerrisk]
+        Add description of Intel MPX calls
+            The 3.19 kernel will have support for Intel MPX, including
+            a pair of new prctl() calls (PR_MPX_ENABLE_MANAGEMENT and
+            PR_MPX_DISABLE_MANAGEMENT) for enabling and disabling the
+            kernel's management of the "bounds tables".  Add a
+            descriptions of the interface.
+    Michael Kerrisk
+        Add mention of seccomp(2) under PR_SET_SECCOMP
+    Michael Kerrisk
+        Suggest /proc/PID/status "Seccomp" as alternative to PRCTL_GET_SECCOMP
+    Michael Kerrisk
+        SIGKILL can also occur PRCTL_GET_SECCOMP in SECCOMP_MODE_FILTER mode
+    Kees Cook  [Andy Lutomirski]
+        Document SECCOMP_MODE_FILTER vs EFAULT
+            This notes the distinction made between EINVAL and EFAULT when
+            attempting to use SECCOMP_MODE_FILTER with PR_SET_SECCOMP.
+
+setns.2
+pid_namespaces.7
+    Mike Frysinger
+        Elaborate discussion of the PID namespace descendant limitation
+            The setns(2) man page already mentions that CLONE_NEWPID may only
+            be used with descendant namespaces, but this nuance could be
+            listed in a few more places so it is not missed.
+
+shmget.2
+    Michael Kerrisk  [Akihiro Motoki]
+        Make wording of SHMALL description a little clearer
+
+sigaction.2
+    Michael Kerrisk
+        Add siginfo_t fields for SECCOMP_RET_TRAP
+
+memchr.3
+strstr.3
+    Alexandre Bique
+        Reference memmem(3) in SEE ALSO section
+
+memcmp.3
+    Michael Kerrisk  [Michael Haardt]
+        NOTES: add some detail on avoiding memcmp() of cryptographic data
+            Wording largely based on comments from Michael Haardt.
+
+pthread_tryjoin_np.3
+    Jérôme Pouiller  [Michael Kerrisk]
+        Document EINVAL error for pthread_timedjoin_np()
+
+mem.4
+    Elie De Brauwer
+        /dev/kmem depends on CONFIG_DEVKMEM
+    Elie De Brauwer
+        Correct /dev/port group in example
+            mem.4 mentions that group for /dev/port should be set to 'mem'
+            However, all other files (/dev/mem and /dev/kmem) use the kmem
+            group in their examples and on my system /dev/port belongs to
+            kmem. Hence the 'mem' group was probably a typo:
+    Elie De Brauwer
+        Add CONFIG_STRICT_DEVMEM
+            Since 2.6.26 the CONFIG_NONPROMISC_DEVMEM options limits the
+            physical addresses which can be accessed through /dev/mem.
+
+random.4
+    Heinrich Schuchardt
+        Describe handling of O_NONBLOCK
+            /dev/random and /dev/urandom treat O_NONBLOCK differently.
+            This should be described in the manpage.
+    Heinrich Schuchardt
+        Mention PRNG used by urandom
+            /dev/urandom uses a pseudo-random number generator to replace
+            missing entropy.
+
+proc.5
+    Michael Kerrisk
+        Document "Seccomp" field of /proc/PID/status
+
+epoll.7
+    Michael Kerrisk  [Ignat Loskutov]
+        Use epoll_create1() rather than epoll_create() in the code example
+            epoll_create1() is more or less the preferred API for new
+            applications, since it allows for some flags and avoids the
+            misdesigned epoll_create() argument, and so it seems sensible
+            to use that in the example, rather than epoll_create().
+
+tcp.7
+    Troy Davis
+        Clarify tcp_tw_recycle on Internet-facing hosts
+            Clarify that tcp_tw_recycle will break communication with many
+            general-purpose remote Internet hosts (namely, remote NAT devices)
+            even when the Linux device itself is not behind NAT.
+
+
+==================== Changes in man-pages-3.78 ====================
+
+Released: 2015-01-22, Munich
+
+
+Contributors
+------------
+
+The following people contributed patches/fixes or (noted in brackets
+in the changelog below) reports, notes, and ideas that have been
+incorporated in changes in this release:
+
+Akihiro Motoki <amotoki@gmail.com>
+Alexey Ishchuk <aishchuk@linux.vnet.ibm.com>
+Carlos O'Donell <carlos@redhat.com>
+Christian Seiler <christian@iwakd.de>
+Daniel J Blueman <daniel@quora.org>
+David Drysdale <drysdale@google.com>
+David Herrmann <dh.herrmann@gmail.com>
+Elie De Brauwer <eliedebrauwer@gmail.com>
+Elliot Hughes <enh@google.com>
+Jessica McKellar <jessica.mckellar@gmail.com>
+Kees Cook <keescook@chromium.org>
+Michael Hayes <mike@aiinc.ca>
+Michael Kerrisk <mtk.manpages@gmail.com>
+Rich Felker <dalias@aerifal.cx>
+Vince Weaver <vincent.weaver@maine.edu>
+
+Apologies if I missed anyone!
+
+
+New and rewritten pages
+-----------------------
+
+execveat.2
+    David Drysdale, Michael Kerrisk  [Rich Felker]
+        New page for execveat(2)
+
+memfd_create.2
+    Michael Kerrisk, David Herrmann
+        New page for memfd_create() system call
+             Including notes about file sealing
+
+s390_pci_mmio_write.2
+    Alexey Ishchuk
+        New page for s390 s390_pci_mmio_write() and s390_pci_mmio_read()
+            New manual page for the new PCI MMIO memory access system
+            calls, s390_pci_mmio_write() and s390_pci_mmio_read(),
+            added for the s390 platform.
+
+
+Newly documented interfaces in existing pages
+---------------------------------------------
+
+fcntl.2
+    David Herrmann  [Michael Kerrisk]
+        Document F_ADD_SEALS and F_GET_SEALS commands
+
+proc.5
+    Elie De Brauwer
+        Document /proc/sys/vm/compact_memory
+    Michael Kerrisk
+        Document /proc/sys/fs/nr_open
+
+
+New and changed links
+---------------------
+
+s390_pci_mmio_read.2
+    Michael Kerrisk
+        New link to new s390_pci_mmio_write(2) page
+
+
+Changes to individual pages
+---------------------------
+
+dup.2
+    Michael Kerrisk
+        Add reference to RLIMIT_NOFILE for EMFILE error
+    Michael Kerrisk
+        Add reference to RLIMIT_NOFILE for EBADF error on 'newfd'.
+
+execve.2
+fexecve.3
+    Michael Kerrisk
+        SEE ALSO: add execveat(2)
+
+fallocate.2
+mmap.2
+open.2
+truncate.2
+write.2
+    Michael Kerrisk
+        ERRORS: add EPERM for operation denied by file seal
+
+fcntl.2
+    Michael Kerrisk
+        ERRORS: add EBUSY case for F_SETPIPE_SZ
+    Michael Kerrisk
+        Add reference to RLIMIT_NOFILE for F_DUPFD EINVAL error on 'arg'.
+    Michael Kerrisk
+        ERRORS: add open file description lock error cases
+
+getrlimit.2
+    Michael Kerrisk
+        Update text on RLIMIT_NOFILE ceiling to refer to /proc/sys/fs/file-max
+
+mbind.2
+    Michael Kerrisk  [Daniel J Blueman]
+        Clarify EFAULT text
+
+mmap.2
+shmget.2
+shm_open.3
+    Michael Kerrisk
+        SEE ALSO: add memfd_create(2)
+
+open.2
+    Michael Kerrisk
+        Refer to RLIMIT_NOFILE for explanation of EMFILE error
+    Michael Kerrisk
+        Add execveat(2) in system call list under "Rationale for openat()"
+
+perf_event_open.2
+    Vince Weaver
+        Clarify description of overflow events
+            Update the perf_event_open manpage to be more consistent when
+            discussing overflow events.  It merges the discussion of
+            poll-type notifications with those generated by SIGIO
+            signal handlers.
+            This addresses the remaining FIXMEs is the document.
+    Vince Weaver
+        Remove inaccurate paragraph describing attr.config
+            Remove an inaccurate paragraph about values in the attr.config
+            field.  This information was never true in any released kernel;
+            it somehow snuck into the manpage because it is still described
+            this way in tools/perf/design.txt in the kernel source tree.
+    Michael Kerrisk
+        Correct the kernel version number for PERF_COUNT_HW_CACHE_NODE
+    Michael Kerrisk
+        Add some kernel version numbers to various fields and constants
+
+ptrace.2
+sigaction.2
+seccomp.2
+    Kees Cook
+        Ptrace and siginfo details
+            While writing some additional seccomp tests, I realized
+            PTRACE_EVENT_SECCOMP wasn't documented yet. Fixed this, and added
+            additional notes related to ptrace events SIGTRAP details.
+
+readv.2
+    Michael Kerrisk
+        Update details on glibc readv()/writev() wrapper behavior
+            And add a historical detail about Linux 2.0.
+
+select.2
+    Michael Kerrisk
+        Mention RLIMIT_NOFILE as a possible cause of EINVAL error
+
+syscall.2
+    Kees Cook
+        Add arm64 and mips
+            Add mips and arm64 to tables, along with some further
+            details on these architectures,
+
+syscalls.2
+    Michael Kerrisk
+        Add s390_pci_mmio_read(2) and s390_pci_mmio_write(2)
+    Michael Kerrisk
+        Note kernel() version that introduced get_kernel_syms()
+        Note kernel version that introduced ppc_rtas()
+        Note kernel version that introduced create_module()
+        Note kernel version that added setup()
+    Michael Kerrisk
+        Remove some details for sync_file_range2()
+            Make the table a bit simpler. The details can anyway be
+            found in the system call man page.
+
+utimensat.2
+    Michael Kerrisk  [Elliot Hughes]
+        If both tv_sec fields are UTIME_OMIT, the file need not exist
+            As noted by Elliot, if both tv_sec fields are UTIME_OMIT,
+            utimensat() will return success even if the file does not exist.
+
+errno.3
+    Michael Kerrisk
+        The RLIMIT_NOFILE resource limit is a common cause of EMFILE
+
+exec.3
+    Michael Kerrisk
+        SEE ALSO: add execveat(2)
+
+fclose.3
+    Carlos O'Donell
+        Consistency fix: use "stream" as name for "FILE *" argument
+            Harmonize all the manual pages to use "stream" for FILE*
+            instead of randomly using "fp" or "stream." Choosing something
+            and being consistent helps users scan the man pages quickly
+            and understand what they are looking at.
+
+fexecve.3
+    Michael Kerrisk
+        Rewrite the script+close-on-exec problem as a BUG
+            Also, add one or two details about this scenario.
+    Michael Kerrisk
+        The natural idiom when using fexecve() is to use the close-on-exec flag
+
+fmemopen.3
+    Michael Kerrisk
+        Consistency fix: use "stream" as name for "FILE *" argument
+
+fopencookie.3
+    Michael Kerrisk
+        Consistency fix: use "stream" as name for "FILE *" argument
+
+getgrent_r.3
+    Carlos O'Donell
+        Consistency fix: use "stream" as name for "FILE *" argument
+
+getline.3
+    Michael Kerrisk
+        Consistency fix: use "stream" as name for "FILE *" argument
+
+getmntent.3
+    Carlos O'Donell
+        Consistency fix: use "stream" as name for "FILE *" argument
+
+getpw.3
+    Michael Kerrisk  [Carlos O'Donell]
+        Describe return value when 'uid' is not found
+
+getpwent_r.3
+    Carlos O'Donell
+        Consistency fix: use "stream" as name for "FILE *" argument
+
+getspnam.3
+    Carlos O'Donell
+        Consistency fix: use "stream" as name for "FILE *" argument
+
+malloc_info.3
+    Carlos O'Donell
+        Consistency fix: use "stream" as name for "FILE *" argument
+
+posix_fallocate.3
+    Michael Kerrisk
+        Note that posix_fallocate() is implemented using fallocate(2)
+
+putgrent.3
+    Carlos O'Donell
+        Consistency fix: use "stream" as name for "FILE *" argument
+            Harmonize all the manual pages to use "stream" for FILE*
+            instead of randomly using "fp" or "stream." Choosing something
+            and being consistent helps users scan the man pages quickly
+            and understand what they are looking at.
+
+locale.5
+    Akihiro Motoki
+        Correct variable name
+
+proc.5
+    Michael Kerrisk
+        Remove bogus statement about NR_OPEN being a ceiling for file-max
+
+
+==================== Changes in man-pages-3.79 ====================
+
+Released: 2015-02-01, Munich
+
+
+Contributors
+------------
+
+The following people contributed patches/fixes or (noted in brackets
+in the changelog below) reports, notes, and ideas that have been
+incorporated in changes in this release:
+
+Akihiro Motoki <amotoki@gmail.com>
+Heinrich Schuchardt <xypron.glpk@gmx.de>
+J William Piggott <elseifthen@gmx.com>
+Masanari Iida <standby24x7@gmail.com>
+Michael Kerrisk <mtk.manpages@gmail.com>
+Scot Doyle <lkml14@scotdoyle.com>
+Sergey V. Zubkov <cubbi@cubbi.com>
+Stephan Mueller <stephan.mueller@atsec.com>
+Vince Weaver <vincent.weaver@maine.edu>
+Vivek Goyal <vgoyal@redhat.com>
+
+Apologies if I missed anyone!
+
+
+New and rewritten pages
+-----------------------
+
+getrandom.2
+    Heinrich Schuchardt, Theodore T'so, Michael Kerrisk
+        New page documenting getrandom(2)
+            Kernel 3.17 introduces a new system call getrandom(2).
+
+kexec_load.2
+    Vivek Goyal, Michael Kerrisk
+        Add documentation of kexec_file_load(2)
+    Michael Kerrisk, Vivek Goyal
+        Rewrite and extend documentation of kexec_load().
+
+
+New and changed links
+---------------------
+
+kexec_file_load.2
+    Michael Kerrisk
+        New link to kexec_load.2
+
+Changes to individual pages
+---------------------------
+
+personality.2
+    Michael Kerrisk
+        SEE ALSO: add setarch(8)
+
+prctl.2
+    Michael Kerrisk
+        Unused arguments of PR_MPX_(EN,DIS}ABLE_MANAGEMENT must be zero
+
+reboot.2
+    Michael Kerrisk
+        SEE ALSO: add kexec_load(2)
+
+socket.2
+    Stephan Mueller
+        document AF_ALG
+            Add a reference to the AF_ALG protocol accessible via socket(2).
+
+fflush.3
+    Michael Kerrisk  [Sergey V. Zubkov]
+        Clarify that flushing of input streams occurs only for seekable files
+            See https://bugzilla.kernel.org/show_bug.cgi?id=91931
+    Michael Kerrisk  [Sergey V. Zubkov]
+        POSIX.1-2008 specifies the behavior when flushing input streams
+            POSIX.1-2001 did not have a specification for input streams,
+            but POSIX.1-2008 added one.
+
+getopt.3
+    Michael Kerrisk
+        SEE ALSO: add getopt(1)
+
+random.3
+    Heinrich Schuchardt
+        SEE ALSO: add getrandom(2)
+
+termios.3
+    Michael Kerrisk
+        SEE ALSO: add reset(1), setterm(1), tput(1)
+
+tzset.3
+    J William Piggott
+        Document behavior when TZ filespec omits the colon
+            If the TZ filespec omits the leading colon, glibc will parse
+            it for any valid format, i.e., it will still work.
+    J William Piggott
+        Add description for posixrules file
+    J William Piggott
+        Correct system timezone file path
+    J William Piggott
+        There are only two TZ formats
+            tzset(3) currently states that there are three TZ formats. The
+            first two it lists are actually variations of the POSIX-style
+            TZ format, of which there are at least five variations.
+
+            This patch corrects this to match the POSIX specification of
+            TZ having only two formats.
+    J William Piggott
+        Filespec omitted incorrect
+            Paragraph three of the DESCRIPTION section says
+            that when TZ is set, but empty, then UTC is used.
+
+            Later it says if the TZ filespec is omitted then the file
+            /usr/share/zoneinfo/localtime is used.  This is incorrect,
+            it will use UTC in that case as well.
+    J William Piggott
+        Fix incorrect TZ string representation
+            The TZ string representation indicates that the start/end
+            rules are required; this is incorrect.
+    J William Piggott
+        Add ENVIRONMENT section + other rearrangements
+            FILES section was overly verbose and included
+            environment variables.  Added ENVIRONMENT section,
+            removing ENV VARS from the FILES section.
+
+random.4
+    Heinrich Schuchardt
+        SEE ALSO: add getrandom(2)
+
+passwd.5
+    Michael Kerrisk
+        SEE ALSO: add chfn(1), chsh(1)
+
+capabilities.7
+    Michael Kerrisk
+        SEE ALSO: add setpriv(1)
+
+signal.7
+    Michael Kerrisk
+        Add getrandom(2) to list of restartable system calls
+    Michael Kerrisk
+        Add F_OFD_SETLKW to list of restartable operations
+

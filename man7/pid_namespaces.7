@@ -24,7 +24,7 @@
 .\" %%%LICENSE_END
 .\"
 .\"
-.TH PID_NAMESPACES 7 2014-09-21 "Linux" "Linux Programmer's Manual"
+.TH PID_NAMESPACES 7 2015-01-10 "Linux" "Linux Programmer's Manual"
 .SH NAME
 pid_namespaces \- overview of Linux PID namespaces
 .SH DESCRIPTION
@@ -70,7 +70,7 @@ to this process rather than
 (unless one of the ancestors of the child
 in the same PID namespace employed the
 .BR prctl (2)
-.B PR_GET_CHILD_SUBREAPER
+.B PR_SET_CHILD_SUBREAPER
 command to mark itself as the reaper of orphaned descendant processes).
 
 If the "init" process of a PID namespace terminates,
@@ -188,6 +188,16 @@ PID namespace from the caller of
 Calls to
 .BR getppid (2)
 for such processes return 0.
+
+While processes may freely descend into child PID namespaces
+(e.g., using
+.BR setns (2)
+with
+.BR CLONE_NEWPID ),
+they may not move in the other direction.
+That is to say, processes may not enter any ancestor namespaces
+(parent, grandparent, etc.).
+Changing PID namespaces is a one way operation.
 .\"
 .\" ============================================================
 .\"
@@ -222,7 +232,7 @@ can't be combined with some other
 flags:
 .IP * 3
 .B CLONE_THREAD
-requires being in the same PID namespace in order that that
+requires being in the same PID namespace in order that
 the threads in a process can send signals to each other.
 Similarly, it must be possible to see all of the threads
 of a processes in the

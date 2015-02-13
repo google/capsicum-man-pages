@@ -1,6 +1,7 @@
 .\" Copyright (C) 1998 Andries Brouwer (aeb@cwi.nl)
 .\" and Copyright (C) 2002, 2006, 2008, 2012, 2013 Michael Kerrisk <mtk.manpages@gmail.com>
 .\" and Copyright Guillem Jover <guillem@hadrons.org>
+.\" and Copyright (C) 2014 Dave Hansen / Intel
 .\"
 .\" %%%LICENSE_START(VERBATIM)
 .\" Permission is granted to make and distribute verbatim copies of this
@@ -47,9 +48,10 @@
 .\"                             PR_GET_TIMERSLACK
 .\" 2013-01-10 Kees Cook, document PR_SET_PTRACER
 .\" 2012-02-04 Michael kerrisk, document PR_{SET,GET}_CHILD_SUBREAPER
+.\" 2014-11-10 Dave Hansen, document PR_MPX_{EN,DIS}ABLE_MANAGEMENT
 .\"
 .\"
-.TH PRCTL 2 2014-04-14 "Linux" "Linux Programmer's Manual"
+.TH PRCTL 2 2015-02-01 "Linux" "Linux Programmer's Manual"
 .SH NAME
 prctl \- operations on a process
 .SH SYNOPSIS
@@ -384,6 +386,11 @@ For further information, see the kernel source file
 .\" andrea@cpushare.com
 Set the secure computing (seccomp) mode for the calling thread, to limit
 the available system calls.
+The more recent
+.BR seccomp (2)
+system call provides a superset of the functionality of
+.BR PR_SET_SECCOMP .
+
 The seccomp mode is selected via
 .IR arg2 .
 (The seccomp constants are defined in
@@ -392,7 +399,7 @@ The seccomp mode is selected via
 With
 .IR arg2
 set to
-.BR SECCOMP_MODE_STRICT
+.BR SECCOMP_MODE_STRICT ,
 the only system calls that the thread is permitted to make are
 .BR read (2),
 .BR write (2),
@@ -413,7 +420,7 @@ enabled.
 With
 .IR arg2
 set to
-.BR SECCOMP_MODE_FILTER " (since Linux 3.5)"
+.BR SECCOMP_MODE_FILTER " (since Linux 3.5),"
 the system calls allowed are defined by a pointer
 to a Berkeley Packet Filter passed in
 .IR arg3 .
@@ -471,12 +478,22 @@ if the caller is in strict secure computing mode, then the
 call will cause a
 .B SIGKILL
 signal to be sent to the process.
-If the caller is in filter or LSM mode, and this system call is allowed by the
-seccomp filters or LSM, it returns 2.
+If the caller is in filter mode, and this system call is allowed by the
+seccomp filters, it returns 2; otherwise, the process is killed with a
+.BR SIGKILL
+signal.
 This operation is available only
 if the kernel is configured with
 .B CONFIG_SECCOMP
 enabled.
+
+Since Linux 3.8, the
+.IR Seccomp
+field of the
+.IR /proc/[pid]/status
+file provides a method of obtaining the same information,
+without the risk that the process is killed; see
+.BR proc (5).
 .TP
 .BR PR_SET_SECUREBITS " (since Linux 2.6.26)"
 Set the "securebits" flags of the calling thread to the value supplied in
@@ -854,6 +871,77 @@ Any further attempts will be rejected.
 This should help system administrators monitor unusual
 symbolic-link transitions over all processes running on a system.
 .RE
+.TP
+.BR PR_MPX_ENABLE_MANAGEMENT ", " PR_MPX_DISABLE_MANAGEMENT " (since Linux 3.19) "
+.\" commit fe3d197f84319d3bce379a9c0dc17b1f48ad358c
+.\" See also http://lwn.net/Articles/582712/
+.\" See also https://gcc.gnu.org/wiki/Intel%20MPX%20support%20in%20the%20GCC%20compiler
+Enable or disable kernel management of Memory Protection eXtensions (MPX)
+bounds tables.
+The
+.IR arg2 ,
+.IR arg3 ,
+.IR arg4 ,
+and
+.IR arg5
+.\" commit e9d1b4f3c60997fe197bf0243cb4a41a44387a88
+arguments must be zero.
+
+MPX is a hardware-assisted mechanism for performing bounds checking on
+pointers.
+It consists of a set of registers storing bounds information
+and a set of special instruction prefixes that tell the CPU on which
+instructions it should do bounds enforcement.
+There is a limited number of these registers and
+when there are more pointers than registers,
+their contents must be "spilled" into a set of tables.
+These tables are called "bounds tables" and the MPX
+.BR prctl ()
+operations control
+whether the kernel manages their allocation and freeing.
+
+When management is enabled, the kernel will take over allocation
+and freeing of the bounds tables.
+It does this by trapping the #BR exceptions that result
+at first use of missing bounds tables and
+instead of delivering the exception to user space,
+it allocates the table and populates the bounds directory
+with the location of the new table.
+For freeing, the kernel checks to see if bounds tables are
+present for memory which is not allocated, and frees them if so.
+
+Before enabling MPX management using
+.BR PR_MPX_ENABLE_MANAGEMENT ,
+the application must first have allocated a user-space buffer for
+the bounds directory and placed the location of that directory in the
+.I bndcfgu
+register.
+
+These calls will fail if the CPU or kernel does not support MPX.
+Kernel support for MPX is enabled via the
+.BR CONFIG_X86_INTEL_MPX
+configuration option.
+You can check whether the CPU supports MPX by looking for the 'mpx'
+CPUID bit, like with the following command:
+
+	cat /proc/cpuinfo | grep ' mpx '
+
+A thread may not switch in or out of long (64-bit) mode while MPX is
+enabled.
+
+All threads in a process are affected by these calls.
+
+The child of a
+.BR fork (2)
+inherits the state of MPX management.
+During
+.BR execve (2),
+MPX management is reset to a state as if
+.BR PR_MPX_DISABLE_MANAGEMENT
+had been called.
+
+For further information on Intel MPX, see the kernel source file
+.IR Documentation/x86/intel_mpx.txt .
 .\"
 .SH RETURN VALUE
 On success,
@@ -879,6 +967,19 @@ is set appropriately.
 .TP
 .B EFAULT
 .I arg2
+is an invalid address.
+.TP
+.B EFAULT
+.I option
+is
+.BR PR_SET_SECCOMP ,
+.I arg2
+is
+.BR SECCOMP_MODE_FILTER ,
+the system was built with
+.BR CONFIG_SECCOMP_FILTER ,
+and
+.I arg3
 is an invalid address.
 .TP
 .B EINVAL
@@ -911,6 +1012,16 @@ or
 .BR PR_GET_SECCOMP ,
 and the kernel was not configured with
 .BR CONFIG_SECCOMP .
+.TP
+.B EINVAL
+.I option
+is
+.BR PR_SET_SECCOMP ,
+.I arg2
+is
+.BR SECCOMP_MODE_FILTER ,
+and the kernel was not configured with
+.BR CONFIG_SECCOMP_FILTER .
 .TP
 .B EINVAL
 .I option
@@ -1116,6 +1227,15 @@ is not valid.
 .\" is
 .\" .BR PR_SET_SECCOMP ,
 .\" and secure computing mode is already 1.
+.TP
+.B ENXIO
+.I option
+was
+.BR PR_MPX_ENABLE_MANAGEMENT
+or
+.BR PR_MPX_DISABLE_MANAGEMENT
+and the kernel or the CPU does not support MPX management.
+Check that the kernel and processor have MPX support.
 .SH VERSIONS
 The
 .BR prctl ()

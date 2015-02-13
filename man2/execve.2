@@ -34,7 +34,7 @@
 .\" 2007-09-14 Ollie Wild <aaw@google.com>, mtk
 .\"     Add text describing limits on command-line arguments + environment
 .\"
-.TH EXECVE 2 2014-10-02 "Linux" "Linux Programmer's Manual"
+.TH EXECVE 2 2015-01-22 "Linux" "Linux Programmer's Manual"
 .SH NAME
 execve \- execute program
 .SH SYNOPSIS
@@ -622,7 +622,7 @@ If the resource limit was not still exceeded at the time of the
 .BR execve ()
 call
 (because other processes belonging to this real UID terminated between the
-.BR set*uid()
+.BR set*uid ()
 call and the
 .BR execve ()
 call), then the
@@ -702,7 +702,7 @@ main(int argc, char *argv[])
     newargv[0] = argv[1];
 
     execve(argv[1], newargv, newenviron);
-    perror("execve");   /* execve() only returns on error */
+    perror("execve");   /* execve() returns only on error */
     exit(EXIT_FAILURE);
 }
 .fi
@@ -750,6 +750,7 @@ argv[4]: world
 .in
 .SH SEE ALSO
 .BR chmod (2),
+.BR execveat (2),
 .BR fork (2),
 .BR ptrace (2),
 .BR execl (3),

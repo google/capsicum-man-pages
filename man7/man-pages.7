@@ -27,7 +27,7 @@
 .\" 2007-05-30 created by mtk, using text from old man.7 plus
 .\" rewrites and additional text.
 .\"
-.TH MAN-PAGES 7 2014-08-19 "Linux" "Linux Programmer's Manual"
+.TH MAN-PAGES 7 2014-12-31 "Linux" "Linux Programmer's Manual"
 .SH NAME
 man-pages \- conventions for writing Linux man pages
 .SH SYNOPSIS
@@ -468,7 +468,7 @@ other related pages or documents.
 
 The list should be ordered by section number and
 then alphabetically by name
-Do not terminate this with a period.
+Do not terminate this list with a period.
 .IP
 Where the SEE ALSO list contains many long manual page names,
 to improve the visual result of the output, it may be useful to employ the
@@ -480,6 +480,11 @@ and
 directives.
 Hyphenation of individual page names can be prevented
 by preceding words with the string "\\%".
+
+Given the distributed, autonomous nature of FOSS projects
+and their documentation, it is sometimes necessary\(emand in many cases
+desirable\(emthat the SEE ALSO section includes references to
+manual pages provided by other projects.
 .SH STYLE GUIDE
 The following subsections describe the preferred style for the
 .IR man-pages

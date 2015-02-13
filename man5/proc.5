@@ -52,7 +52,7 @@
 .\" to see what information could be imported from that file
 .\" into this file.
 .\"
-.TH PROC 5 2014-09-21 "Linux" "Linux Programmer's Manual"
+.TH PROC 5 2015-01-22 "Linux" "Linux Programmer's Manual"
 .SH NAME
 proc \- process information pseudo-filesystem
 .SH DESCRIPTION
@@ -1290,7 +1290,7 @@ Details depend on the kernel version.
 
 The format for this field was %lu before Linux 2.6.
 .TP
-(1) \fIminflt\fP \ %lu
+(10) \fIminflt\fP \ %lu
 The number of minor faults the process has made which have not
 required loading a memory page from disk.
 .TP
@@ -1587,6 +1587,7 @@ VmStk:        88 kB
 VmExe:       572 kB
 VmLib:      1708 kB
 VmPTE:        20 kB
+VmSwap:        0 kB
 Threads:        1
 SigQ:   0/3067
 SigPnd: 0000000000000000
@@ -1598,6 +1599,7 @@ CapInh: 0000000000000000
 CapPrm: 0000000000000000
 CapEff: 0000000000000000
 CapBnd: ffffffffffffffff
+Seccomp:        0
 Cpus_allowed:   00000001
 Cpus_allowed_list:      0
 Mems_allowed:   1
@@ -1672,6 +1674,10 @@ Shared library code size.
 .IR VmPTE :
 Page table entries size (since Linux 2.6.10).
 .IP *
+.IR VmSwap :
+.\" commit b084d4353ff99d824d3bc5a5c2c22c70b1fba722
+Swapped-out virtual memory size (since Linux 2.6.34).
+.IP *
 .IR Threads :
 Number of threads in process containing this thread.
 .IP *
@@ -1706,6 +1712,21 @@ Capability Bounding set
 (since Linux 2.6.26, see
 .BR capabilities (7)).
 .IP *
+.IR Seccomp :
+.\" commit 2f4b3bf6b2318cfaa177ec5a802f4d8d6afbd816
+Seccomp mode of the process
+(since Linux 3.8, see
+.BR seccomp (2)).
+0 means
+.BR SECCOMP_MODE_DISABLED ;
+1 means
+.BR SECCOMP_MODE_STRICT ;
+2 means
+.BR SECCOMP_MODE_FILTER .
+This field is provided only if the kernel was built with the
+.BR CONFIG_SECCOMP
+kernel configuration option enabled.
+.IP *
 .IR Cpus_allowed :
 Mask of CPUs on which this process may run
 (since Linux 2.6.24, see
@@ -1739,7 +1760,7 @@ The values of all six argument registers are exposed,
 although most system calls use fewer registers.
 
 If the process is blocked, but not in a system call,
-then the file displays -1 in place of the system call number,
+then the file displays \-1 in place of the system call number,
 followed by just the values of the stack pointer and program counter.
 If process is not blocked, then file contains just the string "running".
 
@@ -1960,12 +1981,12 @@ Node 0, zone  Normal   216   55  189  101   84   38   37   27    5    3  587
 
 In this example, there is one node containing three zones and there
 are 11 different chunk sizes.
-If the page size is 4 kilobyteis, then the first zone called
+If the page size is 4 kilobytes, then the first zone called
 .I DMA
 (on x86 the first 16 megabyte of memory) has 1 chunk of 4 kilobytes
 (order 0) available and has 3 chunks of 4 megabytes (order 10) available.
 
-If the memory is heavily fragmentated, the counters for higher
+If the memory is heavily fragmented, the counters for higher
 order chunks will be zero and allocation of large contiguous areas
 will fail.
 
@@ -2716,7 +2737,7 @@ The "rem_address" is the remote address and port number pair
 The "tx_queue" and "rx_queue" are the
 outgoing and incoming data queue in terms of kernel memory usage.
 The "tr", "tm\->when", and "rexmits" fields hold internal information of
-the kernel socket state and are only useful for debugging.
+the kernel socket state and are useful only for debugging.
 The "uid"
 field holds the effective UID of the creator of the socket.
 .TP
@@ -2825,7 +2846,7 @@ monotonically-increasing sequence number.
 This shows the ID of the most recent packet queued.
 .RE
 .IP
-The last number only exists for compatibility reasons and is always 1.
+The last number exists only for compatibility reasons and is always 1.
 .TP
 .I /proc/partitions
 Contains the major and minor numbers of each partition as well as the number
@@ -3164,11 +3185,6 @@ try increasing this value:
 .fi
 .ft
 
-The kernel constant
-.B NR_OPEN
-imposes an upper limit on the value that may be placed in
-.IR file-max .
-
 Privileged processes
 .RB ( CAP_SYS_ADMIN )
 can override the
@@ -3267,6 +3283,18 @@ controlling the resources used by POSIX message queues.
 See
 .BR mq_overview (7)
 for details.
+.TP
+.IR /proc/sys/fs/nr_open " (since Linux 2.6.25)
+.\" commit 9cfe015aa424b3c003baba3841a60dd9b5ad319b
+This file imposes ceiling on the value to which the
+.BR RLIMIT_NOFILE
+resource limit can be raised (see
+.BR getrlimit (2)).
+This ceiling is enforced for both unprivileged and privileged process.
+The default value in this file is 1048576.
+(Before Linux 2.6.25, the ceiling for
+.BR RLIMIT_NOFILE
+was hard-coded to the same value.)
 .TP
 .IR /proc/sys/fs/overflowgid " and " /proc/sys/fs/overflowuid
 These files
@@ -3915,6 +3943,15 @@ On some systems, it is not present.
 This directory contains files for memory management tuning, buffer and
 cache management.
 .TP
+.IR /proc/sys/vm/compact_memory " (since Linux 2.6.35)"
+When 1 is written to this file, all zones are compacted such that free
+memory is available in contiguous blocks where possible.
+The effect of this action can be seen by examining
+.IR /proc/buddyinfo .
+.IP
+Only present if the kernel was configured with
+.BR CONFIG_COMPACTION .
+.TP
 .IR /proc/sys/vm/drop_caches " (since Linux 2.6.16)"
 Writing to this file causes the kernel to drop clean caches, dentries, and
 inodes from memory, causing that memory to become free.
@@ -4216,6 +4253,17 @@ These files have headers and are formatted (one IPC object per line)
 for easy understanding.
 .BR svipc (7)
 provides further background on the information shown by these files.
+.TP
+.IR /proc/thread-self " (since Linux 3.17)"
+.\" commit 0097875bd41528922fb3bb5f348c53f17e00e2fd
+This directory refers to the thread accessing the
+.I /proc
+filesystem,
+and is identical to the
+.I /proc/self/task/[tid]
+directory named by the process thread ID
+.RI ( [tid] )
+of the same thread.
 .TP
 .IR /proc/timer_list " (since Linux 2.6.21)"
 .\" commit 289f480af87e45f7a6de6ba9b4c061c2e259fe98

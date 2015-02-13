@@ -61,7 +61,7 @@
 .\" 2008-05-07, mtk / Peter Zijlstra, Added description of RLIMIT_RTTIME
 .\" 2010-11-06, mtk: Added documentation of prlimit()
 .\"
-.TH GETRLIMIT 2 2014-10-02 "Linux" "Linux Programmer's Manual"
+.TH GETRLIMIT 2 2015-01-22 "Linux" "Linux Programmer's Manual"
 .SH NAME
 getrlimit, setrlimit, prlimit \- get/set resource limits
 .SH SYNOPSIS
@@ -485,11 +485,18 @@ was greater than
 An unprivileged process tried to raise the hard limit; the
 .B CAP_SYS_RESOURCE
 capability is required to do this.
-Or, the caller tried to increase the hard
+.TP
+.B EPERM
+The caller tried to increase the hard
 .B RLIMIT_NOFILE
-limit above the current kernel maximum
-.RB ( NR_OPEN ).
-Or, the calling process did not have permission to set limits
+limit above the maximum defined by
+.IR /proc/sys/fs/nr_open
+(see
+.BR proc (5))
+.TP
+.B EPERM
+.RB ( prlimit ())
+The calling process did not have permission to set limits
 for the process specified by
 .IR pid .
 .TP

@@ -37,7 +37,7 @@
 .\"     Enhanced the discussion of "raw" mode for cfmakeraw().
 .\"     Document CMSPAR.
 .\"
-.TH TERMIOS 3 2014-05-08 "Linux" "Linux Programmer's Manual"
+.TH TERMIOS 3 2015-02-01 "Linux" "Linux Programmer's Manual"
 .SH NAME
 termios, tcgetattr, tcsetattr, tcsendbreak, tcdrain, tcflush, tcflow,
 cfmakeraw, cfgetospeed, cfgetispeed, cfsetispeed, cfsetospeed, cfsetspeed \-
@@ -1034,7 +1034,11 @@ behaves like
 .\" glibc for bsd: duration in us
 .\" glibc for sunos4: ignore duration
 .SH SEE ALSO
+.BR reset (1),
+.BR setterm (1),
 .BR stty (1),
+.BR tput (1),
+.BR tset (1),
 .BR console_ioctl (4),
 .BR tty_ioctl (4),
 .BR setserial (8)

@@ -36,8 +36,10 @@
 .\"
 .\" 2002-03-20  Christoph Hellwig <hch@infradead.org>
 .\"	- adopted for Linux
+.\" 2015-01-17, Kees Cook <keescook@chromium.org>
+.\"	Added mips and arm64.
 .\"
-.TH SYSCALL 2 2014-05-10 "Linux" "Linux Programmer's Manual"
+.TH SYSCALL 2 2015-01-22 "Linux" "Linux Programmer's Manual"
 .SH NAME
 syscall \- indirect system call
 .SH SYNOPSIS
@@ -158,13 +160,11 @@ arch/ABI	instruction	syscall #	retval	Notes
 _
 arm/OABI	swi NR	-	a1	NR is syscall #
 arm/EABI	swi 0x0	r7	r0
+arm64	svc #0	x8	x0
 blackfin	excpt 0x0	P0	R0
 i386	int $0x80	eax	eax
-ia64	break 0x100000	r15	r10/r8	T{
-bool error/
-.br
-errno value
-T}
+ia64	break 0x100000	r15	r8	See below
+mips	syscall	v0	v0	See below
 parisc	ble 0x100(%sr2, %r0)	r20	r28
 s390	svc 0	r1	r2	See below
 s390x	svc 0	r1	r2	See below
@@ -175,6 +175,14 @@ x86_64	syscall	rax	rax
 .PP
 For s390 and s390x, NR (the system call number)
 may be passed directly with "svc NR" if it is less than 256.
+
+On a few architectures,
+a register is used to indicate simple boolean failure of the system call:
+ia64 uses
+.I r10
+for this purpose,
+and mips uses
+.IR a3 .
 .if t \{\
 .in
 .ft P
@@ -185,14 +193,17 @@ The second table shows the registers used to pass the system call arguments.
 .ft CW
 \}
 .TS
-l l l l l l l l.
-arch/ABI	arg1	arg2	arg3	arg4	arg5	arg6	arg7
+l l2 l2 l2 l2 l2 l2 l2 l.
+arch/ABI	arg1	arg2	arg3	arg4	arg5	arg6	arg7	Notes
 _
 arm/OABI	a1	a2	a3	a4	v1	v2	v3
 arm/EABI	r0	r1	r2	r3	r4	r5	r6
+arm64	x0	x1	x2	x3	x4	x5	-
 blackfin	R0	R1	R2	R3	R4	R5	-
 i386	ebx	ecx	edx	esi	edi	ebp	-
 ia64	out0	out1	out2	out3	out4	out5	-
+mips/o32	a0	a1	a2	a3	-	-	-	See below
+mips/n32,64	a0	a1	a2	a3	a4	a5	-
 parisc	r26	r25	r24	r23	r22	r21	-
 s390	r2	r3	r4	r5	r6	r7	-
 s390x	r2	r3	r4	r5	r6	r7	-
@@ -200,6 +211,9 @@ sparc/32	o0	o1	o2	o3	o4	o5	-
 sparc/64	o0	o1	o2	o3	o4	o5	-
 x86_64	rdi	rsi	rdx	r10	r8	r9	-
 .TE
+.PP
+The mips/o32 system call convention passes
+arguments 5 through 8 on the user stack.
 .if t \{\
 .in
 .ft P
@@ -228,4 +242,5 @@ main(int argc, char *argv[])
 .BR _syscall (2),
 .BR intro (2),
 .BR syscalls (2),
+.BR errno (3),
 .BR vdso (7)

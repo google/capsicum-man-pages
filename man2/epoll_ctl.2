@@ -17,7 +17,7 @@
 .\" <http://www.gnu.org/licenses/>.
 .\" %%%LICENSE_END
 .\"
-.TH EPOLL_CTL 2 2014-07-08 "Linux" "Linux Programmer's Manual"
+.TH EPOLL_CTL 2 2014-12-31 "Linux" "Linux Programmer's Manual"
 .SH NAME
 epoll_ctl \- control interface for an epoll descriptor
 .SH SYNOPSIS
@@ -38,7 +38,7 @@ be performed for the target file descriptor,
 
 Valid values for the
 .I op
-argument are :
+argument are:
 .TP
 .B EPOLL_CTL_ADD
 Register the target file descriptor
@@ -75,7 +75,7 @@ argument describes the object linked to the file descriptor
 .IR fd .
 The
 .I struct epoll_event
-is defined as :
+is defined as:
 .sp
 .in +4n
 .nf
@@ -250,6 +250,9 @@ The target file
 .I fd
 does not support
 .BR epoll .
+This error can occur if
+.I fd
+refers to, for example, a regular file or a directory.
 .SH VERSIONS
 .BR epoll_ctl ()
 was added to the kernel in version 2.6.
