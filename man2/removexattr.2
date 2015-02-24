@@ -38,8 +38,8 @@ removexattr, lremovexattr, fremovexattr \- remove an extended attribute
 .fam T
 .SH DESCRIPTION
 Extended attributes are
-.IR name :\c
-value pairs associated with inodes (files, directories, symbolic links, etc.).
+.IR name : value
+pairs associated with inodes (files, directories, symbolic links, etc.).
 They are extensions to the normal attributes which are associated
 with all inodes in the system (i.e., the
 .BR stat (2)
@@ -70,7 +70,7 @@ only the extended attribute is removed from the open file referred to by
 in place of
 .IR path .
 .PP
-An extended attribute name is a simple null-terminated string.
+An extended attribute name is a null-terminated string.
 The
 .I name
 includes a namespace prefix; there may be several, disjoint

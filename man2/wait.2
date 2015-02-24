@@ -46,7 +46,7 @@
 .\" 2005-05-10, mtk, __W* flags can't be used with waitid()
 .\" 2008-07-04, mtk, removed erroneous text about SA_NOCLDSTOP
 .\"
-.TH WAIT 2 2014-08-19 "Linux" "Linux Programmer's Manual"
+.TH WAIT 2 2015-02-21 "Linux" "Linux Programmer's Manual"
 .SH NAME
 wait, waitpid, waitid \- wait for process to change state
 .SH SYNOPSIS
@@ -523,6 +523,17 @@ Do not wait for children of other threads in
 the same thread group.
 This was the default before Linux 2.4.
 .SS C library/kernel ABI differences
+.BR wait ()
+is actually a library function that (in glibc) is implemented as a call to
+.BR wait4 (2).
+
+Within glibc,
+.\" A waitpid() system call remains, with a comment noting that
+.\" "waitpid() should be * implemented by calling sys_wait4() from libc.a"
+.BR waitpid ()
+is a wrapper function that invokes
+.BR wait (2).
+
 The raw
 .BR waitid ()
 system call takes a fifth argument, of type

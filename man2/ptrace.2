@@ -43,7 +43,7 @@
 .\" 2015-01, Kees Cook <keescook@chromium.org>
 .\"    Added PTRACE_O_TRACESECCOMP, PTRACE_EVENT_SECCOMP
 .\"
-.TH PTRACE 2 2015-01-22 "Linux" "Linux Programmer's Manual"
+.TH PTRACE 2 2015-02-21 "Linux" "Linux Programmer's Manual"
 .SH NAME
 ptrace \- process trace
 .SH SYNOPSIS
@@ -781,6 +781,23 @@ Unlike
 .BR PTRACE_ATTACH ,
 .B PTRACE_SEIZE
 does not stop the process.
+Group-stops are reported as
+.B PTRACE_EVENT_STOP
+and
+.I WSTOPSIG(status)
+returns the stop signal.
+Automatically attached children stop with
+.B PTRACE_EVENT_STOP
+and
+.I WSTOPSIG(status)
+returns
+.B SIGTRAP
+instead of having
+.B SIGSTOP
+signal delivered to them.
+.BR evecve (2)
+does not deliver an extra
+.BR SIGTRAP .
 Only a
 .BR PTRACE_SEIZE d
 process can accept
@@ -788,6 +805,12 @@ process can accept
 and
 .B PTRACE_LISTEN
 commands.
+The "seized" behavior just described is inherited by
+children that are automatically attached using
+.BR PTRACE_O_TRACEFORK ,
+.BR PTRACE_O_TRACEVFORK ,
+and
+.BR PTRACE_O_TRACECLONE .
 .I addr
 must be zero.
 .I data
@@ -1337,12 +1360,7 @@ Stop induced by
 .B PTRACE_INTERRUPT
 command, or group-stop, or initial ptrace-stop when a new child is attached
 (only if attached using
-.BR PTRACE_SEIZE ),
-or
-.B PTRACE_EVENT_STOP
-if
-.B PTRACE_SEIZE
-was used.
+.BR PTRACE_SEIZE ).
 .TP
 .B PTRACE_EVENT_SECCOMP
 Stop triggered by a
@@ -1837,7 +1855,12 @@ If the
 .B PTRACE_O_TRACEEXEC
 option is
 .I not
-in effect for the execing tracee, the kernel delivers an extra
+in effect for the execing tracee,
+and if the tracee was
+.BR PTRACE_ATTACH ed
+rather that
+.BR PTRACE_SEIZE d,
+the kernel delivers an extra
 .B SIGTRAP
 to the tracee after
 .BR execve (2)
@@ -1870,7 +1893,9 @@ However, determining
 to suppress is not easy.
 Setting the
 .B PTRACE_O_TRACEEXEC
-option and thus suppressing this extra
+option or using
+.B PTRACE_SEIZE
+and thus suppressing this extra
 .B SIGTRAP
 is the recommended approach.
 .SS Real parent
@@ -1973,6 +1998,9 @@ In Linux kernels before 2.6.26,
 .\" See commit 00cd5c37afd5f431ac186dd131705048c0a11fdb
 .BR init (1),
 the process with PID 1, may not be traced.
+.LP
+A tracees parent continues to be the tracer even if that tracer calls
+.BR execve (2).
 .LP
 The layout of the contents of memory and the USER area are
 quite operating-system- and architecture-specific.

@@ -36,7 +36,7 @@
 .\"     Greatly expanded, to describe all attributes that differ
 .\"	parent and child.
 .\"
-.TH FORK 2 2014-05-28 "Linux" "Linux Programmer's Manual"
+.TH FORK 2 2015-02-21 "Linux" "Linux Programmer's Manual"
 .SH NAME
 fork \- create a child process
 .SH SYNOPSIS
@@ -46,9 +46,25 @@ fork \- create a child process
 .SH DESCRIPTION
 .BR fork ()
 creates a new process by duplicating the calling process.
-The new process, referred to as the \fIchild\fP,
-is an exact duplicate of the calling process,
-referred to as the \fIparent\fP, except for the following points:
+The new process is referred to as the
+.I child
+process.
+The calling process is referred to as the
+.I parent
+process.
+
+The child process and the parent process run in separate memory spaces.
+At the time of
+.BR fork ()
+both memory spaces have the same content.
+Memory writes, file mappings
+.RB ( mmap (2)),
+and unmappings
+.RB ( munmap (2))
+performed by one of the processes do not affect the other.
+
+The child process is an exact duplicate of the parent
+process except for the following points:
 .IP * 3
 The child has its own unique process ID,
 and this PID does not match the ID of any existing process group
@@ -185,11 +201,6 @@ is set appropriately.
 .SH ERRORS
 .TP
 .B EAGAIN
-.BR fork ()
-cannot allocate sufficient memory to copy the parent's page tables and
-allocate a task structure for the child.
-.TP
-.B EAGAIN
 \" NOTE! The following should match the description in pthread_create(3)
 A system-imposed limit on the number of threads was encountered.
 There are a number of limits that may trigger this error: the
@@ -232,7 +243,7 @@ Under Linux,
 is implemented using copy-on-write pages, so the only penalty that it incurs
 is the time and memory required to duplicate the parent's page tables,
 and to create a unique task structure for the child.
-
+.SS C library/kernel ABI differences
 Since version 2.3.3,
 .\" nptl/sysdeps/unix/sysv/linux/fork.c
 rather than invoking the kernel's

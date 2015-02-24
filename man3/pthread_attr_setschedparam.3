@@ -23,7 +23,7 @@
 .\" the source, must acknowledge the copyright and authors of this work.
 .\" %%%LICENSE_END
 .\"
-.TH PTHREAD_ATTR_SETSCHEDPARAM 3 2014-05-21 "Linux" "Linux Programmer's Manual"
+.TH PTHREAD_ATTR_SETSCHEDPARAM 3 2015-02-21 "Linux" "Linux Programmer's Manual"
 .SH NAME
 pthread_attr_setschedparam, pthread_attr_getschedparam \- set/get
 scheduling parameter attributes in thread attributes object
@@ -86,15 +86,22 @@ to
 On success, these functions return 0;
 on error, they return a nonzero error number.
 .SH ERRORS
-POSIX.1 documents
+.BR pthread_attr_setschedparam ()
+can fail with the following error:
+.TP
 .B EINVAL
-and
+The priority specified in
+.I param
+does not make sense for the current scheduling policy of
+.IR attr .
+.PP
+POSIX.1 also documents an
 .B ENOTSUP
-errors for
+error for
 .BR pthread_attr_setschedparam ().
-On Linux these functions always succeed
+This value is never returned on Linux
 (but portable and future-proof applications should nevertheless
-handle a possible error return).
+handle this error return value).
 .\" .SH VERSIONS
 .\" Available since glibc 2.0.
 .SH ATTRIBUTES

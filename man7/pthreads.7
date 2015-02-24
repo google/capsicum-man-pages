@@ -23,7 +23,7 @@
 .\" the source, must acknowledge the copyright and authors of this work.
 .\" %%%LICENSE_END
 .\"
-.TH PTHREADS 7  2014-05-21 "Linux" "Linux Programmer's Manual"
+.TH PTHREADS 7  2015-02-21 "Linux" "Linux Programmer's Manual"
 .SH NAME
 pthreads \- POSIX threads
 .SH DESCRIPTION
@@ -894,6 +894,7 @@ bash$ $( LD_ASSUME_KERNEL=2.2.5 ldd /bin/ls | grep libc.so | \\
 .ad l
 .nh
 .BR clone (2),
+.BR fork (2),
 .BR futex (2),
 .BR gettid (2),
 .BR proc (5),

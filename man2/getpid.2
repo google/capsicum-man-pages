@@ -22,7 +22,7 @@
 .\" the source, must acknowledge the copyright and authors of this work.
 .\" %%%LICENSE_END
 .\"
-.TH GETPID 2 2014-09-21 "Linux" "Linux Programmer's Manual"
+.TH GETPID 2 2015-02-21 "Linux" "Linux Programmer's Manual"
 .SH NAME
 getpid, getppid \- get process identification
 .SH SYNOPSIS
@@ -46,6 +46,7 @@ These functions are always successful.
 .SH CONFORMING TO
 POSIX.1-2001, 4.3BSD, SVr4.
 .SH NOTES
+.SS C library/kernel ABI differences
 Since glibc version 2.3.4,
 the glibc wrapper function for
 .BR getpid ()

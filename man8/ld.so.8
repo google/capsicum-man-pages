@@ -2,7 +2,7 @@
 .\" This is in the public domain
 .\" %%%LICENSE_END
 .\"
-.TH LD.SO 8 2014-12-31 "GNU" "Linux Programmer's Manual"
+.TH LD.SO 8 2015-02-21 "GNU" "Linux Programmer's Manual"
 .SH NAME
 ld.so, ld-linux.so* \- dynamic linker/loader
 .SH SYNOPSIS
@@ -150,52 +150,24 @@ it.
 .B \-\-inhibit-cache
 Do not use /etc/ld.so.cache.
 .TP
-.B \-\-library\-path PATH
-Use PATH instead of
+.BI \-\-library\-path " path"
+Use
+.I path
+instead of
 .B LD_LIBRARY_PATH
 environment variable setting (see below).
 .TP
-.B \-\-inhibit\-rpath LIST
-Ignore RPATH and RUNPATH information in object names in LIST.
+.BI \-\-inhibit\-rpath " list"
+Ignore RPATH and RUNPATH information in object names in
+.IR list .
 This option is ignored if
 .B ld.so
 is set-user-ID or set-group-ID.
 .TP
-.B \-\-audit LIST
-Use objects named in LIST as auditors.
-.SH HARDWARE CAPABILITIES
-Some libraries are compiled using hardware-specific instructions which do
-not exist on every CPU.
-Such libraries should be installed in directories whose names define the
-required hardware capabilities, such as
-.IR /usr/lib/sse2/ .
-The dynamic linker checks these directories against the hardware of the
-machine and selects the most suitable version of a given library.
-Hardware capability directories can be cascaded to combine CPU features.
-The list of supported hardware capability names depends on the CPU.
-The following names are currently recognized:
-.TP
-.B Alpha
-ev4, ev5, ev56, ev6, ev67
-.TP
-.B MIPS
-loongson2e, loongson2f, octeon, octeon2
-.TP
-.B PowerPC
-4xxmac, altivec, arch_2_05, arch_2_06, booke, cellbe, dfp, efpdouble, efpsingle,
-fpu, ic_snoop, mmu, notb, pa6t, power4, power5, power5+, power6x, ppc32, ppc601,
-ppc64, smt, spe, ucache, vsx
-.TP
-.B SPARC
-flush, muldiv, stbar, swap, ultra3, v9, v9v, v9v2
-.TP
-.B s390
-dfp, eimm, esan3, etf3enh, g5, highgprs, hpage, ldisp, msa, stfle,
-z900, z990, z9-109, z10, zarch
-.TP
-.B x86 (32-bit only)
-acpi, apic, clflush, cmov, cx8, dts, fxsr, ht, i386, i486, i586, i686, mca, mmx,
-mtrr, pat, pbe, pge, pn, pse36, sep, ss, sse, sse2, tm
+.BI \-\-audit " list"
+Use objects named in
+.I list
+as auditors.
 .SH ENVIRONMENT
 Among the more important environment variables are the following:
 .TP
@@ -241,11 +213,6 @@ LinuxThreads and NPTL
 (which latter was typically the default on such systems);
 see
 .BR pthreads (7).
-.TP
-.B LD_BIND_NOT
-(glibc since 2.2)
-Don't update the Global Offset Table (GOT) and Procedure Linkage Table (PLT)
-when resolving a symbol.
 .TP
 .B LD_BIND_NOW
 (libc5; glibc since 2.1.1)
@@ -418,10 +385,17 @@ Show auxiliary array passed up from the kernel.
 For security reasons, since glibc 2.3.5,
 .B LD_SHOW_AUXV
 is ignored for set-user-ID/set-group-ID binaries.
-.\" FIXME
-.\" Document LD_TRACE_PRELINKING (e.g.: LD_TRACE_PRELINKING=libx1.so ./prog)
-.\"	Available since glibc 2.3
-.\"	Also enables DL_DEBUG_PRELINK
+.TP
+.B LD_TRACE_PRELINKING
+(glibc since 2.4)
+Trace prelinking of the object whose name is assigned to
+this environment variable.
+(Use
+.BR ldd (1)
+to get a list of the objects that might be traced.)
+If the object name is not recognized,
+.\" (This is what seems to happen, from experimenting)
+then all prelinking activity is traced.
 .TP
 .B LD_USE_LOAD_BIAS
 .\" http://sources.redhat.com/ml/libc-hacker/2003-11/msg00127.html
@@ -486,6 +460,39 @@ The
 functionality is available for executables compiled using libc version
 4.4.3 or greater.
 ELF functionality is available since Linux 1.1.52 and libc5.
+.SS Hardware capabilities
+Some libraries are compiled using hardware-specific instructions which do
+not exist on every CPU.
+Such libraries should be installed in directories whose names define the
+required hardware capabilities, such as
+.IR /usr/lib/sse2/ .
+The dynamic linker checks these directories against the hardware of the
+machine and selects the most suitable version of a given library.
+Hardware capability directories can be cascaded to combine CPU features.
+The list of supported hardware capability names depends on the CPU.
+The following names are currently recognized:
+.TP
+.B Alpha
+ev4, ev5, ev56, ev6, ev67
+.TP
+.B MIPS
+loongson2e, loongson2f, octeon, octeon2
+.TP
+.B PowerPC
+4xxmac, altivec, arch_2_05, arch_2_06, booke, cellbe, dfp, efpdouble, efpsingle,
+fpu, ic_snoop, mmu, notb, pa6t, power4, power5, power5+, power6x, ppc32, ppc601,
+ppc64, smt, spe, ucache, vsx
+.TP
+.B SPARC
+flush, muldiv, stbar, swap, ultra3, v9, v9v, v9v2
+.TP
+.B s390
+dfp, eimm, esan3, etf3enh, g5, highgprs, hpage, ldisp, msa, stfle,
+z900, z990, z9-109, z10, zarch
+.TP
+.B x86 (32-bit only)
+acpi, apic, clflush, cmov, cx8, dts, fxsr, ht, i386, i486, i586, i686, mca, mmx,
+mtrr, pat, pbe, pge, pn, pse36, sep, ss, sse, sse2, tm
 .SH SEE ALSO
 .BR ld (1),
 .BR ldd (1),

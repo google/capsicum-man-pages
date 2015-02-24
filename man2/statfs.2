@@ -25,7 +25,7 @@
 .\" Modified 2003-08-17 by Walter Harms
 .\" Modified 2004-06-23 by Michael Kerrisk <mtk.manpages@gmail.com>
 .\"
-.TH STATFS 2 2014-06-13 "Linux" "Linux Programmer's Manual"
+.TH STATFS 2 2015-02-21 "Linux" "Linux Programmer's Manual"
 .SH NAME
 statfs, fstatfs \- get filesystem statistics
 .SH SYNOPSIS
@@ -35,9 +35,9 @@ statfs, fstatfs \- get filesystem statistics
 .br
 .BI "int fstatfs(int " fd ", struct statfs *" buf );
 .SH DESCRIPTION
-The function
+The
 .BR statfs ()
-returns information about a mounted filesystem.
+system call returns information about a mounted filesystem.
 .I path
 is the pathname of any file within the mounted filesystem.
 .I buf
@@ -47,25 +47,22 @@ structure defined approximately as follows:
 
 .in +4n
 .nf
-#if __WORDSIZE == 32		/* System word size */
-# define __SWORD_TYPE           int
-#else /* __WORDSIZE == 64 */
-# define __SWORD_TYPE		long int
-#endif
-
 struct statfs {
-    __SWORD_TYPE f_type;    /* type of filesystem (see below) */
-    __SWORD_TYPE f_bsize;   /* optimal transfer block size */
-    fsblkcnt_t   f_blocks;  /* total data blocks in filesystem */
-    fsblkcnt_t   f_bfree;   /* free blocks in fs */
-    fsblkcnt_t   f_bavail;  /* free blocks available to
-                               unprivileged user */
-    fsfilcnt_t   f_files;   /* total file nodes in filesystem */
-    fsfilcnt_t   f_ffree;   /* free file nodes in fs */
-    fsid_t       f_fsid;    /* filesystem id */
-    __SWORD_TYPE f_namelen; /* maximum length of filenames */
-    __SWORD_TYPE f_frsize;  /* fragment size (since Linux 2.6) */
-    __SWORD_TYPE f_spare[5];
+    __fsword_t f_type;    /* Type of filesystem (see below) */
+    __fsword_t f_bsize;   /* Optimal transfer block size */
+    fsblkcnt_t f_blocks;  /* Total data blocks in filesystem */
+    fsblkcnt_t f_bfree;   /* Free blocks in filesystem */
+    fsblkcnt_t f_bavail;  /* Free blocks available to
+                             unprivileged user */
+    fsfilcnt_t f_files;   /* Total file nodes in filesystem */
+    fsfilcnt_t f_ffree;   /* Free file nodes in filesystem */
+    fsid_t     f_fsid;    /* Filesystem ID */
+    __fsword_t f_namelen; /* Maximum length of filenames */
+    __fsword_t f_frsize;  /* Fragment size (since Linux 2.6) */
+    __fsword_t f_flags;   /* Mount flags of filesystem
+                             (since Linux 2.6.36) */
+    __fsword_t f_spare[xxx];
+                    /* Padding bytes reserved for future use */
 };
 
 Filesystem types:
@@ -112,6 +109,7 @@ Filesystem types:
    NFS_SUPER_MAGIC       0x6969
    NILFS_SUPER_MAGIC     0x3434
    NTFS_SB_MAGIC         0x5346544e
+   OCFS2_SUPER_MAGIC     0x7461636f
    OPENPROM_SUPER_MAGIC  0x9fa1
    PIPEFS_MAGIC          0x50495045
    PROC_SUPER_MAGIC      0x9fa0
@@ -145,12 +143,55 @@ Filesystem types:
 Most of these MAGIC constants are defined in
 .IR /usr/include/linux/magic.h ,
 and some are hardcoded in kernel sources.
+
+The
+.IR f_flags
+is a bit mask indicating mount options for the file system.
+It contains zero or more of the following bits:
+.\" XXX Keep this list in sync with statvfs(3)
+.TP
+.B ST_MANDLOCK
+Mandatory locking is permitted on the filesystem (see
+.BR fcntl (2)).
+.TP
+.B ST_NOATIME
+Do not update access times; see
+.BR mount (2).
+.TP
+.B ST_NODEV
+Disallow access to device special files on this filesystem.
+.TP
+.B ST_NODIRATIME
+Do not update directory access times; see
+.BR mount (2).
+.TP
+.B ST_NOEXEC
+Execution of programs is disallowed on this filesystem.
+.TP
+.B ST_NOSUID
+The set-user-ID and set-group-ID bits are ignored by
+.BR exec (3)
+for executable files on this filesystem
+.TP
+.B ST_RDONLY
+This filesystem is mounted read-only.
+.TP
+.B ST_RELATIME
+Update atime relative to mtime/ctime; see
+.BR mount (2).
+.TP
+.B ST_SYNCHRONOUS
+Writes are synched to the filesystem immediately (see the description of
+.B O_SYNC
+in
+.BR open (2)).
 .PP
 Nobody knows what
 .I f_fsid
 is supposed to contain (but see below).
 .PP
 Fields that are undefined for a particular filesystem are set to 0.
+
 .BR fstatfs ()
 returns the same information about an open file referenced by descriptor
 .IR fd .
@@ -222,6 +263,18 @@ The Linux
 was inspired by the 4.4BSD one
 (but they do not use the same structure).
 .SH NOTES
+The
+.I __fsword_t
+type used for various fields in the
+.I statfs
+structure definition is a glibc internal type,
+not intended for public use.
+This leaves the programmer in a bit of a conundrum when trying to copy
+or compare these fields to local variables in a program.
+Using
+.I "unsigned\ int"
+for such variables suffices on most systems.
+
 The original Linux
 .BR statfs ()
 and

@@ -22,7 +22,7 @@
 .\" the source, must acknowledge the copyright and authors of this work.
 .\" %%%LICENSE_END
 .\"
-.TH CORE 5 2014-08-19 "Linux" "Linux Programmer's Manual"
+.TH CORE 5 2015-02-21 "Linux" "Linux Programmer's Manual"
 .SH NAME
 core \- core dump file
 .SH DESCRIPTION
@@ -93,7 +93,9 @@ permission enabled.
 .IP *
 The process is executing a set-user-ID (set-group-ID) program
 that is owned by a user (group) other than the real user (group)
-ID of the process.
+ID of the process,
+or the process is executing a program that has file capabilities (see
+.BR capabilities (7)).
 (However, see the description of the
 .BR prctl (2)
 .B PR_SET_DUMPABLE
@@ -154,6 +156,17 @@ with slashes (\(aq/\(aq) replaced by exclamation marks (\(aq!\(aq)
 .TP
 %h
 hostname (same as \fInodename\fP returned by \fBuname\fP(2))
+.TP
+%i
+TID of thread that triggered core dump,
+as seen in the PID namespace in which the thread resides
+.\" commit b03023ecbdb76c1dec86b41ed80b123c22783220
+(since Linux 3.18)
+.TP
+%I
+TID of thread that triggered core dump, as seen in the initial PID namespace
+.\" commit b03023ecbdb76c1dec86b41ed80b123c22783220
+(since Linux 3.18)
 .TP
 %p
 PID of dumped process,

@@ -39,7 +39,7 @@
 .\" 2008-11-19, mtk, document CLONE_NEWIPC
 .\" 2008-11-19, Jens Axboe, mtk, document CLONE_IO
 .\"
-.TH CLONE 2 2014-09-21 "Linux" "Linux Programmer's Manual"
+.TH CLONE 2 2015-02-21 "Linux" "Linux Programmer's Manual"
 .SH NAME
 clone, __clone2 \- create a child process
 .SH SYNOPSIS
@@ -203,6 +203,9 @@ or changes its associated flags (using the
 .BR fcntl (2)
 .B F_SETFD
 operation), the other process is also affected.
+If a process sharing a file descriptor table calls
+.BR execve (2),
+its file descriptor table is duplicated (unshared).
 
 If
 .B CLONE_FILES
@@ -517,7 +520,7 @@ calling process itself, will be signaled.
 .BR CLONE_PARENT_SETTID " (since Linux 2.5.49)"
 Store child thread ID at location
 .I ptid
-in parent and child memory.
+in parent memory.
 (In Linux 2.5.32-2.5.48 there was a flag
 .B CLONE_SETTID
 that did this.)

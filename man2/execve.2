@@ -34,7 +34,7 @@
 .\" 2007-09-14 Ollie Wild <aaw@google.com>, mtk
 .\"     Add text describing limits on command-line arguments + environment
 .\"
-.TH EXECVE 2 2015-01-22 "Linux" "Linux Programmer's Manual"
+.TH EXECVE 2 2015-02-21 "Linux" "Linux Programmer's Manual"
 .SH NAME
 execve \- execute program
 .SH SYNOPSIS
@@ -202,6 +202,11 @@ The termination signal is reset to
 .B SIGCHLD
 (see
 .BR clone (2)).
+.IP *
+The file descriptor table is unshared, undoing the effect of the
+.B CLONE_FILES
+flag of
+.BR clone (2).
 .PP
 Note the following further points:
 .IP * 3

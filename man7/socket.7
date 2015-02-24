@@ -41,9 +41,6 @@
 .\" 	SO_GET_FILTER (3.8)
 .\"		commit a8fc92778080c845eaadc369a0ecf5699a03bef0
 .\"		Author: Pavel Emelyanov <xemul@parallels.com>
-.\"	SO_REUSEPORT (3.9)
-.\"		commit c617f398edd4db2b8567a28e899a88f8f574798d
-.\"		https://lwn.net/Articles/542629/
 .\"	SO_LOCK_FILTER (3.9)
 .\"		commit d59577b6ffd313d0ab3be39cb1ab47e29bdc9182
 .\"		Author: Vincent Bernat <bernat@luffy.cx>
@@ -55,7 +52,7 @@
 .\"     SO_BPF_EXTENSIONS (3.14)
 .\"             commit ea02f9411d9faa3553ed09ce0ec9f00ceae9885e
 .\"
-.TH SOCKET 7 2014-07-08 Linux "Linux Programmer's Manual"
+.TH SOCKET 7 2015-02-21 Linux "Linux Programmer's Manual"
 .SH NAME
 socket \- Linux socket interface
 .SH SYNOPSIS
@@ -648,6 +645,8 @@ timeouts have no effect for
 and so on.
 .TP
 .B SO_REUSEADDR
+.\"	commit c617f398edd4db2b8567a28e899a88f8f574798d
+.\"	https://lwn.net/Articles/542629/
 Indicates that the rules used in validating addresses supplied in a
 .BR bind (2)
 call should allow reuse of local addresses.
@@ -661,6 +660,39 @@ When the listening socket is bound to
 with a specific port then it is not possible
 to bind to this port for any local address.
 Argument is an integer boolean flag.
+.TP
+.BR SO_REUSEPORT " (since Linux 3.9)"
+Permits multiple
+.B AF_INET
+or
+.B AF_INET6
+sockets to be bound to an identical socket address.
+This option must be set on each socket (including the first socket)
+prior to calling
+.BR bind (2)
+on the socket.
+To prevent port hijacking,
+all of the processes binding to the same address must have the same
+effective UID.
+This option can be employed with both TCP and UDP sockets.
+
+For TCP sockets, this option allows
+.BR accept (2)
+load distribution in a multi-threaded server to be improved by
+using a distinct listener socket for each thread.
+This provides improved load distribution as compared
+to traditional techniques such using a single
+.BR accept (2)ing
+thread that distributes connections,
+or having multiple threads that compete to
+.BR accept (2)
+from the same socket.
+
+For UDP sockets,
+the use of this option can provide better distribution
+of incoming datagrams to multiple processes (or threads) as compared
+to the traditional technique of having multiple processes
+compete to receive datagrams on the same socket.
 .TP
 .BR SO_RXQ_OVFL " (since Linux 2.6.33)"
 .\" commit 3b885787ea4112eaa80945999ea0901bf742707f
