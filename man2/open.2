@@ -716,7 +716,7 @@ XFS support was added
 .\" commit ab29743117f9f4c22ac44c13c1647fb24fb2bafe
 in Linux 3.15.
 .TP
-.B O_BENEATH " (since Linux 3.??)"
+.B O_BENEATH " (since Linux 4.??)"
 Ensure that the
 .I pathname
 is beneath the current working directory (for
@@ -740,6 +740,18 @@ relative paths containing a ".." component, will also cause the
 .BR open ()
 operation to fail with the error
 .BR EPERM.
+
+This feature allows applications to be sure that the opened file is
+within the specified directory, regardless of the original source of the
+.I pathname
+argument.
+Some security-conscious programs may further ensure
+this by imposing a system call filter (with
+.BR seccomp (2))
+that requires this flag for all
+.BR open ()
+operations, so that the program cannot open files outside of
+specified directories even if subverted.
 .TP
 .B O_TRUNC
 If the file already exists and is a regular file and the access mode allows
