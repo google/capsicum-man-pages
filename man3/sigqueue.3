@@ -25,7 +25,7 @@
 .\" added note on self-signaling, aeb, 2002-06-07
 .\" added note on CAP_KILL, mtk, 2004-06-16
 .\"
-.TH SIGQUEUE 3 2013-12-16 "Linux" "Linux Programmer's Manual"
+.TH SIGQUEUE 3 2015-07-23 "Linux" "Linux Programmer's Manual"
 .SH NAME
 sigqueue \- queue a signal and data to a process
 .SH SYNOPSIS
@@ -110,12 +110,22 @@ For the required permissions, see
 No process has a PID matching
 .IR pid .
 .SH VERSIONS
-This system call first appeared in Linux 2.2.
-.SH ATTRIBUTES
-.SS Multithreading (see pthreads(7))
-The
 .BR sigqueue ()
-function is thread-safe.
+and the underlying
+.BR rt_sigqueueinfo ()
+system call first appeared in Linux 2.2.
+.SH ATTRIBUTES
+For an explanation of the terms used in this section, see
+.BR attributes (7).
+.TS
+allbox;
+lb lb lb
+l l l.
+Interface	Attribute	Value
+T{
+.BR sigqueue ()
+T}	Thread safety	MT-Safe
+.TE
 .SH CONFORMING TO
 POSIX.1-2001.
 .SH NOTES
@@ -126,8 +136,10 @@ having it unblocked, or by waiting for it using
 .BR sigwait (3)),
 then at least some signal must be delivered to this thread before this
 function returns.
-
-On Linux, this function is implemented using the
+.SS C library/kernel differences
+On Linux,
+.BR sigqueue ()
+is implemented using the
 .BR rt_sigqueueinfo (2)
 system call.
 The system call differs in its third argument, which is the

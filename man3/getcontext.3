@@ -22,7 +22,7 @@
 .\" the source, must acknowledge the copyright and authors of this work.
 .\" %%%LICENSE_END
 .\"
-.TH GETCONTEXT 3 2014-04-08 "Linux" "Linux Programmer's Manual"
+.TH GETCONTEXT 3 2015-03-02 "Linux" "Linux Programmer's Manual"
 .SH NAME
 getcontext, setcontext \- get or set the user context
 .SH SYNOPSIS
@@ -151,12 +151,18 @@ appropriately.
 .SH ERRORS
 None defined.
 .SH ATTRIBUTES
-.SS Multithreading (see pthreads(7))
-The
-.BR getcontext ()
-and
+For an explanation of the terms used in this section, see
+.BR attributes (7).
+.TS
+allbox;
+lbw26 lb lb
+l l l.
+Interface	Attribute	Value
+T{
+.BR getcontext (),
 .BR setcontext ()
-functions are thread-safe.
+T}	Thread safety	MT-Safe race:ucp
+.TE
 .SH CONFORMING TO
 SUSv2, POSIX.1-2001.
 POSIX.1-2008 removes the specification of

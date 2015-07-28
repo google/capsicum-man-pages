@@ -24,7 +24,7 @@
 .\"
 .\" Modified Sat Jul 24 17:51:42 1993 by Rik Faith (faith@cs.unc.edu)
 .\" Modified Tue Aug 17 11:42:20 1999 by Ariel Scolnicov (ariels@compugen.co.il)
-.TH SYSCONF 3  2014-12-31 "GNU" "Linux Programmer's Manual"
+.TH SYSCONF 3  2015-05-07 "GNU" "Linux Programmer's Manual"
 .SH NAME
 sysconf \- get configuration information at run time
 .SH SYNOPSIS
@@ -324,6 +324,19 @@ is not changed.
 In the case of options, a positive value is returned if a queried option
 is available, and \-1 if it is not.
 In the case of limits, \-1 means that there is no definite limit.
+.SH ATTRIBUTES
+For an explanation of the terms used in this section, see
+.BR attributes (7).
+.TS
+allbox;
+lb lb lb
+l l l.
+Interface	Attribute	Value
+T{
+.BR sysconf ()
+T}	Thread safety	MT-Safe env
+.TE
+
 .SH CONFORMING TO
 POSIX.1-2001.
 .SH BUGS

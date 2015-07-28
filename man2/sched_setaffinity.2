@@ -1,5 +1,5 @@
 .\" Copyright (C) 2002 Robert Love
-.\" and Copyright (C) 2006 Michael Kerrisk
+.\" and Copyright (C) 2006, 2015 Michael Kerrisk
 .\"
 .\" %%%LICENSE_START(GPLv2+_DOC_FULL)
 .\" This is free documentation; you can redistribute it and/or
@@ -31,7 +31,7 @@
 .\" 2008-11-12, mtk, removed CPU_*() macro descriptions to a
 .\" separate CPU_SET(3) page.
 .\"
-.TH SCHED_SETAFFINITY 2 2014-12-31 "Linux" "Linux Programmer's Manual"
+.TH SCHED_SETAFFINITY 2 2015-07-23 "Linux" "Linux Programmer's Manual"
 .SH NAME
 sched_setaffinity, sched_getaffinity \- \
 set and get a thread's CPU affinity mask
@@ -176,7 +176,7 @@ There are various ways of determining the number of CPUs
 available on the system, including: inspecting the contents of
 .IR /proc/cpuinfo ;
 using
-.BR syconf (3)
+.BR sysconf (3)
 to obtain the values of the
 .BR _SC_NPROCESSORS_CONF
 and
@@ -204,12 +204,30 @@ will set the attribute for the main thread of the thread group.
 instead of
 .BR sched_setaffinity ().)
 
+The
+.I isolcpus
+boot option can be used to isolate one or more CPUs at boot time,
+so that no processes are scheduled onto those CPUs.
+Following the use of this boot option,
+the only way to schedule processes onto the isolated CPUs is via
+.BR sched_setaffinity ()
+or the
+.BR cpuset (7)
+mechanism.
+For further information, see the kernel source file
+.IR Documentation/kernel-parameters.txt .
+As noted in that file,
+.I isolcpus
+is the preferred mechanism of isolating CPUs
+(versus the alternative of manually setting the CPU affinity
+of all processes on the system).
+
 A child created via
 .BR fork (2)
 inherits its parent's CPU affinity mask.
 The affinity mask is preserved across an
 .BR execve (2).
-.SS C library/kernel ABI differences
+.SS C library/kernel differences
 This manual page describes the glibc interface for the CPU affinity calls.
 The actual system call interface is slightly different, with the
 .I mask
@@ -223,6 +241,150 @@ system call returns the size (in bytes) of the
 .I cpumask_t
 data type that is used internally by the kernel to
 represent the CPU set bit mask.
+.SS Handling systems with large CPU affinity masks
+The underlying system calls (which represent CPU masks as bit masks of type
+.IR "unsigned long\ *" )
+impose no restriction on the size of the CPU mask.
+However, the
+.I cpu_set_t
+data type used by glibc has a fixed size of 128 bytes,
+meaning that the maximum CPU number that can be represented is 1023.
+.\" FIXME . See https://sourceware.org/bugzilla/show_bug.cgi?id=15630
+.\" and https://sourceware.org/ml/libc-alpha/2013-07/msg00288.html
+If the kernel CPU affinity mask is larger than 1024,
+then calls of the form:
+
+    sched_getaffinity(pid, sizeof(cpu_set_t), &mask);
+
+will fail with the error
+.BR EINVAL ,
+the error produced by the underlying system call for the case where the
+.I mask
+size specified in
+.I cpusetsize
+is smaller than the size of the affinity mask used by the kernel.
+(Depending on the system CPU topology, the kernel affinity mask can
+be substantially larger than the number of active CPUs in the system.)
+.PP
+When working on systems with large kernel CPU affinity masks,
+one must dynamically allocate the
+.I mask
+argument.
+Currently, the only way to do this is by probing for the size
+of the required mask using
+.BR sched_getaffinity ()
+calls with increasing mask sizes (until the call does not fail with the error
+.BR EINVAL ).
+.SH EXAMPLE
+The program below creates a child process.
+The parent and child then each assign themselves to a specified CPU
+and execute identical loops that consume some CPU time.
+Before terminating, the parent waits for the child to complete.
+The program takes three command-line arguments:
+the CPU number for the parent,
+the CPU number for the child,
+and the number of loop iterations that both processes should perform.
+
+As the sample runs below demonstrate, the amount of real and CPU time
+consumed when running the program will depend on intra-core caching effects
+and whether the processes are using the same CPU.
+
+We first employ
+.BR lscpu (1)
+to determine that this (x86)
+system has two cores, each with two CPUs:
+
+.in +4n
+.nf
+$ \fBlscpu | grep -i 'core.*:|socket'\fP
+Thread(s) per core:    2
+Core(s) per socket:    2
+Socket(s):             1
+.fi
+.in
+
+We then time the operation of the example program for three cases:
+both processes running on the same CPU;
+both processes running on different CPUs on the same core;
+and both processes running on different CPUs on different cores.
+
+.in +4n
+.nf
+$ \fBtime \-p ./a.out 0 0 100000000\fP
+real 14.75
+user 3.02
+sys 11.73
+$ \fBtime \-p ./a.out 0 1 100000000\fP
+real 11.52
+user 3.98
+sys 19.06
+$ \fBtime \-p ./a.out 0 3 100000000\fP
+real 7.89
+user 3.29
+sys 12.07
+.fi
+.in
+.SS Program source
+\&
+.nf
+#define _GNU_SOURCE
+#include <sched.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <sys/wait.h>
+
+#define errExit(msg)    do { perror(msg); exit(EXIT_FAILURE); \\
+                        } while (0)
+
+int
+main(int argc, char *argv[])
+{
+    cpu_set_t set;
+    int parentCPU, childCPU;
+    int nloops, j;
+
+    if (argc != 4) {
+        fprintf(stderr, "Usage: %s parent\-cpu child\-cpu num\-loops\\n",
+                argv[0]);
+        exit(EXIT_FAILURE);
+    }
+
+    parentCPU = atoi(argv[1]);
+    childCPU = atoi(argv[2]);
+    nloops = atoi(argv[3]);
+
+    CPU_ZERO(&set);
+
+    switch (fork()) {
+    case \-1:            /* Error */
+        errExit("fork");
+
+    case 0:             /* Child */
+        CPU_SET(childCPU, &set);
+
+        if (sched_setaffinity(getpid(), sizeof(set), &set) == \-1)
+            errExit("sched_setaffinity");
+
+        for (j = 0; j < nloops; j++)
+            getppid();
+
+        exit(EXIT_SUCCESS);
+
+    default:            /* Parent */
+        CPU_SET(parentCPU, &set);
+
+        if (sched_setaffinity(getpid(), sizeof(set), &set) == \-1)
+            errExit("sched_setaffinity");
+
+        for (j = 0; j < nloops; j++)
+            getppid();
+
+        wait(NULL);     /* Wait for child to terminate */
+        exit(EXIT_SUCCESS);
+    }
+}
+.fi
 .SH SEE ALSO
 .ad l
 .nh

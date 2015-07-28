@@ -24,7 +24,7 @@
 .\" the source, must acknowledge the copyright and authors of this work.
 .\" %%%LICENSE_END
 .\"
-.TH CPU_SET 3 2012-03-15 "Linux" "Linux Programmer's Manual"
+.TH CPU_SET 3 2015-05-07 "Linux" "Linux Programmer's Manual"
 .SH NAME
 CPU_SET, CPU_CLR, CPU_ISSET, CPU_ZERO, CPU_COUNT,
 CPU_AND, CPU_OR, CPU_XOR, CPU_EQUAL,
@@ -126,11 +126,14 @@ Where a
 argument is specified, it should not produce side effects,
 since the above macros may evaluate the argument more than once.
 .PP
-The first available CPU on the system corresponds to a
+The first CPU on the system corresponds to a
 .I cpu
 value of 0, the next CPU corresponds to a
 .I cpu
 value of 1, and so on.
+No assumptions should be made about particular CPUs being
+available, or the set of CPUs being contiguous, since CPUs can
+be taken offline dynamically or be otherwise absent.
 The constant
 .B CPU_SETSIZE
 (currently 1024) specifies a value one greater than the maximum CPU

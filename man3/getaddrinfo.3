@@ -41,7 +41,7 @@
 .\" FIXME . glibc's 2.9 NEWS file documents DCCP and UDP-lite support
 .\"           and is SCTP support now also there?
 .\"
-.TH GETADDRINFO 3 2014-04-06 "GNU" "Linux Programmer's Manual"
+.TH GETADDRINFO 3 2015-07-23 "GNU" "Linux Programmer's Manual"
 .SH NAME
 getaddrinfo, freeaddrinfo, gai_strerror \- network address and
 service translation
@@ -592,6 +592,23 @@ function translates these error codes to a human readable string,
 suitable for error reporting.
 .SH FILES
 .I /etc/gai.conf
+.SH ATTRIBUTES
+For an explanation of the terms used in this section, see
+.BR attributes (7).
+.TS
+allbox;
+lbw15 lb lb
+l l l.
+Interface	Attribute	Value
+T{
+.BR getaddrinfo ()
+T}	Thread safety	MT-Safe env locale
+T{
+.BR freeaddrinfo (),
+.BR gai_strerror ()
+T}	Thread safety	MT-Safe
+.TE
+
 .SH CONFORMING TO
 POSIX.1-2001.
 The

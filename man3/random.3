@@ -30,7 +30,7 @@
 .\" Modified Sat Jul 24 18:13:39 1993 by Rik Faith (faith@cs.unc.edu)
 .\" Modified Sun Aug 20 21:47:07 2000, aeb
 .\"
-.TH RANDOM 3  2015-02-01 "GNU" "Linux Programmer's Manual"
+.TH RANDOM 3  2015-03-02 "GNU" "Linux Programmer's Manual"
 .SH NAME
 random, srandom, initstate, setstate \- random number generator
 .SH SYNOPSIS
@@ -150,14 +150,21 @@ was NULL.
 A state array of less than 8 bytes was specified to
 .BR initstate ().
 .SH ATTRIBUTES
-.SS Multithreading (see pthreads(7))
-The
+For an explanation of the terms used in this section, see
+.BR attributes (7).
+.TS
+allbox;
+lbw23 lb lb
+l l l.
+Interface	Attribute	Value
+T{
 .BR random (),
 .BR srandom (),
+.br
 .BR initstate (),
-and
 .BR setstate ()
-functions are thread-safe.
+T}	Thread safety	MT-Safe
+.TE
 .SH CONFORMING TO
 4.3BSD, POSIX.1-2001.
 .SH NOTES

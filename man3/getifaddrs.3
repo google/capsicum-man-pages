@@ -33,7 +33,7 @@
 .\"    for glibc specificities, provide an example.
 .\" 2009-01-14 mtk, many edits and changes, rewrote example program.
 .\"
-.TH GETIFADDRS 3 2014-02-26 "GNU" "Linux Programmer's Manual"
+.TH GETIFADDRS 3 2015-07-23 "GNU" "Linux Programmer's Manual"
 .SH NAME
 getifaddrs, freeifaddrs \- get interface addresses
 .SH SYNOPSIS
@@ -167,6 +167,20 @@ the implementation supported only IPv4 addresses;
 IPv6 support was added in glibc 2.3.3.
 Support of address families other than IPv4 is available only
 on kernels that support netlink.
+.SH ATTRIBUTES
+For an explanation of the terms used in this section, see
+.BR attributes (7).
+.TS
+allbox;
+lbw27 lb lb
+l l l.
+Interface	Attribute	Value
+T{
+.BR getifaddrs (),
+.BR freeifaddrs ()
+T}	Thread safety	MT-Safe
+.TE
+
 .SH CONFORMING TO
 Not in POSIX.1-2001.
 This function first appeared in BSDi and is

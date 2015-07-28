@@ -13,7 +13,7 @@
 .\"   OpenGroup's Single UNIX specification http://www.UNIX-systems.org/online.html
 .\"   ISO/IEC 9899:1999
 .\"
-.TH ISWDIGIT 3  1999-07-25 "GNU" "Linux Programmer's Manual"
+.TH ISWDIGIT 3  2015-03-02 "GNU" "Linux Programmer's Manual"
 .SH NAME
 iswdigit \- test for decimal digit wide character
 .SH SYNOPSIS
@@ -66,6 +66,18 @@ if
 is a wide character
 belonging to the wide-character class "digit".
 Otherwise, it returns zero.
+.SH ATTRIBUTES
+For an explanation of the terms used in this section, see
+.BR attributes (7).
+.TS
+allbox;
+lb lb lb
+l l l.
+Interface	Attribute	Value
+T{
+.BR iswdigit ()
+T}	Thread safety	MT-Safe locale
+.TE
 .SH CONFORMING TO
 C99.
 .SH NOTES

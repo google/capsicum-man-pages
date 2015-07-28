@@ -1,4 +1,5 @@
 .\" Copyright (C), 1994, Graeme W. Wilford (Wilf).
+.\" and Copyright (C) 2010, 2014, 2015, Michael Kerrisk <mtk.manpages@gmail.com>
 .\"
 .\" %%%LICENSE_START(VERBATIM)
 .\" Permission is granted to make and distribute verbatim copies of this
@@ -27,7 +28,7 @@
 .\"   <richard@greenend.org.uk>, aeb 970616.
 .\" Modified, 27 May 2004, Michael Kerrisk <mtk.manpages@gmail.com>
 .\"     Added notes on capability requirements
-.TH SETUID 2 2014-09-21 "Linux" "Linux Programmer's Manual"
+.TH SETUID 2 2015-07-23 "Linux" "Linux Programmer's Manual"
 .SH NAME
 setuid \- set user identity
 .SH SYNOPSIS
@@ -39,7 +40,10 @@ setuid \- set user identity
 .SH DESCRIPTION
 .BR setuid ()
 sets the effective user ID of the calling process.
-If the effective UID of the caller is root,
+If the effective UID of the caller is root
+(more precisely: if the caller has the
+.BR CAP_SETUID
+capability),
 the real UID and saved set-user-ID are also set.
 .PP
 Under Linux,
@@ -142,6 +146,21 @@ supporting 32-bit IDs.
 The glibc
 .BR setuid ()
 wrapper function transparently deals with the variation across kernel versions.
+.\"
+.SS C library/kernel differences
+At the kernel level, user IDs and group IDs are a per-thread attribute.
+However, POSIX requires that all threads in a process
+share the same credentials.
+The NPTL threading implementation handles the POSIX requirements by
+providing wrapper functions for
+the various system calls that change process UIDs and GIDs.
+These wrapper functions (including the one for
+.BR setuid ())
+employ a signal-based technique to ensure
+that when one thread changes credentials,
+all of the other threads in the process also change their credentials.
+For details, see
+.BR nptl (7).
 .SH SEE ALSO
 .BR getuid (2),
 .BR seteuid (2),

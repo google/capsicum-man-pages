@@ -23,7 +23,7 @@
 .\" the source, must acknowledge the copyright and authors of this work.
 .\" %%%LICENSE_END
 .\"
-.TH SIGWAIT 3 2013-12-16 "Linux" "Linux Programmer's Manual"
+.TH SIGWAIT 3 2015-03-02 "Linux" "Linux Programmer's Manual"
 .SH NAME
 sigwait \- wait for a signal
 .SH SYNOPSIS
@@ -78,16 +78,31 @@ On error, it returns a positive error number (listed in ERRORS).
 .I set
 contains an invalid signal number.
 .SH ATTRIBUTES
-.SS Multithreading (see pthreads(7))
-The
+For an explanation of the terms used in this section, see
+.BR attributes (7).
+.TS
+allbox;
+lb lb lb
+l l l.
+Interface	Attribute	Value
+T{
 .BR sigwait ()
-function is thread-safe.
+T}	Thread safety	MT-Safe
+.TE
 .SH CONFORMING TO
 POSIX.1-2001.
 .SH NOTES
 .BR sigwait ()
 is implemented using
 .BR sigtimedwait (2).
+
+The glibc implementation of
+.BR sigwait ()
+silently ignores attempts to wait for the two real-time signals that
+are used internally by the NPTL threading implementation.
+See
+.BR nptl (7)
+for details.
 .SH EXAMPLE
 See
 .BR pthread_sigmask (3).

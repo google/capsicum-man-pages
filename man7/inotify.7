@@ -24,7 +24,7 @@
 .\" the source, must acknowledge the copyright and authors of this work.
 .\" %%%LICENSE_END
 .\"
-.TH INOTIFY 7 2014-12-31 "Linux" "Linux Programmer's Manual"
+.TH INOTIFY 7 2015-05-07 "Linux" "Linux Programmer's Manual"
 .SH NAME
 inotify \- monitoring filesystem events
 .SH DESCRIPTION
@@ -84,7 +84,7 @@ the state of a set of filesystem objects.
 However, robust applications should allow for the fact that bugs
 in the monitoring logic or races of the kind described below
 may leave the cache inconsistent with the filesystem state.
-It is probably wise to to do some consistency checking,
+It is probably wise to do some consistency checking,
 and rebuild the cache when inconsistencies are detected.
 .SS Reading events from an inotify file descriptor
 To determine what events have occurred, an application
@@ -752,9 +752,16 @@ and also the possibility that there may not be any
 .B IN_MOVED_TO
 event.
 .SH BUGS
-As of kernel 3.17, calling
+Before Linux 3.19,
 .BR fallocate (2)
-does not create any inotify events.
+did not create any inotify events.
+Since Linux 3.19,
+.\" commit 820c12d5d6c0890bc93dd63893924a13041fdc35
+calls to
+.BR fallocate (2)
+generate
+.B IN_MODIFY
+events.
 
 .\" FIXME . kernel commit 611da04f7a31b2208e838be55a42c7a1310ae321
 .\" implies that unmount events were buggy 2.6.11 to 2.6.36

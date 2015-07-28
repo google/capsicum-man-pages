@@ -27,7 +27,7 @@
 .\"     386BSD man pages
 .\" Modified Sat Jul 24 18:50:48 1993 by Rik Faith (faith@cs.unc.edu)
 .\" Interchanged 'needle' and 'haystack'; added history, aeb, 980113.
-.TH MEMMEM 3  2014-08-19 "GNU" "Linux Programmer's Manual"
+.TH MEMMEM 3  2015-03-02 "GNU" "Linux Programmer's Manual"
 .SH NAME
 memmem \- locate a substring
 .SH SYNOPSIS
@@ -57,10 +57,17 @@ The
 function returns a pointer to the beginning of the
 substring, or NULL if the substring is not found.
 .SH ATTRIBUTES
-.SS Multithreading (see pthreads(7))
-The
+For an explanation of the terms used in this section, see
+.BR attributes (7).
+.TS
+allbox;
+lb lb lb
+l l l.
+Interface	Attribute	Value
+T{
 .BR memmem ()
-function is thread-safe.
+T}	Thread safety	MT-Safe
+.TE
 .SH CONFORMING TO
 This function is a GNU extension.
 .SH BUGS

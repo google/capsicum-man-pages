@@ -23,7 +23,7 @@
 .\" the source, must acknowledge the copyright and authors of this work.
 .\" %%%LICENSE_END
 .\"
-.TH MQ_RECEIVE 3 2014-06-03 "Linux" "Linux Programmer's Manual"
+.TH MQ_RECEIVE 3 2015-03-02 "Linux" "Linux Programmer's Manual"
 .SH NAME
 mq_receive, mq_timedreceive \- receive a message from a message queue
 .SH SYNOPSIS
@@ -154,12 +154,18 @@ attribute of the message queue.
 .B ETIMEDOUT
 The call timed out before a message could be transferred.
 .SH ATTRIBUTES
-.SS Multithreading (see pthreads(7))
-The
-.BR mq_receive ()
-and
+For an explanation of the terms used in this section, see
+.BR attributes (7).
+.TS
+allbox;
+lbw31 lb lb
+l l l.
+Interface	Attribute	Value
+T{
+.BR mq_receive (),
 .BR mq_timedreceive ()
-functions are thread-safe.
+T}	Thread safety	MT-Safe
+.TE
 .SH CONFORMING TO
 POSIX.1-2001.
 .SH NOTES

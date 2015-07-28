@@ -23,7 +23,7 @@
 .\" the source, must acknowledge the copyright and authors of this work.
 .\" %%%LICENSE_END
 .\"
-.TH PTHREAD_KILL 3 2014-05-13 "Linux" "Linux Programmer's Manual"
+.TH PTHREAD_KILL 3 2015-03-02 "Linux" "Linux Programmer's Manual"
 .SH NAME
 pthread_kill \- send a signal to a thread
 .SH SYNOPSIS
@@ -70,10 +70,17 @@ on error, it returns an error number, and no signal is sent.
 .B EINVAL
 An invalid signal was specified.
 .SH ATTRIBUTES
-.SS Multithreading (see pthreads(7))
-The
+For an explanation of the terms used in this section, see
+.BR attributes (7).
+.TS
+allbox;
+lb lb lb
+l l l.
+Interface	Attribute	Value
+T{
 .BR pthread_kill ()
-function is thread-safe.
+T}	Thread safety	MT-Safe
+.TE
 .SH CONFORMING TO
 POSIX.1-2008.
 .SH NOTES
@@ -83,6 +90,16 @@ the handler will be invoked in the thread
 .IR thread ,
 but if the disposition of the signal is "stop", "continue", or "terminate",
 this action will affect the whole process.
+
+The glibc implementation of
+.BR pthread_kill ()
+gives an error
+.RB ( EINVAL )
+on attempts to send either of the real-time signals
+used internally by the NPTL threading implementation.
+See
+.BR nptl (7)
+for details.
 
 POSIX.1-2008 recommends that if an implementation detects the use
 of a thread ID after the end of its lifetime,

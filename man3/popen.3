@@ -37,7 +37,7 @@
 .\" Modified Sat May 18 20:37:44 1996 by Martin Schulze (joey@linux.de)
 .\" Modified 7 May 1998 by Joseph S. Myers (jsm28@cam.ac.uk)
 .\"
-.TH POPEN 3  2013-04-19 "GNU" "Linux Programmer's Manual"
+.TH POPEN 3  2015-03-29 "GNU" "Linux Programmer's Manual"
 .SH NAME
 popen, pclose \- pipe stream to or from a process
 .SH SYNOPSIS
@@ -80,6 +80,7 @@ This command is passed to
 using the
 .B \-c
 flag; interpretation, if any, is performed by the shell.
+
 The
 .I type
 argument is a pointer to a null-terminated string which must contain
@@ -113,7 +114,7 @@ standard input is the same as that of the process that called
 .PP
 Note that output
 .BR popen ()
-streams are fully buffered by default.
+streams are block buffered by default.
 .PP
 The
 .BR pclose ()
@@ -169,6 +170,20 @@ cannot obtain the child status,
 .I errno
 is set to
 .BR ECHILD .
+.SH ATTRIBUTES
+For an explanation of the terms used in this section, see
+.BR attributes (7).
+.TS
+allbox;
+lbw17 lb lb
+l l l.
+Interface	Attribute	Value
+T{
+.BR popen (),
+.BR pclose ()
+T}	Thread safety	MT-Safe
+.TE
+
 .SH CONFORMING TO
 POSIX.1-2001.
 

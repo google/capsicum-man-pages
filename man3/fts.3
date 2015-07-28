@@ -37,7 +37,7 @@
 .\"
 .\" 2007-12-08, mtk, Converted from mdoc to man macros
 .\"
-.TH FTS 3 2014-03-18 "Linux" "Linux Programmer's Manual"
+.TH FTS 3 2015-07-23 "Linux" "Linux Programmer's Manual"
 .SH NAME
 fts, fts_open, fts_read, fts_children, fts_set, fts_close \- \
 traverse a file hierarchy
@@ -772,6 +772,25 @@ as follows:
 The options were invalid.
 .SH VERSIONS
 These functions are available in Linux since glibc2.
+.SH ATTRIBUTES
+For an explanation of the terms used in this section, see
+.BR attributes (7).
+.TS
+allbox;
+lbw34 lb lb
+l l l.
+Interface	Attribute	Value
+T{
+.BR fts_open (),
+.BR fts_set (),
+.BR fts_close ()
+T}	Thread safety	MT-Safe
+T{
+.BR fts_read (),
+.BR fts_children ()
+T}	Thread safety	MT-Unsafe
+.TE
+
 .SH CONFORMING TO
 4.4BSD.
 .SH BUGS

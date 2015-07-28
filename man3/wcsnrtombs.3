@@ -12,7 +12,7 @@
 .\"   Dinkumware C library reference http://www.dinkumware.com/
 .\"   OpenGroup's Single UNIX specification http://www.UNIX-systems.org/online.html
 .\"
-.TH WCSNRTOMBS 3  2014-03-18 "GNU" "Linux Programmer's Manual"
+.TH WCSNRTOMBS 3  2015-04-19 "GNU" "Linux Programmer's Manual"
 .SH NAME
 wcsnrtombs \- convert a wide-character string to a multibyte string
 .SH SYNOPSIS
@@ -157,6 +157,19 @@ is returned, and
 .I errno
 set to
 .BR EILSEQ .
+.SH ATTRIBUTES
+For an explanation of the terms used in this section, see
+.BR attributes (7).
+.TS
+allbox;
+lb lb lbw29
+l l l.
+Interface	Attribute	Value
+T{
+.BR wcsnrtombs ()
+T}	Thread safety	MT-Unsafe race:wcsnrtombs/!ps
+.TE
+
 .SH CONFORMING TO
 POSIX.1-2008.
 .SH NOTES

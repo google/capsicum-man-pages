@@ -21,7 +21,7 @@
 .\" <http://www.gnu.org/licenses/>.
 .\" %%%LICENSE_END
 .\"
-.TH AIO_READ 3 2012-05-08  "" "Linux Programmer's Manual"
+.TH AIO_READ 3 2015-03-02  "" "Linux Programmer's Manual"
 .SH NAME
 aio_read \- asynchronous read
 .SH SYNOPSIS
@@ -129,6 +129,18 @@ the maximum offset for this file.
 The
 .BR aio_read ()
 function is available since glibc 2.1.
+.SH ATTRIBUTES
+For an explanation of the terms used in this section, see
+.BR attributes (7).
+.TS
+allbox;
+lb lb lb
+l l l.
+Interface	Attribute	Value
+T{
+.BR aio_read ()
+T}	Thread safety	MT-Safe
+.TE
 .SH CONFORMING TO
 POSIX.1-2001, POSIX.1-2008.
 .SH NOTES

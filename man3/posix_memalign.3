@@ -26,7 +26,7 @@
 .\" 2001-10-11, 2003-08-22, aeb, added some details
 .\" 2012-03-23, Michael Kerrisk <mtk.manpages@mail.com>
 .\"     Document pvalloc() and aligned_alloc()
-.TH POSIX_MEMALIGN 3  2013-09-02 "GNU" "Linux Programmer's Manual"
+.TH POSIX_MEMALIGN 3  2015-04-19 "GNU" "Linux Programmer's Manual"
 .SH NAME
 posix_memalign, aligned_alloc, memalign, valloc, pvalloc \- allocate aligned memory
 .SH SYNOPSIS
@@ -179,6 +179,28 @@ was added to glibc in version 2.16.
 The function
 .BR posix_memalign ()
 is available since glibc 2.1.91.
+.SH ATTRIBUTES
+For an explanation of the terms used in this section, see
+.BR attributes (7).
+.TS
+allbox;
+lb lb lb
+l l l.
+Interface	Attribute	Value
+T{
+.BR aligned_alloc (),
+.br
+.BR memalign (),
+.br
+.BR posix_memalign ()
+T}	Thread safety	MT-Safe
+T{
+.BR valloc (),
+.br
+.BR pvalloc ()
+T}	Thread safety	MT-Unsafe init
+.TE
+
 .SH CONFORMING TO
 The function
 .BR valloc ()

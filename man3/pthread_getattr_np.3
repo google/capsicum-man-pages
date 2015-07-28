@@ -23,7 +23,7 @@
 .\" the source, must acknowledge the copyright and authors of this work.
 .\" %%%LICENSE_END
 .\"
-.TH PTHREAD_GETATTR_NP 3 2010-09-10 "Linux" "Linux Programmer's Manual"
+.TH PTHREAD_GETATTR_NP 3 2015-07-23 "Linux" "Linux Programmer's Manual"
 .SH NAME
 pthread_getattr_np \- get attributes of created thread
 .SH SYNOPSIS
@@ -95,6 +95,19 @@ if the
 resource limit is not supported.
 .SH VERSIONS
 This function is available in glibc since version 2.2.3.
+.SH ATTRIBUTES
+For an explanation of the terms used in this section, see
+.BR attributes (7).
+.TS
+allbox;
+lb lb lb
+l l l.
+Interface	Attribute	Value
+T{
+.BR pthread_getattr_np ()
+T}	Thread safety	MT-Safe
+.TE
+
 .SH CONFORMING TO
 This function is a nonstandard GNU extension;
 hence the suffix "_np" (nonportable) in the name.

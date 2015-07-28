@@ -23,7 +23,7 @@
 .\" the source, must acknowledge the copyright and authors of this work.
 .\" %%%LICENSE_END
 .\"
-.TH UTIMENSAT 2 2015-01-22 "Linux" "Linux Programmer's Manual"
+.TH UTIMENSAT 2 2015-07-23 "Linux" "Linux Programmer's Manual"
 .SH NAME
 utimensat, futimens \- change file timestamps with nanosecond precision
 .SH SYNOPSIS
@@ -418,6 +418,20 @@ glibc support was added with version 2.6.
 Support for
 .BR futimens ()
 first appeared in glibc 2.6.
+.SH ATTRIBUTES
+For an explanation of the terms used in this section, see
+.BR attributes (7).
+.TS
+allbox;
+lbw23 lb lb
+l l l.
+Interface	Attribute	Value
+T{
+.BR utimensat (),
+.BR futimens ()
+T}	Thread safety	MT-Safe
+.TE
+
 .SH CONFORMING TO
 .BR futimens ()
 and

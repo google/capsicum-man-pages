@@ -25,7 +25,7 @@
 .\" Modified Fri Jun 23 01:35:19 1995 Andries Brouwer <aeb@cwi.nl>
 .\" (prompted by Bas V. de Bakker <bas@phys.uva.nl>)
 .\" Corrected (and moved to man3), 980612, aeb
-.TH PROFIL 3 2014-07-08 "Linux" "Linux Programmer's Manual"
+.TH PROFIL 3 2015-07-23 "Linux" "Linux Programmer's Manual"
 .SH NAME
 profil \- execution time profile
 .SH SYNOPSIS
@@ -67,6 +67,19 @@ If
 is NULL, profiling is disabled.
 .SH RETURN VALUE
 Zero is always returned.
+.SH ATTRIBUTES
+For an explanation of the terms used in this section, see
+.BR attributes (7).
+.TS
+allbox;
+lb lb lb
+l l l.
+Interface	Attribute	Value
+T{
+.BR profil ()
+T}	Thread safety	MT-Unsafe
+.TE
+
 .SH CONFORMING TO
 Similar to a call in SVr4 (but not POSIX.1-2001).
 .SH BUGS

@@ -29,7 +29,7 @@
 .\" Modified Sat Jul 24 21:29:05 1993 by Rik Faith (faith@cs.unc.edu)
 .\" Modified Thu Jul 26 14:06:20 2001 by Andries Brouwer (aeb@cwi.nl)
 .\"
-.TH BYTEORDER 3  2014-04-08 "GNU" "Linux Programmer's Manual"
+.TH BYTEORDER 3  2015-03-02 "GNU" "Linux Programmer's Manual"
 .SH NAME
 htonl, htons, ntohl, ntohs \- convert values between host and network
 byte order
@@ -74,14 +74,20 @@ On the i386 the host byte order is Least Significant Byte first,
 whereas the network byte order, as used on the Internet, is Most
 Significant Byte first.
 .SH ATTRIBUTES
-.SS Multithreading (see pthreads(7))
-The
+For an explanation of the terms used in this section, see
+.BR attributes (7).
+.TS
+allbox;
+lbw34 lb lb
+l l l.
+Interface	Attribute	Value
+T{
 .BR htonl (),
 .BR htons (),
 .BR ntohl (),
-and
 .BR ntohs ()
-functions are thread-safe.
+T}	Thread safety	MT-Safe
+.TE
 .SH CONFORMING TO
 POSIX.1-2001.
 

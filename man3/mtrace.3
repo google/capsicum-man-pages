@@ -22,7 +22,7 @@
 .\" the source, must acknowledge the copyright and authors of this work.
 .\" %%%LICENSE_END
 .\"
-.TH MTRACE 3 2012-04-18 "GNU" "Linux Programmer's Manual"
+.TH MTRACE 3 2015-03-02 "GNU" "Linux Programmer's Manual"
 .SH NAME
 mtrace, muntrace \- malloc tracing
 .SH SYNOPSIS
@@ -75,6 +75,26 @@ In set-user-ID and set-group-ID programs,
 is ignored, and
 .BR mtrace ()
 has no effect.
+.SH ATTRIBUTES
+For an explanation of the terms used in this section, see
+.BR attributes (7).
+.TS
+allbox;
+lbw20 lb lb
+l l l.
+Interface	Attribute	Value
+T{
+.BR mtrace (),
+.BR muntrace ()
+.\" FIXME: the following marking is different from which in glibc manual,
+.\" markings in glibc manual are more detailed.
+.\" mtrace: MT-Unsafe env race:mtrace const:malloc_hooks init
+.\" muntrace: MT-Unsafe race:mtrace const:malloc_hooks locale
+.\" But there is something wrong in glibc manual, for example:
+.\" glibc manual says muntrace should have marking locale because it calls
+.\" fprintf(), but muntrace does not execute area which cause locale problem.
+T}	Thread safety	MT-Unsafe
+.TE
 .SH CONFORMING TO
 These functions are GNU extensions.
 .SH NOTES

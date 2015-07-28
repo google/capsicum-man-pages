@@ -19,7 +19,7 @@
 .\"
 .\" 2008-10-10, mtk: describe eventfd2(), and EFD_NONBLOCK and EFD_CLOEXEC
 .\"
-.TH EVENTFD 2 2014-07-08 Linux "Linux Programmer's Manual"
+.TH EVENTFD 2 2015-07-23 Linux "Linux Programmer's Manual"
 .SH NAME
 eventfd \- create a file descriptor for event notification
 .SH SYNOPSIS
@@ -263,6 +263,19 @@ Since version 2.9, the glibc
 wrapper will employ the
 .BR eventfd2 ()
 system call, if it is supported by the kernel.
+.SH ATTRIBUTES
+For an explanation of the terms used in this section, see
+.BR attributes (7).
+.TS
+allbox;
+lb lb lb
+l l l.
+Interface	Attribute	Value
+T{
+.BR eventfd ()
+T}	Thread safety	MT-Safe
+.TE
+
 .SH CONFORMING TO
 .BR eventfd ()
 and
@@ -299,7 +312,7 @@ interface, these mechanisms could not be multiplexed via
 .BR poll (2),
 or
 .BR epoll (7).)
-.SS C library/kernel ABI differences
+.SS C library/kernel differences
 There are two underlying Linux system calls:
 .BR eventfd ()
 and the more recent

@@ -23,7 +23,7 @@
 .\" the source, must acknowledge the copyright and authors of this work.
 .\" %%%LICENSE_END
 .\"
-.TH SCHED_GETCPU 3 2014-05-10 "Linux" "Linux Programmer's Manual"
+.TH SCHED_GETCPU 3 2015-03-02 "Linux" "Linux Programmer's Manual"
 .SH NAME
 sched_getcpu \- determine CPU on which the calling thread is running
 .SH SYNOPSIS
@@ -70,10 +70,17 @@ This kernel does not implement
 .SH VERSIONS
 This function is available since glibc 2.6.
 .SH ATTRIBUTES
-.SS Multithreading (see pthreads(7))
-The
+For an explanation of the terms used in this section, see
+.BR attributes (7).
+.TS
+allbox;
+lb lb lb
+l l l.
+Interface	Attribute	Value
+T{
 .BR sched_getcpu ()
-function is thread-safe.
+T}	Thread safety	MT-Safe
+.TE
 .SH CONFORMING TO
 .BR sched_getcpu ()
 is glibc-specific.

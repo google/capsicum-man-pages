@@ -22,7 +22,7 @@
 .\" the source, must acknowledge the copyright and authors of this work.
 .\" %%%LICENSE_END
 .\"
-.TH BSD_SIGNAL 3 2013-10-22 "" "Linux Programmer's Manual"
+.TH BSD_SIGNAL 3 2015-03-02 "" "Linux Programmer's Manual"
 .SH NAME
 bsd_signal \- signal handling with BSD semantics
 .SH SYNOPSIS
@@ -61,10 +61,17 @@ on error.
 As for
 .BR signal (2).
 .SH ATTRIBUTES
-.SS Multithreading (see pthreads(7))
-The
+For an explanation of the terms used in this section, see
+.BR attributes (7).
+.TS
+allbox;
+lb lb lb
+l l l.
+Interface	Attribute	Value
+T{
 .BR bsd_signal ()
-function is thread-safe.
+T}	Thread safety	MT-Safe
+.TE
 .SH CONFORMING TO
 4.2BSD, POSIX.1-2001.
 POSIX.1-2008 removes the specification of

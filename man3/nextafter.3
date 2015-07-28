@@ -8,7 +8,7 @@
 .\"
 .\" Based on glibc infopages
 .\"
-.TH NEXTAFTER 3 2013-09-02 "GNU" "Linux Programmer's Manual"
+.TH NEXTAFTER 3 2015-04-19 "GNU" "Linux Programmer's Manual"
 .SH NAME
 nextafter, nextafterf, nextafterl, nexttoward, nexttowardf, nexttowardl \-
 floating-point number manipulation
@@ -177,18 +177,26 @@ These functions do not set
 .\" FIXME . Is it intentional that these functions do not set errno?
 .\" Bug raised: http://sources.redhat.com/bugzilla/show_bug.cgi?id=6799
 .SH ATTRIBUTES
-.SS Multithreading (see pthreads(7))
-The
+For an explanation of the terms used in this section, see
+.BR attributes (7).
+.TS
+allbox;
+lbw28 lb lb
+l l l.
+Interface	Attribute	Value
+T{
 .BR nextafter (),
 .BR nextafterf (),
+.br
 .BR nextafterl (),
 .BR nexttoward (),
+.br
 .BR nexttowardf (),
-and
 .BR nexttowardl ()
-functions are thread-safe.
+T}	Thread safety	MT-Safe
+.TE
 .SH CONFORMING TO
-C99, POSIX.1-2001.
+C99, POSIX.1-2001, POSIX.1-2008.
 This function is defined in IEC 559 (and the appendix with
 recommended functions in IEEE 754/IEEE 854).
 .SH BUGS

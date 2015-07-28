@@ -41,7 +41,7 @@
 .\" Converted for Linux, Mon Nov 29 14:24:40 1993, faith@cs.unc.edu
 .\" Added remark on EBADF for fileno, aeb, 2001-03-22
 .\"
-.TH FERROR 3  2014-01-15 "" "Linux Programmer's Manual"
+.TH FERROR 3  2015-03-02 "" "Linux Programmer's Manual"
 .SH NAME
 clearerr, feof, ferror, fileno \- check and reset stream status
 .SH SYNOPSIS
@@ -104,14 +104,21 @@ return \-1 and set
 to
 .BR EBADF .)
 .SH ATTRIBUTES
-.SS Multithreading (see pthreads(7))
-The
+For an explanation of the terms used in this section, see
+.BR attributes (7).
+.TS
+allbox;
+lbw19 lb lb
+l l l.
+Interface	Attribute	Value
+T{
 .BR clearerr (),
 .BR feof (),
+.br
 .BR ferror (),
-and
 .BR fileno ()
-functions are thread-safe.
+T}	Thread safety	MT-Safe
+.TE
 .SH CONFORMING TO
 The functions
 .BR clearerr (),

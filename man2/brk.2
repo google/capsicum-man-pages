@@ -26,7 +26,7 @@
 .\" Modified Wed Jul 21 19:52:58 1993 by Rik Faith <faith@cs.unc.edu>
 .\" Modified Sun Aug 21 17:40:38 1994 by Rik Faith <faith@cs.unc.edu>
 .\"
-.TH BRK 2 2014-08-19 "Linux" "Linux Programmer's Manual"
+.TH BRK 2 2015-07-23 "Linux" "Linux Programmer's Manual"
 .SH NAME
 brk, sbrk \- change data segment size
 .SH SYNOPSIS
@@ -137,7 +137,7 @@ Common are \fIint\fP, \fIssize_t\fP, \fIptrdiff_t\fP, \fIintptr_t\fP.
 .\" \fIptrdiff_t\fP (libc4, libc5, ulibc, glibc 2.0, 2.1),
 .\" \fIintptr_t\fP (e.g., XPGv5, AIX, SunOS 5.8, 5.9, FreeBSD 4.7, NetBSD 1.6,
 .\" Tru64 5.1, glibc2.2).
-.SS C library/kernel ABI differences
+.SS C library/kernel differences
 The return value described above for
 .BR brk ()
 is the behavior provided by the glibc wrapper function for the Linux

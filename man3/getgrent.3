@@ -27,7 +27,7 @@
 .\"     Lewine's _POSIX Programmer's Guide_ (O'Reilly & Associates, 1991)
 .\"     386BSD man pages
 .\" Modified Sat Jul 24 19:29:54 1993 by Rik Faith (faith@cs.unc.edu)
-.TH GETGRENT 3  2014-10-02 "" "Linux Programmer's Manual"
+.TH GETGRENT 3  2015-03-02 "" "Linux Programmer's Manual"
 .SH NAME
 getgrent, setgrent, endgrent \- get group file entry
 .SH SYNOPSIS
@@ -164,16 +164,37 @@ Insufficient buffer space supplied.
 .I /etc/group
 local group database file
 .SH ATTRIBUTES
-.SS Multithreading (see pthreads(7))
-The
+For an explanation of the terms used in this section, see
+.BR attributes (7).
+.TS
+allbox;
+lbw11 lb lb
+l l l.
+Interface	Attribute	Value
+T{
 .BR getgrent ()
-function is not thread-safe.
-.LP
-The
-.BR setgrent ()
-and
+T}	Thread safety	T{
+MT-Unsafe race:grent
+.br
+race:grentbuf locale
+T}
+T{
+.BR setgrent (),
 .BR endgrent ()
-functions are thread-safe.
+T}	Thread safety	MT-Unsafe race:grent locale
+.TE
+
+In the above table,
+.I grent
+in
+.I race:grent
+signifies that if any of the functions
+.BR setgrent (),
+.BR getgrent (),
+or
+.BR endgrent ()
+are used in parallel in different threads of a program,
+then data races could occur.
 .SH CONFORMING TO
 SVr4, 4.3BSD, POSIX.1-2001.
 .SH SEE ALSO

@@ -23,7 +23,7 @@
 .\" the source, must acknowledge the copyright and authors of this work.
 .\" %%%LICENSE_END
 .\"
-.TH PTHREADS 7  2015-02-21 "Linux" "Linux Programmer's Manual"
+.TH PTHREADS 7  2015-05-07 "Linux" "Linux Programmer's Manual"
 .SH NAME
 pthreads \- POSIX threads
 .SH DESCRIPTION
@@ -121,12 +121,16 @@ This identifier is returned to the caller of
 .BR pthread_create (3),
 and a thread can obtain its own thread identifier using
 .BR pthread_self (3).
+
 Thread IDs are guaranteed to be unique only within a process.
-A thread ID may be reused after a terminated thread has been joined,
-or a detached thread has terminated.
-In all pthreads functions that accept a thread ID as an argument,
+(In all pthreads functions that accept a thread ID as an argument,
 that ID by definition refers to a thread in
-the same process as the caller.
+the same process as the caller.)
+
+The system may reuse a thread ID after a terminated thread has been joined,
+or a detached thread has terminated.
+POSIX says: "If an application attempts to use a thread ID whose
+lifetime has ended, the behavior is undefined."
 .SS Thread-safe functions
 A thread-safe function is one that can be safely
 (i.e., it will deliver the same results regardless of whether it is)
@@ -788,10 +792,12 @@ With NPTL, all of the threads in a process are placed
 in the same thread group;
 all members of a thread group share the same PID.
 NPTL does not employ a manager thread.
-NPTL makes internal use of the first two real-time signals
-(see also
-.BR signal (7));
+
+NPTL makes internal use of the first two real-time signals;
 these signals cannot be used in applications.
+See
+.BR nptl (7)
+for further details.
 
 NPTL still has at least one nonconformance with POSIX.1:
 .IP \- 3
@@ -898,7 +904,9 @@ bash$ $( LD_ASSUME_KERNEL=2.2.5 ldd /bin/ls | grep libc.so | \\
 .BR futex (2),
 .BR gettid (2),
 .BR proc (5),
+.BR attributes (7),
 .BR futex (7),
+.BR nptl (7),
 .BR sigevent (7),
 .BR signal (7),
 

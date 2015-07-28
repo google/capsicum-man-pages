@@ -37,7 +37,7 @@
 .\" Modified Oct 2003 by aeb
 .\" Modified 2004-07-01 by mtk
 .\"
-.TH SEND 2 2014-08-19 "Linux" "Linux Programmer's Manual"
+.TH SEND 2 2015-07-23 "Linux" "Linux Programmer's Manual"
 .SH NAME
 send, sendto, sendmsg \- send a message on a socket
 .SH SYNOPSIS
@@ -191,11 +191,21 @@ Enables nonblocking operation; if the operation would block,
 .B EAGAIN
 or
 .B EWOULDBLOCK
-is returned (this can also be enabled using the
+is returned.
+This provides similar behavior to setting the
 .B O_NONBLOCK
-flag with the
+flag (via the
+.BR fcntl (2)
 .B F_SETFL
-.BR fcntl (2)).
+operation), but differs in that
+.B MSG_DONTWAIT
+is a per-call option, whereas
+.B O_NONBLOCK
+is a setting on the open file description (see
+.BR open (2)),
+which will affect all threads in the calling process
+and as well as other processes that hold file descriptors
+referring to the same open file description.
 .TP
 .BR MSG_EOR " (since Linux 2.2)"
 Terminates a record (when this notion is supported, as for sockets of type
@@ -220,13 +230,22 @@ socket option described in
 .BR udp (7).)
 .TP
 .BR MSG_NOSIGNAL " (since Linux 2.2)"
-Requests not to send
+Don't generate a
 .B SIGPIPE
-on errors on stream oriented sockets when the other end breaks the
-connection.
+signal if the peer on a stream-oriented socket has closed the connection.
 The
 .B EPIPE
 error is still returned.
+This provides similar behavior to using
+.BR sigaction (2)
+to ignore
+.BR SIGPIPE ,
+but, whereas
+.B MSG_NOSIGNAL
+is a per-call feature,
+ignoring
+.B SIGPIPE
+sets a process attribute that affects all threads in the process.
 .TP
 .B MSG_OOB
 Sends

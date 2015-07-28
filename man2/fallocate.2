@@ -8,7 +8,7 @@
 .\" 2011-09-19: Added FALLOC_FL_PUNCH_HOLE
 .\" 2011-09-19: Substantial restructuring of the page
 .\"
-.TH FALLOCATE 2 2015-01-22 "Linux" "Linux Programmer's Manual"
+.TH FALLOCATE 2 2015-07-23 "Linux" "Linux Programmer's Manual"
 .SH NAME
 fallocate \- manipulate file space
 .SH SYNOPSIS
@@ -183,7 +183,7 @@ and XFS.
 .SS Zeroing file space
 Specifying the
 .BR FALLOC_FL_ZERO_RANGE
-flag (available since Linux 3.14)
+flag (available since Linux 3.15)
 .\" commit 409332b65d3ed8cfa7a8030f1e9d52f372219642
 in
 .I mode
@@ -220,11 +220,66 @@ Not all filesystems support
 if a filesystem doesn't support the operation, an error is returned.
 The operation is supported on at least the following filesystems:
 .IP * 3
-XFS (since Linux 3.14)
+XFS (since Linux 3.15)
 .\" commit 376ba313147b4172f3e8cf620b9fb591f3e8cdfa
 .IP *
-ext4, for extent-based files (since Linux 3.14)
+ext4, for extent-based files (since Linux 3.15)
 .\" commit b8a8684502a0fc852afa0056c6bb2a9273f6fcc0
+.IP *
+SMB3 (since Linux 3.17)
+.\" commit 30175628bf7f521e9ee31ac98fa6d6fe7441a556
+.SS Increasing file space
+Specifying the
+.BR FALLOC_FL_INSERT_RANGE
+flag
+(available since Linux 4.1)
+.\" commit dd46c787788d5bf5b974729d43e4c405814a4c7d
+in
+.I mode
+increases the file space by inserting a hole within the file size without
+overwriting any existing data.
+The hole will start at
+.I offset
+and continue for
+.I len
+bytes.
+When inserting the hole inside file, the contents of the file starting at
+.I offset
+will be shifted upward (i.e., to a higher file offset) by
+.I len
+bytes.
+Inserting a hole inside a file increases the file size by
+.I len
+bytes.
+
+This mode has the same limitations as
+.BR FALLOC_FL_COLLAPSE_RANGE
+regarding the granularity of the operation.
+If the granularity requirements are not met,
+.BR fallocate ()
+will fail with the error
+.BR EINVAL.
+If the
+.I offset
+is equal to or greater than the end of file, an error is returned.
+For such operations (i.e., inserting a hole at the end of file),
+.BR ftruncate (2)
+should be used.
+
+No other flags may be specified in
+.IR mode
+in conjunction with
+.BR FALLOC_FL_INSERT_RANGE .
+
+.B FALLOC_FL_INSERT_RANGE
+requires filesystem support.
+Filesystems that support this operation include
+XFS (since Linux 4.1)
+.\" commit a904b1ca5751faf5ece8600e18cd3b674afcca1b
+and ext4 (since Linux 4.2).
+.\" commit 331573febb6a224bc50322e3670da326cb7f4cfc
+.\" f2fs also has support since Linux 4.2
+.\"     commit f62185d0e283e9d311e3ac1020f159d95f0aab39
 .SH RETURN VALUE
 On success,
 .BR fallocate ()
@@ -241,6 +296,12 @@ is not a valid file descriptor, or is not opened for writing.
 .B EFBIG
 .IR offset + len
 exceeds the maximum file size.
+.TP
+.B EFBIG
+.I mode
+is
+.BR FALLOC_FL_INSERT_RANGE ,
+and the current file size+\fIlen\fP exceeds the maximum file size.
 .TP
 .B EINTR
 A signal was caught during execution.
@@ -270,7 +331,17 @@ reaches or passes the end of the file.
 .B EINVAL
 .I mode
 is
-.BR FALLOC_FL_COLLAPSE_RANGE ,
+.BR FALLOC_FL_INSERT_RANGE
+and the range specified by
+.I offset
+reaches or passes the end of the file.
+.TP
+.B EINVAL
+.I mode
+is
+.BR FALLOC_FL_COLLAPSE_RANGE
+or
+.BR FALLOC_FL_INSERT_RANGE ,
 but either
 .I offset
 or
@@ -279,18 +350,24 @@ is not a multiple of the filesystem block size.
 .TP
 .B EINVAL
 .I mode
-contains both
+contains one of
 .B FALLOC_FL_COLLAPSE_RANGE
-and other flags;
+or
+.B FALLOC_FL_INSERT_RANGE
+and also other flags;
 no other flags are permitted with
-.BR FALLOC_FL_COLLAPSE_RANGE .
+.BR FALLOC_FL_COLLAPSE_RANGE
+or
+.BR FALLOC_FL_INSERT_RANGE .
 .TP
 .B EINVAL
 .I mode
 is
 .BR FALLOC_FL_COLLAPSE_RANGE
 or
-.BR FALLOC_FL_ZERO_RANGE ,
+.BR FALLOC_FL_ZERO_RANGE
+or
+.BR FALLOC_FL_INSERT_RANGE ,
 but the file referred to by
 .I fd
 is not a regular file.
@@ -342,6 +419,8 @@ specifies
 .BR FALLOC_FL_PUNCH_HOLE
 or
 .BR FALLOC_FL_COLLAPSE_RANGE
+or
+.BR FALLOC_FL_INSERT_RANGE
 and
 the file referred to by
 .I fd
@@ -360,7 +439,9 @@ refers to a pipe or FIFO.
 .B ETXTBSY
 .I mode
 specifies
-.BR FALLOC_FL_COLLAPSE_RANGE ,
+.BR FALLOC_FL_COLLAPSE_RANGE
+or
+.BR FALLOC_FL_INSERT_RANGE ,
 but the file referred to by
 .IR fd
 is currently being executed.

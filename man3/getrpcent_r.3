@@ -23,7 +23,7 @@
 .\" the source, must acknowledge the copyright and authors of this work.
 .\" %%%LICENSE_END
 .\"
-.TH GETRPCENT_R 3  2010-09-10 "GNU" "Linux Programmer's Manual"
+.TH GETRPCENT_R 3  2015-07-23 "GNU" "Linux Programmer's Manual"
 .SH NAME
 getrpcent_r, getrpcbyname_r, getrpcbynumber_r \- get
 RPC entry (reentrant)
@@ -127,6 +127,21 @@ is too small.
 Try again with a larger buffer
 (and increased
 .IR buflen ).
+.SH ATTRIBUTES
+For an explanation of the terms used in this section, see
+.BR attributes (7).
+.TS
+allbox;
+lbw19 lb lb
+l l l.
+Interface	Attribute	Value
+T{
+.BR getrpcent_r (),
+.BR getrpcbyname_r (),
+.BR getrpcbynumber_r ()
+T}	Thread safety	MT-Safe locale
+.TE
+
 .SH CONFORMING TO
 These functions are GNU extensions.
 Functions with similar names exist on some other systems,

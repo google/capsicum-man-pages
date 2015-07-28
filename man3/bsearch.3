@@ -28,7 +28,7 @@
 .\"     386BSD man pages
 .\" Modified Mon Mar 29 22:41:16 1993, David Metcalfe
 .\" Modified Sat Jul 24 21:35:16 1993, Rik Faith (faith@cs.unc.edu)
-.TH BSEARCH 3  2003-11-01 "" "Linux Programmer's Manual"
+.TH BSEARCH 3  2015-05-07 "" "Linux Programmer's Manual"
 .SH NAME
 bsearch \- binary search of a sorted array
 .SH SYNOPSIS
@@ -74,6 +74,19 @@ function returns a pointer to a matching member of the
 array, or NULL if no match is found.
 If there are multiple elements that
 match the key, the element returned is unspecified.
+.SH ATTRIBUTES
+For an explanation of the terms used in this section, see
+.BR attributes (7).
+.TS
+allbox;
+lb lb lb
+l l l.
+Interface	Attribute	Value
+T{
+.BR bsearch ()
+T}	Thread safety	MT-Safe
+.TE
+
 .SH CONFORMING TO
 SVr4, 4.3BSD, POSIX.1-2001, C89, C99.
 .SH EXAMPLE

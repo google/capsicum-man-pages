@@ -34,7 +34,7 @@
 .\" 2005-11-22 mtk, added Glibc Notes covering optional 'flag' and
 .\"           'width' components of conversion specifications.
 .\"
-.TH STRFTIME 3  2014-08-19 "GNU" "Linux Programmer's Manual"
+.TH STRFTIME 3  2015-03-02 "GNU" "Linux Programmer's Manual"
 .SH NAME
 strftime \- format date and time
 .SH SYNOPSIS
@@ -358,6 +358,18 @@ The environment variables
 and
 .B LC_TIME
 are used.
+.SH ATTRIBUTES
+For an explanation of the terms used in this section, see
+.BR attributes (7).
+.TS
+allbox;
+lb lb lb
+l l l.
+Interface	Attribute	Value
+T{
+.BR strftime ()
+T}	Thread safety	MT-Safe env locale
+.TE
 .SH CONFORMING TO
 SVr4, C89, C99.
 There are strict inclusions between the set of conversions

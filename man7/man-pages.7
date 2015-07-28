@@ -27,7 +27,7 @@
 .\" 2007-05-30 created by mtk, using text from old man.7 plus
 .\" rewrites and additional text.
 .\"
-.TH MAN-PAGES 7 2014-12-31 "Linux" "Linux Programmer's Manual"
+.TH MAN-PAGES 7 2015-07-23 "Linux" "Linux Programmer's Manual"
 .SH NAME
 man-pages \- conventions for writing Linux man pages
 .SH SYNOPSIS
@@ -48,32 +48,34 @@ for authors writing man pages for other projects.
 .PP
 The manual Sections are traditionally defined as follows:
 .TP 10
-.B 1 Commands (Programs)
+.B 1 User commands (Programs)
 Those commands that can be executed by the user from within
 a shell.
 .TP
 .B 2 System calls
-Those functions which must be performed by the kernel.
+Those functions which wrap operations performed by the kernel.
 .TP
 .B 3 Library calls
-Most of the
+All library functions excluding the system call wrappers
+(Most of the
 .I libc
-functions.
+functions).
 .TP
 .B 4 Special files (devices)
 Files found in
-.IR /dev .
+.I /dev
+which allow to access to devices through the kernel.
 .TP
-.B 5 File formats and conventions
-The format for
-.I /etc/passwd
-and other human-readable files.
+.B 5 File formats and configuration files
+Describes various human-readable file formats and configuration files.
 .TP
 .B 6 Games
+Games and funny little programs available on the system.
 .TP
 .B 7 Overview, conventions, and miscellaneous
-Overviews of various topics, conventions and protocols,
-character set standards, and miscellaneous other things.
+Overviews or descriptions of various topics, conventions and protocols,
+character set standards, the standard filesystem layout, and miscellaneous
+other things.
 .TP
 .B 8 System management commands
 Commands like
@@ -358,27 +360,10 @@ as the base.
 .\" However, please include security information somewhere!
 .TP
 .B ATTRIBUTES
-A summary of various attributes of the function(s) documented on this page,
-broken into subsections.
-
-The following subsections are defined:
-.sp
-.RS
-.TP
-.B "Multithreading (see pthreads(7))"
-This subsection notes attributes relating to multithreaded applications:
-.RS
-.IP * 3
-Whether the function is thread-safe.
-.IP *
-Whether the function is a cancellation point.
-.IP *
-Whether the function is async-cancel-safe.
-.RE
-.IP
-Details of these attributes can be found in
-.BR pthreads (7).
-.RE
+A summary of various attributes of the function(s) documented on this page.
+See
+.BR attributes (7)
+for further details.
 .TP
 .B VERSIONS
 A brief summary of the Linux kernel or glibc versions where a
@@ -435,7 +420,7 @@ For Section 2 and 3 man pages you may find it useful to include
 subsections (\fBSS\fP) named \fILinux Notes\fP and \fIGlibc Notes\fP.
 
 In Section 2, use the heading
-.I "C library/kernel ABI differences"
+.I "C library/kernel differences"
 to mark off notes that describe the differences (if any) between
 the C library wrapper function for a system call and
 the raw system call interface provided by the kernel.
@@ -872,6 +857,10 @@ input read by the program).
 Example programs should be laid out according to Kernighan and
 Ritchie style, with 4-space indents.
 (Avoid the use of TAB characters in source code!)
+The following command can be used to format your source code to
+something close to the preferred style:
+
+    indent \-npro \-kr \-i4 \-ts4 \-sob \-l72 \-ss \-nut \-psl prog.c
 .IP *
 For consistency, all example programs should terminate using either of:
 
@@ -918,6 +907,7 @@ and
 .SH SEE ALSO
 .BR man (1),
 .BR man2html (1),
+.BR attributes (7),
 .BR groff (7),
 .BR groff_man (7),
 .BR man (7),

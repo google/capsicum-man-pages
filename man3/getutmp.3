@@ -23,7 +23,7 @@
 .\" the source, must acknowledge the copyright and authors of this work.
 .\" %%%LICENSE_END
 .\"
-.TH GETUTMP 3 2014-04-08 "Linux" "Linux Programmer's Manual"
+.TH GETUTMP 3 2015-03-02 "Linux" "Linux Programmer's Manual"
 .SH NAME
 getutmp, getutmpx \- copy utmp structure to utmpx, and vice versa
 .SH SYNOPSIS
@@ -53,12 +53,18 @@ These functions do not return a value.
 .SH VERSIONS
 These functions first appeared in glibc in version 2.1.1.
 .SH ATTRIBUTES
-.SS Multithreading (see pthreads(7))
-The
-.BR getutmp ()
-and
+For an explanation of the terms used in this section, see
+.BR attributes (7).
+.TS
+allbox;
+lbw21 lb lb
+l l l.
+Interface	Attribute	Value
+T{
+.BR getutmp (),
 .BR getutmpx ()
-functions are thread-safe.
+T}	Thread safety	MT-Safe
+.TE
 .SH CONFORMING TO
 These functions are nonstandard, but appear on a few other systems,
 such as Solaris and NetBSD.

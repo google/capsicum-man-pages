@@ -45,7 +45,7 @@
 .\"     other capabilities where the permitted or inheritable bit is set.
 .\" 2011-09-07, mtk/Serge hallyn: Add CAP_SYSLOG
 .\"
-.TH CAPABILITIES 7 2015-02-01 "Linux" "Linux Programmer's Manual"
+.TH CAPABILITIES 7 2015-05-07 "Linux" "Linux Programmer's Manual"
 .SH NAME
 capabilities \- overview of Linux capabilities
 .SH DESCRIPTION
@@ -142,7 +142,7 @@ and
 .PD
 .TP
 .B CAP_FSETID
-Don't clear set-user-ID and set-group-ID permission
+Don't clear set-user-ID and set-group-ID mode
 bits when a file is modified;
 set the set-group-ID bit for a file whose GID does not match
 the filesystem or any of the supplementary GIDs of the calling process.
@@ -330,7 +330,7 @@ perform operations on
 and
 .I security
 Extended Attributes (see
-.BR attr (5));
+.BR xattr (7));
 .IP *
 use
 .BR lookup_dcookie (2);
@@ -380,6 +380,9 @@ namespace);
 .IP *
 call
 .BR fanotify_init (2);
+.IP *
+call
+.BR bpf (2);
 .IP *
 perform
 .B KEYCTL_CHOWN
@@ -1000,7 +1003,7 @@ all of its user IDs to nonzero values, it can do so using the
 .B PR_SET_KEEPCAPS
 operation or the
 .B SECBIT_KEEP_CAPS
-securebuts flag described below..
+securebits flag described below.
 .\"
 .SS Programmatically adjusting capability sets
 A thread can retrieve and change its capability sets using the
@@ -1189,7 +1192,7 @@ set, and that bounding set is inherited by all other processes
 created on the system.
 .SH SEE ALSO
 .BR capsh (1),
-.BR setpriv (2),
+.BR setpriv (1),
 .BR prctl (2),
 .BR setfsuid (2),
 .BR cap_clear (3),

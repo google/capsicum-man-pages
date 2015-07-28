@@ -9,7 +9,7 @@
 .\" Modified 2004-11-15, Added further text on FLT_ROUNDS
 .\" 	as suggested by AEB and Fabian Kreutz
 .\"
-.TH FMA 3  2013-09-17 "" "Linux Programmer's Manual"
+.TH FMA 3  2015-04-19 "" "Linux Programmer's Manual"
 .SH NAME
 fma, fmaf, fmal \- floating-point multiply and add
 .SH SYNOPSIS
@@ -43,9 +43,7 @@ or
 .RE
 .ad
 .SH DESCRIPTION
-The
-.BR fma ()
-function computes
+These functions compute
 .IR x " * " y " + " z .
 The result is rounded as one ternary operation according to the
 current rounding mode (see
@@ -154,15 +152,21 @@ These functions do not set
 .SH VERSIONS
 These functions first appeared in glibc in version 2.1.
 .SH ATTRIBUTES
-.SS Multithreading (see pthreads(7))
-The
+For an explanation of the terms used in this section, see
+.BR attributes (7).
+.TS
+allbox;
+lbw21 lb lb
+l l l.
+Interface	Attribute	Value
+T{
 .BR fma (),
 .BR fmaf (),
-and
 .BR fmal ()
-functions are thread-safe.
+T}	Thread safety	MT-Safe
+.TE
 .SH CONFORMING TO
-C99, POSIX.1-2001.
+C99, POSIX.1-2001, POSIX.1-2008.
 .SH SEE ALSO
 .BR remainder (3),
 .BR remquo (3)

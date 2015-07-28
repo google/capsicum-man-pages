@@ -24,7 +24,7 @@
 .\"
 .\" Created 2004-10-31. Text taken from a page by Walter Harms, 2003-09-08
 .\"
-.TH DRAND48_R 3 2013-09-09 "GNU" "Linux Programmer's Manual"
+.TH DRAND48_R 3 2015-03-02 "GNU" "Linux Programmer's Manual"
 .SH NAME
 drand48_r, erand48_r, lrand48_r, nrand48_r, mrand48_r, jrand48_r,
 srand48_r, seed48_r, lcong48_r
@@ -96,8 +96,15 @@ or
 .SH RETURN VALUE
 The return value is 0.
 .SH ATTRIBUTES
-.SS Multithreading (see pthreads(7))
-The
+For an explanation of the terms used in this section, see
+.BR attributes (7).
+.ad l
+.TS
+allbox;
+lbw25 lb lb
+l l l.
+Interface	Attribute	Value
+T{
 .BR drand48_r (),
 .BR erand48_r (),
 .BR lrand48_r (),
@@ -106,9 +113,10 @@ The
 .BR jrand48_r (),
 .BR srand48_r (),
 .BR seed48_r (),
-and
 .BR lcong48_r ()
-functions are thread-safe.
+T}	Thread safety	MT-Safe race:buffer
+.TE
+.ad
 .SH CONFORMING TO
 These functions are GNU extensions and are not portable.
 .SH SEE ALSO

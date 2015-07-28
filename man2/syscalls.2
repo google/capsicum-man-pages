@@ -28,7 +28,7 @@
 .\" the source, must acknowledge the copyright and authors of this work.
 .\" %%%LICENSE_END
 .\"
-.TH SYSCALLS 2 2015-01-22 "Linux" "Linux Programmer's Manual"
+.TH SYSCALLS 2 2015-03-29 "Linux" "Linux Programmer's Manual"
 .SH NAME
 syscalls \- Linux system calls
 .SH SYNOPSIS
@@ -133,7 +133,8 @@ and new system calls may appear in each 2.6.x release.
 In this case, the exact version number where the system call appeared
 is shown.
 This convention continues with the 3.x kernel series,
-which followed on from kernel 2.6.39.
+which followed on from kernel 2.6.39, and the 4.x kernel series,
+which followed on from kernel 3.19.
 .IP *
 In some cases, a system call was added to a stable kernel
 series after it branched from the previous stable kernel
@@ -143,7 +144,7 @@ into a 2.4.x release after 2.4.15.
 When this is so, the version where the system call appeared
 in both of the major kernel series is listed.
 .PP
-The list of system calls that are available as at kernel 3.15
+The list of system calls that are available as at kernel 4.0
 (or in a few cases only on older kernels) is as follows:
 .\"
 .\" Looking at scripts/checksyscalls.sh in the kernel source is
@@ -410,7 +411,6 @@ Added as "pread" in 2.2;
 renamed "pread64" in 2.6
 T}
 \fBpreadv\fP(2)	2.6.30
-\fBprlimit\fP(2)	2.6.36
 \fBprlimit64\fP(2)	2.6.36
 \fBprocess_vm_readv\fP(2)	3.2
 \fBprocess_vm_writev\fP(2)	3.2
@@ -686,9 +686,9 @@ Over time, changes to the interfaces of some system calls have been
 necessary.
 One reason for such changes was the need to increase the size of
 structures or scalar values passed to the system call.
-Because of these changes, there are now various groups
-of related system calls
-(e.g.,
+Because of these changes, certain architectures
+(notably, longstanding 32-bit architectures such as i386)
+now have various groups of related system calls (e.g.,
 .BR truncate (2)
 and
 .BR truncate64 (2))
@@ -770,19 +770,21 @@ To support this change, replacements were required for system calls
 that deal with file offsets and sizes.
 Thus the following system calls were added:
 .BR fcntl64 (2),
-.BR ftruncate64 (2),
 .BR getdents64 (2),
 .BR stat64 (2),
 .BR statfs64 (2),
+.BR truncate64 (2),
 and their analogs that work with file descriptors or
 symbolic links.
 These system calls supersede the older system calls
 which, except in the case of the "stat" calls,
 have the same name without the "64" suffix.
 
-On newer platforms that only have 64-bit file access and 32-bit uids
-(e.g., alpha, ia64, s390x) there are no *64 or *32 calls.
-Where the *64 and *32 calls exist, the other versions are obsolete.
+On newer platforms that only have 64-bit file access and 32-bit UIDs/GIDs
+(e.g., alpha, ia64, s390x, x86-64), there is just a single version of
+the UID/GID and file access system calls.
+On platforms (typically, 32-bit platforms) where the *64 and *32 calls exist,
+the other versions are obsolete.
 .IP *
 The
 .I rt_sig*

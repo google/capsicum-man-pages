@@ -25,7 +25,7 @@
 .\"
 .\" Modified Thu Oct 31 15:16:23 1996 by Eric S. Raymond <esr@thyrsus.com>
 .\"
-.TH LLSEEK 2 2012-07-13 "Linux" "Linux Programmer's Manual"
+.TH LLSEEK 2 2015-04-19 "Linux" "Linux Programmer's Manual"
 .SH NAME
 _llseek \- reposition read/write file offset
 .SH SYNOPSIS
@@ -59,6 +59,9 @@ or
 respectively.
 It returns the resulting file position in the argument
 .IR result .
+
+This system call exists on various 32-bit platforms to support
+seeking to large file offsets.
 .SH RETURN VALUE
 Upon successful completion,
 .BR _llseek ()
@@ -82,8 +85,12 @@ is invalid.
 This function is Linux-specific, and should not be used in programs
 intended to be portable.
 .SH NOTES
-Glibc does not provide a wrapper for this system call; call it using
+Glibc does not provide a wrapper for this system call.
+To invoke it directly, use
 .BR syscall (2).
+However, you probably want to use the
+.BR lseek (2)
+wrapper function instead.
 .SH SEE ALSO
 .BR lseek (2),
 .BR lseek64 (3)

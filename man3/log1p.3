@@ -26,7 +26,7 @@
 .\"
 .\" Modified 2002-07-27 by Walter Harms
 .\" 	(walter.harms@informatik.uni-oldenburg.de)
-.TH LOG1P 3   2014-02-28 "" "Linux Programmer's Manual"
+.TH LOG1P 3   2015-04-19 "" "Linux Programmer's Manual"
 .SH NAME
 log1p, log1pf, log1pl \-  logarithm of 1 plus argument
 .SH SYNOPSIS
@@ -69,14 +69,13 @@ or
 .RE
 .ad b
 .SH DESCRIPTION
-.I log1p(x)
-returns a value equivalent to
+These functions return a value equivalent to
 .nf
 
     log (1 + \fIx\fP)
 
 .fi
-It is computed in a way
+The result is computed in a way
 that is accurate even if the value of
 .I x
 is near zero.
@@ -140,15 +139,21 @@ These functions do not set
 .\" log(), log2(), log10() do set errno
 .\" Bug raised: http://sources.redhat.com/bugzilla/show_bug.cgi?id=6792
 .SH ATTRIBUTES
-.SS Multithreading (see pthreads(7))
-The
+For an explanation of the terms used in this section, see
+.BR attributes (7).
+.TS
+allbox;
+lbw27 lb lb
+l l l.
+Interface	Attribute	Value
+T{
 .BR log1p (),
 .BR log1pf (),
-and
 .BR log1pl ()
-functions are thread-safe.
+T}	Thread safety	MT-Safe
+.TE
 .SH CONFORMING TO
-C99, POSIX.1-2001.
+C99, POSIX.1-2001, POSIX.1-2008.
 .\" BSD
 .SH SEE ALSO
 .BR exp (3),

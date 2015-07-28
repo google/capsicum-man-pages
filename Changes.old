@@ -10136,7 +10136,7 @@ tanh.3
 
 Various pages
     Alain Portal
-        Formating fixes.
+        Formatting fixes.
 
 mlock.2
 mprotect.2
@@ -12257,7 +12257,7 @@ strcat.3
 
 strerror.3
     mtk, after a note from Daniele Giacomini
-        Modify SYNOPSIS to show protoypes of both versions of strerror_r(),
+        Modify SYNOPSIS to show prototypes of both versions of strerror_r(),
         and make other small clarifications of the description regarding
         the two versions.
 
@@ -12274,7 +12274,7 @@ locale.5
 
 proc.5
     mtk
-        The vaious CPU time fields in /proc/stat and /proc/PID/stat
+        The various CPU time fields in /proc/stat and /proc/PID/stat
         return time in clock ticks (USER_HZ, cputime_to_clock_t(),
         sysconf(_SC_CLK_TCK)).
         Updated, clarified and expanded the description several
@@ -17699,7 +17699,7 @@ time.7
     Michael Kerrisk
         Global fix: s/(3)/(2)/ in section number xrefs for timer_*() API
             The POSIX timers API is implemented (mostly) within the kernel,
-            so thse interfaces are system calls.  Although there are as yet
+            so these interfaces are system calls.  Although there are as yet
             no man pages, when they are added they should be in Section 2,
             not 3.  Therefore fix those pages that currently refer to these
             interfaces as being in Section 3.
@@ -19513,7 +19513,7 @@ quotactl.2
         Major updates
             Update the page to consolidate information from the
             outdated man-pages quotactl.2 page and the quotactl.2
-            page in the "quota-tools" pachage. The page in "quota-tools"
+            page in the "quota-tools" package. The page in "quota-tools"
             has now been dropped by Jan Kara, so that there is just one
             canonical quotactl.2 page (in pan-pages).
     Michael Kerrisk
@@ -21653,7 +21653,7 @@ memcpy.3
         Change "should not overlap" to "must not overlap"
             glibc 2.12 changed things so that applications that use memcpy() on
             overlapping regions will encounter problems. (The standards have
-            long said that the behavious is undefined if the memory areas
+            long said that the behaviors is undefined if the memory areas
             overlap.)
 
             See http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=603144
@@ -29062,7 +29062,7 @@ fcntl.2
     Michael Kerrisk
         BUGS: The O_SYNC and O_DSYNC flags are not modifiable using F_SETFL
     Michael Kerrisk
-        Add susbsections under BUGS
+        Add subsections under BUGS
             There's several bugs listed. It's helpful to mark
             them separately.
     Michael Kerrisk
@@ -30109,7 +30109,7 @@ sync.8
 	project generally focuses on only Linux kernel and
         (g)libc interfaces, so this sync(8) page doesn't really
 	belong.  Furthermore, coreutils has a sync(1) page which
-	covers the same command. After dicussions on the
+	covers the same command. After discussions on the
 	coreutils list, I've decided to retire this page from
 	man-pages.
 
@@ -34714,9 +34714,9 @@ prctl.2
     Michael Kerrisk
         Add mention of seccomp(2) under PR_SET_SECCOMP
     Michael Kerrisk
-        Suggest /proc/PID/status "Seccomp" as alternative to PRCTL_GET_SECCOMP
+        Suggest /proc/PID/status "Seccomp" as alternative to PR_GET_SECCOMP
     Michael Kerrisk
-        SIGKILL can also occur PRCTL_GET_SECCOMP in SECCOMP_MODE_FILTER mode
+        SIGKILL can also occur PR_GET_SECCOMP in SECCOMP_MODE_FILTER mode
     Kees Cook  [Andy Lutomirski]
         Document SECCOMP_MODE_FILTER vs EFAULT
             This notes the distinction made between EINVAL and EFAULT when
@@ -35781,3 +35781,2737 @@ ld.so.8
         (Briefly) document LD_TRACE_PRELINKING
     Michael Kerrisk
         Remove duplicate description of LD_BIND_NOT
+
+
+==================== Changes in man-pages-3.81 ====================
+
+Released: 2015-03-02, Munich
+
+
+Contributors
+------------
+
+The following people contributed patches/fixes or (noted in brackets
+in the changelog below) reports, notes, and ideas that have been
+incorporated in changes in this release:
+
+Alexandre Oliva <aoliva@redhat.com>
+Carlos O'Donell <carlos@redhat.com>
+Ma Shimiao <mashimiao.fnst@cn.fujitsu.com>
+Michael Kerrisk <mtk.manpages@gmail.com>
+Peng Haitao <penght@cn.fujitsu.com>
+
+Apologies if I missed anyone!
+
+
+New and rewritten pages
+-----------------------
+
+attributes.7
+    Alexandre Oliva, Michael Kerrisk  [Carlos O'Donell]
+        New page describing POSIX safety concepts
+
+
+Global changes
+--------------
+
+Many pages
+    Peng Haitao, Michael Kerrisk
+        Reformat existing thread-safety information to use a
+        tabular format, rather than plain text.
+
+
+Changes to individual pages
+---------------------------
+
+mmap.2
+    Ma Shimiao
+        ATTRIBUTES: Note functions that are thread-safe
+            The function mmap() and munmap() are thread safe.
+
+a64l.3
+    Ma Shimiao
+        Modify thread-safety information
+            As annotation in glibc manual is more detailed, change the
+            thread-safety information to be the same as glibc manual.
+
+acos.3
+    Ma Shimiao
+        ATTRIBUTES: Note functions that are thread-safe
+            The function acos(), acosf() and acosl() are thread safe.
+
+acosh.3
+    Ma Shimiao
+        ATTRIBUTES: Note functions that are thread-safe
+            The function acosh(), acoshf() and acoshl() are thread safe.
+
+addseverity.3
+    Ma Shimiao
+        ATTRIBUTES: Note function is thread-safe
+            The function addseverity() is thread safe.
+
+aio_cancel.3
+    Ma Shimiao
+        ATTRIBUTES: Note function that is thread-safe
+            The function aio_cancel() is thread safe.
+
+aio_fsync.3
+    Ma Shimiao
+        ATTRIBUTES: Note function that is thread-safe
+            The function aio_fsync() is thread safe.
+
+aio_read.3
+    Ma Shimiao
+        ATTRIBUTES: Note function that is thread-safe
+            The function aio_read() is thread safe.
+
+aio_suspend.3
+    Ma Shimiao
+        ATTRIBUTES: Note function that is thread-safe
+            The function aio_suspend() is thread safe.
+
+aio_write.3
+    Ma Shimiao
+        ATTRIBUTES: Note function that is thread-safe
+            The function aio_write() is thread safe.
+
+argz_add.3
+    Ma Shimiao
+        ATTRIBUTES: Note functions that are thread-safe
+
+asin.3
+    Ma Shimiao
+        ATTRIBUTES: Note functions that are thread-safe
+            The function asin(), asinf() and asinl() are thread safe.
+
+assert.3
+    Ma Shimiao
+        ATTRIBUTES: Note function that is thread-safe
+            Its marking matches glibc marking.
+
+assert_perror.3
+    Ma Shimiao
+        ATTRIBUTES: Note function that is thread-safe
+            Its marking matches glibc marking.
+
+atan2.3
+    Ma Shimiao
+        ATTRIBUTES: Note functions that are thread-safe
+            The function atan2(), atan2f() and atan2l() are thread safe.
+
+atanh.3
+    Ma Shimiao
+        ATTRIBUTES: Note functions that are thread-safe
+            The function atanh(), atanhf() and atanhl() are thread safe.
+
+backtrace.3
+    Ma Shimiao
+        ATTRIBUTES: Note function that is thread-safe
+            The markings match glibc markings.
+
+btowc.3
+    Ma Shimiao
+        ATTRIBUTES: Note function that is thread-safe
+            The function btowc() in glibc is thread safe.
+            Its marking matches glibc marking.
+
+cabs.3
+    Ma Shimiao
+        ATTRIBUTES: Note functions that are thread-safe
+            The function cabs(), cabsf() and cabsl() are thread safe.
+
+cacos.3
+    Ma Shimiao
+        ATTRIBUTES: Note functions that are thread-safe
+            The function cacos(), cacosf() and cacosl() are thread safe.
+
+cacosh.3
+    Ma Shimiao
+        ATTRIBUTES: Note functions that are thread-safe
+            The functions cacosh(), cacoshf() and cacoshl() in glibc are
+            thread safe.  Its markings match glibc markings.
+
+canonicalize_file_name.3
+    Ma Shimiao
+        ATTRIBUTES: Note function that is thread-safe
+            The functions canonicalize_file_name() in glibc is thread safe.
+            Its marking matches glibc marking.
+
+carg.3
+    Ma Shimiao
+        ATTRIBUTES: Note functions that are thread-safe
+            The function carg(), cargf() and cargl() are thread safe.
+
+casin.3
+    Ma Shimiao
+        ATTRIBUTES: Note functions that are thread-safe
+            The functions casin(), casinf() and casinl() are thread safe.
+            Their markings match glibc markings.
+
+casinh.3
+    Ma Shimiao
+        ATTRIBUTES: Note functions that are thread-safe
+            The functions casinh(), casinhf() and casinhl() in glibc are
+            thread safe.  Its markings match glibc markings.
+
+catan.3
+    Ma Shimiao
+        ATTRIBUTES: Note functions that are thread-safe
+            The functions catan(), catanf() and catanl() are thread safe.
+            Their markings match glibc markings.
+
+catanh.3
+    Ma Shimiao
+        ATTRIBUTES: Note functions that are thread-safe
+            The functions catanh(), catanhf() and catanhl() in glibc are
+            thread safe.  Its markings match glibc markings.
+
+catopen.3
+    Peng Haitao
+        ATTRIBUTES: Note functions that are thread-safe
+            The functions catopen() and catclose() are thread safe.
+
+cfree.3
+    Ma Shimiao
+        ATTRIBUTES: Note function that is thread-safe
+            The function cfree() in glibc is thread safe.
+            Its marking matches glibc marking.
+
+clog10.3
+    Ma Shimiao
+        ATTRIBUTES: Note functions that are thread-safe
+            The functions clog10(), clog10f() and clog10l() in glibc are
+            thread safe.  Its markings match glibc markings.
+
+clog.3
+    Ma Shimiao
+        ATTRIBUTES: Note functions that are thread-safe
+            The function clog(), clogf() and clogl() are thread safe.
+
+closedir.3
+    Ma Shimiao
+        ATTRIBUTES: Note function that is thread-safe
+            The function closedir() in glibc is thread safe.
+            Its marking matches glibc marking.
+
+confstr.3
+    Ma Shimiao
+        ATTRIBUTES: Note function that is thread-safe
+            The function confstr() is thread safe.
+
+cosh.3
+    Ma Shimiao
+        ATTRIBUTES: Note functions that are thread-safe
+            The functions cosh(), coshf() and coshl() in glibc are thread safe.
+            Its markings match glibc markings.
+
+cpow.3
+    Ma Shimiao
+        ATTRIBUTES: Note functions that are thread-safe
+            The functions cpow(), cpowf() and cpowl() in glibc are thread safe.
+            Its markings match glibc markings.
+
+crypt.3
+    Ma Shimiao
+        Modify thread-safety information
+            As annotation in glibc manual is more detailed, change the
+            thread-safety information to be the same as glibc manual.
+
+ctermid.3
+    Ma Shimiao
+        Modify thread-safety information
+            According to the change of source code, ctermid's level has been
+            changed from MT-Unsafe to MT-Safe.  After modifying, the marking
+            matches the glibc marking.
+
+drand48.3
+    Ma Shimiao
+        Modify thread-safety information
+            As annotation in glibc manual is more detailed, change the
+            thread-safety information to be the same as glibc manual.
+
+drand48_r.3
+    Ma Shimiao
+        Modify thread-safety information
+            As annotation in glibc manual is more detailed, change the
+            thread-safety information to be the same as glibc manual.
+
+ecvt.3
+    Ma Shimiao
+        Modify thread-safety information
+            As annotation in glibc manual is more detailed, change the
+            thread-safety information to be same as glibc manual.
+
+ecvt_r.3
+    Ma Shimiao
+        ATTRIBUTES: Note function that is thread-safe
+            The markings match glibc markings.
+
+encrypt.3
+    Ma Shimiao
+        Modify thread-safety information
+            As annotation in glibc manual is more detailed, change the
+            thread-safety information to be the same as glibc manual.
+
+envz_add.3
+    Ma Shimiao
+        ATTRIBUTES: Note functions that are thread-safe
+            The markings match glibc markings.
+
+exec.3
+    Peng Haitao
+        ATTRIBUTES: Note functions that are thread-safe
+            The functions execl(), execlp(), execle(), execv(), execvp() and
+            execvpe() are thread safe.
+
+exit.3
+    Ma Shimiao
+        Modify thread-safety information
+            As annotation in glibc manual is more detailed, change the
+            thread-safety information to be the same as glibc manual.
+
+exp10.3
+    Ma Shimiao
+        ATTRIBUTES: Note functions that are thread-safe
+
+exp2.3
+    Ma Shimiao
+        ATTRIBUTES: Note functions that are thread-safe
+            The function exp2(), exp2f() and exp2l() are thread safe.
+
+exp.3
+    Ma Shimiao
+        ATTRIBUTES: Note functions that are thread-safe
+            The function exp(), expf() and expl() are thread safe.
+
+fclose.3
+    Ma Shimiao
+        ATTRIBUTES: Note function that is thread-safe
+            The function fclose() is thread safe.
+            Its marking matches glibc marking.
+
+fcloseall.3
+    Ma Shimiao
+        Modify thread-safety information
+            As annotation in glibc manual is more detailed, change the
+            thread-safety information to be the same as glibc manual.
+
+fgetc.3
+    Ma Shimiao
+        ATTRIBUTES: Note functions that are thread-safe
+            The markings match glibc markings.
+
+fgetwc.3
+    Ma Shimiao
+        ATTRIBUTES: Note functions that are thread-safe
+            The markings match glibc markings.
+
+fgetws.3
+    Ma Shimiao
+        ATTRIBUTES: Note function that is thread-safe
+            The marking matches glibc marking.
+
+fmod.3
+    Ma Shimiao
+        ATTRIBUTES: Note functions that are thread-safe
+            The function fmod(), fmodf() and fmodl() are thread safe.
+
+fnmatch.3
+    Peng Haitao
+        ATTRIBUTES: Note function that is thread safe with exceptions
+            The function fnmatch() is thread safe with exceptions.
+
+fopen.3
+    Ma Shimiao
+        ATTRIBUTES: Note function that is thread-safe
+            The markings match glibc markings.
+
+fopencookie.3
+    Ma Shimiao
+        ATTRIBUTES: Note function that is thread-safe
+            The marking matches glibc marking.
+
+fread.3
+    Peng Haitao
+        ATTRIBUTES: Note functions that are thread-safe
+            The functions fread() and fwrite() are thread safe.
+
+gamma.3
+    Peng Haitao
+        ATTRIBUTES: Note functions that are not thread-safe
+            The functions gamma(), gammaf() and gammal() are not thread safe.
+    Ma Shimiao
+        Modify thread-safety information
+            As annotation in glibc manual is more detailed, change the
+            thread-safety information to be the same as glibc manual.
+
+getcontext.3
+    Ma Shimiao
+        Modify thread-safety information
+            As annotation in glibc manual is more detailed, change the
+            thread-safety information to be the same as glibc manual.
+
+getcwd.3
+    Peng Haitao
+        ATTRIBUTES: Note functions that are thread-safe
+            The functions getcwd(), getwd() and get_current_dir_name() are
+            thread safe.
+
+getdate.3
+    Ma Shimiao
+        Modify thread-safety information
+            As annotation in glibc manual is more detailed, change the
+            thread-safety information to be the same as glibc manual.
+
+getenv.3
+    Peng Haitao
+        ATTRIBUTES: Note functions that are thread-safe
+            The functions getenv() and secure_getenv() are thread safe.
+
+getfsent.3
+    Peng Haitao
+        ATTRIBUTES: Note functions that are not thread-safe
+            The functions setfsent(), getfsent(), endfsent(), getfsspec()
+            and getfsfile() are not thread safe.
+    Ma Shimiao
+        Modify thread-safety information
+            As annotation in glibc manual is more detailed, change the
+            thread-safety information to be the same as glibc manual.
+
+getgrent.3
+    Ma Shimiao
+        ATTRIBUTES: Note function that is thread-safe
+            Its marking matches glibc marking.
+    Ma Shimiao
+        Modify thread-safety information
+            As annotation in glibc manual is more detailed, change the
+            thread-safety information to be the same as glibc manual.
+
+getgrnam.3
+    Ma Shimiao
+        Modify thread-safety information
+            As annotation in glibc manual is more detailed, change the
+            thread-safety information to be the same as glibc manual.
+
+getgrouplist.3
+    Peng Haitao
+        ATTRIBUTES: Note function that is thread safe with exceptions
+            The function getgrouplist() is thread safe with exceptions.
+
+getlogin.3
+    Ma Shimiao
+        Modify thread-safety information
+            As annotation in glibc manual is more detailed, change the
+            thread-safety information to be the same as glibc manual.
+
+getopt.3
+    Peng Haitao
+        ATTRIBUTES: Note functions that are not thread-safe
+            The functions getopt(), getopt_long() and getopt_long_only() are
+            not thread safe.
+    Ma Shimiao
+        Modify thread-safety information
+            As annotation in glibc manual is more detailed, change the
+            thread-safety information to be the same as glibc manual.
+
+getpass.3
+    Ma Shimiao
+        Modify thread-safety information
+            As annotation in glibc manual is more detailed, change the
+            thread-safety information to be the same as glibc manual.
+
+getpwent.3
+    Ma Shimiao
+        Modify thread-safety information
+            As annotation in glibc manual is more detailed, change the
+            thread-safety information to be the same as glibc manual.
+
+getpwnam.3
+    Ma Shimiao
+        Modify thread-safety information
+            As annotation in glibc manual is more detailed, change the
+            thread-safety information to be the same as glibc manual.
+
+gets.3
+    Ma Shimiao
+        ATTRIBUTES: Note function that is thread-safe
+            Its marking matches glibc marking.
+
+getw.3
+    Peng Haitao
+        ATTRIBUTES: Note functions that are thread-safe
+            The functions getw() and putw() are thread safe.
+
+gnu_get_libc_version.3
+    Peng Haitao
+        ATTRIBUTES: Note functions that are thread-safe
+            The functions gnu_get_libc_version() and gnu_get_libc_release()
+            are thread safe.
+
+hsearch.3
+    Ma Shimiao
+        Modify thread-safety information
+            As annotation in glibc manual is more detailed, change the
+            thread-safety information to be the same as glibc manual.
+
+iconv.3
+    Peng Haitao
+        Modify thread-safety information
+
+inet.3
+    Peng Haitao
+        ATTRIBUTES: Note functions that are thread safe with exceptions
+            The functions inet_aton() and inet_addr() are thread safe with
+            exceptions.
+            The functions inet_network(), inet_ntoa(), inet_makeaddr(),
+            inet_lnaof() and inet_netof() are thread safe.
+        Modify thread-safety information
+            After researching and talking, we think inet_network() and
+            inet_ntoa() should be marked with locale.
+            After changing, the markings match glbc markings.
+
+inet_pton.3
+    Peng Haitao
+        ATTRIBUTES: Note function that is thread safe with exceptions
+            The function inet_pton() is thread safe with exceptions.
+
+iswdigit.3
+    Peng Haitao
+        ATTRIBUTES: Note function that is thread safe with exceptions
+            The function iswdigit() is thread safe with exceptions.
+
+iswgraph.3
+    Peng Haitao
+        ATTRIBUTES: Note function that is thread safe with exceptions
+            The function iswgraph() is thread safe with exceptions.
+
+iswlower.3
+    Peng Haitao
+        ATTRIBUTES: Note function that is thread safe with exceptions
+            The function iswlower() is thread safe with exceptions.
+
+iswprint.3
+    Peng Haitao
+        ATTRIBUTES: Note function that is thread safe with exceptions
+            The function iswprint() is thread safe with exceptions.
+
+iswpunct.3
+    Peng Haitao
+        ATTRIBUTES: Note function that is thread safe with exceptions
+            The function iswpunct() is thread safe with exceptions.
+
+iswspace.3
+    Peng Haitao
+        ATTRIBUTES: Note function that is thread safe with exceptions
+            The function iswspace() is thread safe with exceptions.
+
+iswupper.3
+    Peng Haitao
+        ATTRIBUTES: Note function that is thread safe with exceptions
+            The function iswupper() is thread safe with exceptions.
+
+iswxdigit.3
+    Peng Haitao
+        ATTRIBUTES: Note function that is thread safe with exceptions
+            The function iswxdigit() is thread safe with exceptions.
+
+j0.3
+    Ma Shimiao
+        ATTRIBUTES: Note functions that are thread-safe
+            The function j0(), j1f() jnl() and so on are thread safe.
+
+lio_listio.3
+    Ma Shimiao
+        ATTRIBUTES: Note function that is thread-safe
+            Its marking matches glibc marking.
+
+log10.3
+    Ma Shimiao
+        ATTRIBUTES: Note functions that are thread-safe
+            The function log10(), log10f() and log10l() are thread safe.
+
+log2.3
+    Ma Shimiao
+        ATTRIBUTES: Note functions that are thread-safe
+            The function log2(), log2f() and log2l() are thread safe.
+
+log.3
+    Ma Shimiao
+        ATTRIBUTES: Note functions that are thread-safe
+            The function log(), logf() and logl() are thread safe.
+
+makecontext.3
+    Ma Shimiao
+        Modify thread-safety information
+            As annotation in glibc manual is more detailed, change the
+            thread-safety information to be the same as glibc manual.
+
+makedev.3
+    Peng Haitao
+        ATTRIBUTES: Note macros that are thread-safe
+            The macros makedev(), major() and minor() are thread safe.
+
+malloc.3
+    Ma Shimiao
+        ATTRIBUTES: Note functions that are thread-safe
+            The function malloc(), free(), calloc() and realloc() are
+            thread safe.
+
+mblen.3
+    Ma Shimiao
+        Modify thread-safety information
+            As annotation in glibc manual is more detailed, change the
+            thread-safety information to be the same as glibc manual.
+
+mbstowcs.3
+    Ma Shimiao
+        ATTRIBUTES: Note function that is thread-safe
+            The marking matches glibc marking.
+
+mbtowc.3
+    Peng Haitao
+        ATTRIBUTES: Note function that is not thread-safe
+            The function mbtowc() is not thread safe.
+    Ma Shimiao
+        Modify thread-safety information
+            As annotation in glibc manual is more detailed, change the
+            thread-safety information to be the same as glibc manual.
+
+mktemp.3
+    Peng Haitao
+        ATTRIBUTES: Note function that is thread-safe
+            The function mktemp() is thread safe.
+
+mtrace.3
+    Peng Haitao
+        ATTRIBUTES: Note functions that are not thread-safe
+            The functions mtrace() and muntrace() are not thread safe.
+
+nan.3
+    Ma Shimiao
+        ATTRIBUTES: Note functions that are thread-safe
+            The markings match glibc markings.
+
+nl_langinfo.3
+    Peng Haitao
+        ATTRIBUTES: Note function that is thread safe with exceptions
+            The function nl_langinfo() is thread safe with exceptions.
+
+opendir.3
+    Ma Shimiao
+        ATTRIBUTES: Note function that is thread-safe
+            The markings match glibc markings.
+
+pow10.3
+    Ma Shimiao
+        ATTRIBUTES: Note functions that are thread-safe
+            The function pow10(), pow10f() and pow10l() are thread safe.
+
+pow.3
+    Ma Shimiao
+        ATTRIBUTES: Note functions that are thread-safe
+            The function pow(), powf() and powl() are thread safe.
+
+pthread_setcancelstate.3
+    Michael Kerrisk
+        Add async-signal-safety information
+
+ptsname.3
+    Ma Shimiao
+        Modify thread-safety information
+            As annotation in glibc manual is more detailed, change the
+            thread-safety information to be the same as glibc manual.
+
+putenv.3
+    Ma Shimiao
+        ATTRIBUTES: Note function that is thread-unsafe
+            The function putenv() is thread unsafe.
+
+puts.3
+    Peng Haitao
+        ATTRIBUTES: Note functions that are thread-safe
+            The functions fputc(), fputs(), putc(), putchar() and puts() are
+            thread safe.
+
+putwchar.3
+    Ma Shimiao
+        ATTRIBUTES: Note function that is thread-safe
+            The marking matches glibc marking.
+
+qecvt.3
+    Ma Shimiao
+        Modify thread-safety information
+            As annotation in glibc manual is more detailed, change the
+            thread-safety information to be same as glibc manual.
+
+rand.3
+    Peng Haitao
+        ATTRIBUTES: Note macros that are thread-safe
+            The functions rand(), rand_r() and srand() are thread safe.
+
+random_r.3
+    Ma Shimiao
+        Modify thread-safety information
+            As annotation in glibc manual is more detailed, change the
+            thread-safety information to be the same as glibc manual.
+
+readdir.3
+    Ma Shimiao
+        Modify thread-safety information
+            As annotation in glibc manual is more detailed, change the
+            thread-safety information to be same as glibc manual.
+
+realpath.3
+    Ma Shimiao
+        ATTRIBUTES: Note function that is thread-safe
+            The marking matches glibc marking.
+
+regex.3
+    Peng Haitao
+        ATTRIBUTES: Note functions that are thread safe with exceptions
+            The functions regcomp() and regexec() are thread safe with
+            exceptions.
+            The functions regerror() and regfree() are thread safe.
+
+remainder.3
+    Ma Shimiao
+        ATTRIBUTES: Note function that is thread-safe
+            The markings match glibc markings.
+
+scalb.3
+    Ma Shimiao
+        ATTRIBUTES: Note functions that are thread-safe
+            The function scalb(), scalbf() and scalbl() are thread safe.
+
+setenv.3
+    Ma Shimiao
+        ATTRIBUTES: Note functions that are thread-unsafe
+            The function setenv() and unsetenv() are thread unsafe.
+
+siginterrupt.3
+    Ma Shimiao
+        Modify thread-safety information
+            As annotation in glibc manual is more detailed, change the
+            thread-safety information to be the same as glibc manual.
+
+sigset.3
+    Peng Haitao
+        ATTRIBUTES: Note macros that are thread-safe
+            The functions sigset(), sighold(), sigrelse() and sigignore()
+            are thread safe.
+
+sinh.3
+    Ma Shimiao
+        ATTRIBUTES: Note functions that are thread-safe
+            The function sinh(), sinhf() and sinhl() are thread safe.
+
+sqrt.3
+    Ma Shimiao
+        ATTRIBUTES: Note functions that are thread-safe
+            The function sqrt(), sqrtf() and sqrtl() are thread safe.
+
+stdarg.3
+    Ma Shimiao
+        Modify thread-safety information
+            As annotation in glibc manual is more detailed, change the
+            thread-safety information to be the same as glibc manual.
+
+stdio_ext.3
+    Ma Shimiao
+        Modify thread-safety information
+            Change the thread safety information to be the same as glibc.
+
+strcasecmp.3
+    Peng Haitao
+        ATTRIBUTES: Note functions that are thread safe with exceptions
+            The functions strcasecmp() and strncasecmp() are thread safe
+            with exceptions.
+
+strerror.3
+    Ma Shimiao
+        Modify thread-safety information
+            As annotation in glibc manual is more detailed, change the
+            thread-safety information to be the same as glibc manual.
+
+strfmon.3
+    Ma Shimiao
+        ATTRIBUTES: Note function that is thread-safe
+            Its marking matches glibc marking.
+
+strfry.3
+    Peng Haitao
+        ATTRIBUTES: Note function that is thread-safe
+            The function strfry() is thread safe.
+
+strftime.3
+    Peng Haitao
+        ATTRIBUTES: Note function that is thread safe with exceptions
+            The function strftime() is thread safe with exceptions.
+
+strptime.3
+    Peng Haitao
+        ATTRIBUTES: Note function that is thread safe with exceptions
+            The function strptime() is thread safe with exceptions.
+
+strtok.3
+    Ma Shimiao
+        Modify thread-safety information
+            As annotation in glibc manual is more detailed, change the
+            thread-safety information to be the same as glibc manual.
+
+strverscmp.3
+    Peng Haitao
+        ATTRIBUTES: Note function that is thread-safe
+            The function strverscmp() is thread safe.
+
+strxfrm.3
+    Ma Shimiao
+        ATTRIBUTES: Note function that is thread-safe
+            The marking matches glibc marking.
+
+syslog.3
+    Peng Haitao
+        ATTRIBUTES: Note functions that are thread safe with exceptions
+            The functions openlog() and closelog() are thread safe.
+            The functions syslog() and vsyslog() are thread safe with
+            exceptions.
+
+tempnam.3
+    Peng Haitao
+        ATTRIBUTES: Note function that is thread-safe
+            The function tempnam() is thread safe.
+
+termios.3
+    Ma Shimiao
+        Modify thread-safety information
+            As annotation in glibc manual is more detailed, change the
+            thread-safety information to be the same as glibc manual.
+    Ma Shimiao
+        Modify thread-safety information
+            As this is man page for Linux, we don't need thread safety
+            information for bsd
+
+tgamma.3
+    Ma Shimiao
+        ATTRIBUTES: Note functions that are thread-safe
+            The functions tgamma(), tgammaf() and tgammal() in glibc are
+            thread safe.  Its markings match glibc markings.
+
+timegm.3
+    Peng Haitao
+        ATTRIBUTES: Note functions that are thread safe with exceptions
+            The functions timelocal() and timegm() are thread safe with
+            exceptions.
+
+tmpfile.3
+    Ma Shimiao
+        ATTRIBUTES: Note function that is thread-safe
+            Its markings match glibc markings.
+
+tmpnam.3
+    Peng Haitao
+        Modify thread-safety information
+            When the argument s is NULL, tmpnam() should be MT-Unsafe.
+
+toupper.3
+    Ma Shimiao
+        Modify thread-safety information
+            After researching and talking, we think toupper() and tolower()
+            should not be marked with locale.
+            After changing, the markings match glbc markings.
+
+tsearch.3
+    Ma Shimiao
+        ATTRIBUTES: Note functions that are thread-safe
+            The functions' markings match glibc markings.
+
+ttyname.3
+    Ma Shimiao
+        Modify thread-safety information
+            As annotation in glibc manual is more detailed, change the
+            thread-safety information to be same as glibc manual.
+
+tzset.3
+    Peng Haitao
+        ATTRIBUTES: Note function that is thread safe with exceptions
+            The function tzset() is thread safe with exceptions.
+
+wcsdup.3
+    Ma Shimiao
+        ATTRIBUTES: Note function that is thread-safe
+            Its marking matches glibc marking.
+
+wctomb.3
+    Ma Shimiao
+        Modify thread-safety information
+            As annotation in glibc manual is more detailed, change the
+            thread-safety information to be the same as glibc manual.
+
+y0.3
+    Ma Shimiao
+        ATTRIBUTES: Note functions that are thread-safe
+            The function y0(), y1f() ynl() and so on are thread safe.
+
+man-pages.7
+    Michael Kerrisk
+        Refer reader to attributes(7) for details of ATTRIBUTES section
+    Michael Kerrisk
+        SEE ALSO: add attributes(7)
+
+pthreads.7
+    Michael Kerrisk
+        SEE ALSO: add attributes(7)
+
+standards.7
+    Michael Kerrisk
+        SEE ALSO: add attributes(7)
+
+
+
+==================== Changes in man-pages-3.82 ====================
+
+Released: 2015-03-29, Paris
+
+Contributors
+------------
+
+The following people contributed patches/fixes or (noted in brackets
+in the changelog below) reports, notes, and ideas that have been
+incorporated in changes in this release:
+
+Alban Crequy <alban.crequy@gmail.com>
+Andy Lutomirski <luto@amacapital.net>
+Bert Wesarg <bert.wesarg@googlemail.com>
+Bill Pemberton <wfp5p@worldbroken.com>
+Chris Delozier <c.s.delozier@gmail.com>
+David Madore <david.madore@ens.fr>
+Dmitry Deshevoy <mityada@gmail.com>
+Eric W. Biederman <ebiederm@xmission.com>
+Heinrich Schuchardt <xypron.glpk@gmx.de>
+Jakub Wilk <jwilk@debian.org>
+Jann Horn <jann@thejh.net>
+Jason Vas Dias <jason.vas.dias@gmail.com>
+Josh Triplett <josh@joshtriplett.org>
+J William Piggott <elseifthen@gmx.com>
+Kees Cook <keescook@chromium.org>
+Konstantin Shemyak <konstantin@shemyak.com>
+Ma Shimiao <mashimiao.fnst@cn.fujitsu.com>
+Matt Turner <mattst88@gmail.com>
+Michael Kerrisk <mtk.manpages@gmail.com>
+Michael Witten <mfwitten@gmail.com>
+Mikael Pettersson <mikpelinux@gmail.com>
+Namhyung Kim <namhyung@gmail.com>
+Nicolas FRANCOIS <nicolas.francois@centraliens.net>
+Paul E Condon <pecondon@mesanetworks.net>
+Peter Adkins <peter.adkins@kernelpicnic.net>
+Scot Doyle <lkml14@scotdoyle.com>
+Shawn Landden <shawn@churchofgit.com>
+Stéphane Aulery <saulery@free.fr>
+Stephen Smalley <sds@tycho.nsa.gov>
+Taisuke Yamada <tai@rakugaki.org>
+Torvald Riegel <triegel@redhat.com>
+Vincent Lefevre <vincent@vinc17.net>
+<ygrex@ygrex.ru>
+Yuri Kozlov <yuray@komyakino.ru>
+
+Apologies if I missed anyone!
+
+
+New and rewritten pages
+-----------------------
+
+nptl.7
+    Michael Kerrisk
+        New page with details of the NPTL POSIX threads implementation
+
+
+Newly documented interfaces in existing pages
+---------------------------------------------
+
+user_namespaces.7
+    Eric W. Biederman  [Michael Kerrisk]
+        Document /proc/[pid]/setgroups
+
+
+Changes to individual pages
+---------------------------
+
+intro.1
+    Stéphane Aulery
+        Prompt is not % but $
+    Stéphane Aulery
+        Various improvements
+            - Add reference to other common shells dash(1), ksh(1)
+            - Add a reference to stdout(3)
+            - Separate cp and mv descriptions
+            - Add examples of special cases of cd
+            - Add su(1) and shutdown(8) references for section Logout
+              and poweroff
+            - Move Control-D to section Logout and poweroff
+            - Fix some little formatting errors
+    Stéphane Aulery
+        Add cross references cited
+    Stéphane Aulery
+        Order SEE ALSO section
+
+clone.2
+    Josh Triplett
+        Document that clone() silently ignores CLONE_PID and CLONE_STOPPED
+            Normally, system calls return EINVAL for flags they don't support.
+            Explicitly document that clone does *not* produce an error for
+            these two obsolete flags.
+    Michael Kerrisk
+        Small rewording of explanation of clone() wrt threads
+            Clone has so many effects that it's an oversimplification to say
+            that the *main* use of clone is to create a thread.  (In fact,
+            the use of clone() to create new processes may well be more
+            common, since glibc's fork() is a wrapper that calls clone().)
+
+getgroups.2
+    Michael Kerrisk  [Shawn Landden]
+        Add discussion of NPTL credential-changing mechanism
+            At the kernel level, credentials (UIDs and GIDs) are a per-thread
+            attribute. NPTL uses a signal-based mechanism to ensure that
+            when one thread changes its credentials, all other threads change
+            credentials to the same values. By this means, the NPTL
+            implementation conforms to the POSIX requirement that the threads
+            in a process share credentials.
+    Michael Kerrisk
+        ERRORS: add EPERM for the case where /proc/PID/setgroups is "deny"
+    Michael Kerrisk
+        Note capability associated with EPERM error for setgroups(2)
+    Michael Kerrisk
+        Refer reader to user_namespaces(7) for discussion of /proc/PID/setgroups
+            The discussion of /proc/PID/setgroups has moved from
+            proc(5) to user_namespaces(7).
+
+getpid.2
+    Michael Kerrisk
+        Note that getppid() returns 0 if parent is in different PID namespace
+
+getsockopt.2
+    Konstantin Shemyak
+        Note RETURN VALUE details when netfilter is involved
+
+ioctl_list.2
+    Heinrich Schuchardt
+        SEE ALSO ioctl_fat.2
+            Add FAT_IOCTL_GET_VOLUME_ID
+            SEE ALSO ioctl_fat.2
+    Heinrich Schuchardt
+        include/linux/ext2_fs.h
+            Include linux/ext2_fs.h does not contain any ioctl definitions
+            anymore.
+
+            Request codes EXT2_IOC* have been replaced by FS_IOC* in
+            linux/fs.h.
+
+            Some definitions of FS_IOC_* use long* but the actual code expects
+            int* (see fs/ext2/ioctl.c).
+
+msgop.2
+    Bill Pemberton
+        Remove EAGAIN as msgrcv() errno
+            The list of errnos for msgrcv() lists both EAGAIN and ENOMSG as
+            the errno for no message available with the IPC_NOWAIT flag.
+            ENOMSG is the errno that will be set.
+    Bill Pemberton
+        Add an example program
+
+open.2
+    Michael Kerrisk  [Jason Vas Dias]
+        Mention blocking semantics for FIFO opens
+            See https://bugzilla.kernel.org/show_bug.cgi?id=95191
+
+seccomp.2
+    Jann Horn  [Kees Cook, Mikael Pettersson, Andy Lutomirski]
+        Add note about alarm(2) not being sufficient to limit runtime
+    Jann Horn
+        Explain blacklisting problems, expand example
+    Michael Kerrisk  [Kees Cook]
+        Add mention of libseccomp
+
+setgid.2
+    Michael Kerrisk
+        Clarify that setgid() changes all GIDs when caller has CAP_SETGID
+    Michael Kerrisk  [Shawn Landden]
+        Add discussion of NPTL credential-changing mechanism
+            At the kernel level, credentials (UIDs and GIDs) are a per-thread
+            attribute. NPTL uses a signal-based mechanism to ensure that
+            when one thread changes its credentials, all other threads change
+            credentials to the same values. By this means, the NPTL
+            implementation conforms to the POSIX requirement that the threads
+            in a process share credentials.
+
+setresuid.2
+    Michael Kerrisk  [Shawn Landden]
+        Add discussion of NPTL credential-changing mechanism
+            At the kernel level, credentials (UIDs and GIDs) are a per-thread
+            attribute. NPTL uses a signal-based mechanism to ensure that
+            when one thread changes its credentials, all other threads change
+            credentials to the same values. By this means, the NPTL
+            implementation conforms to the POSIX requirement that the threads
+            in a process share credentials.
+
+setreuid.2
+    Michael Kerrisk  [Shawn Landden]
+        Add discussion of NPTL credential-changing mechanism
+            At the kernel level, credentials (UIDs and GIDs) are a per-thread
+            attribute. NPTL uses a signal-based mechanism to ensure that
+            when one thread changes its credentials, all other threads change
+            credentials to the same values. By this means, the NPTL
+            implementation conforms to the POSIX requirement that the threads
+            in a process share credentials.
+    Michael Kerrisk
+        SEE ALSO: add credentials(7)
+
+setuid.2
+    Michael Kerrisk
+        Clarify that setuid() changes all UIDs when caller has CAP_SETUID
+    Michael Kerrisk  [Shawn Landden]
+        Add discussion of NPTL credential-changing mechanism
+            At the kernel level, credentials (UIDs and GIDs) are a per-thread
+            attribute. NPTL uses a signal-based mechanism to ensure that
+            when one thread changes its credentials, all other threads change
+            credentials to the same values. By this means, the NPTL
+            implementation conforms to the POSIX requirement that the threads
+            in a process share credentials.
+
+sigaction.2
+    Michael Kerrisk
+        Add discussion of rt_sigaction(2)
+    Michael Kerrisk
+        Note treatment of signals used internally by NPTL
+            The glibc wrapper gives an EINVAL error on attempts to change the
+            disposition of either of the two real-time signals used by NPTL.
+
+sigpending.2
+    Michael Kerrisk
+        Add discussion of rt_sigpending(2)
+
+sigprocmask.2
+    Michael Kerrisk
+        Add discussion of rt_sigprocmask(2)
+    Michael Kerrisk
+        Note treatment of signals used internally by NPTL
+            The glibc wrapper silently ignores attempts to block the two
+            real-time signals used by NPTL.
+
+sigreturn.2
+    Michael Kerrisk
+        Add discussion of rt_sigreturn(2)
+
+sigsuspend.2
+    Michael Kerrisk
+        Add discussion of rt_sigsuspend(2)
+
+sigwaitinfo.2
+    Michael Kerrisk
+        Note treatment of signals used internally by NPTL
+            The glibc wrappers silently ignore attempts to wait for
+            signals used by NPTL.
+    Michael Kerrisk
+        Add discussion of rt_sigtimedwait(2)
+
+socket.2
+    Heinrich Schuchardt
+        SEE ALSO close(2)
+            The description mentions close(2). Hence it should also be
+            referenced in the SEE ALSO section.
+
+syscall.2
+    Jann Horn
+        Add x32 ABI
+
+umount.2
+    Eric W. Biederman
+        Document the effect of shared subtrees on umount(2)
+    Eric W. Biederman
+        Correct the description of MNT_DETACH
+            I recently realized that I had been reasoning improperly about
+            what umount(MNT_DETACH) did based on an insufficient description
+            in the umount.2 man page, that matched my intuition but not the
+            implementation.
+
+            When there are no submounts, MNT_DETACH is essentially harmless to
+            applications.  Where there are submounts, MNT_DETACH changes what
+            is visible to applications using the detach directories.
+    Michael Kerrisk
+        Move "shared mount + umount" text to a subsection in NOTES
+
+aio_return.3
+    Stéphane Aulery
+        Document the return value on error
+            Reported by Alexander Holler <holler@ahsoftware.de>
+
+clock.3
+    Stéphane Aulery
+        CLOCKS_PER_SEC = 1000000 is required by XSI, not POSIX
+            Debian Bug #728213 reported by Tanaka Akira <akr@fsij.org>
+
+            See https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=728213
+
+dlopen.3
+    Michael Kerrisk
+        Amend error in description of dlclose() behavior
+            The current text says that unloading depends on whether
+            the reference count falls to zero *and no other libraries
+            are using symbols in this library*. That latter text has
+            been there since man-pages-1.29, but it seems rather dubious.
+            How could the implementation know whether other libraries
+            are still using symbols in this library? Furthermore, no
+            other implementation's man page mentions this point.
+            Seems best to drop this point.
+    Michael Kerrisk
+        Add some details for RTLD_DEFAULT
+    Michael Kerrisk
+        Add some details on RTLD_NEXT and preloading
+    Michael Kerrisk
+        RTLD_NEXT works for symbols generally, not just functions
+            The common use case is for functions, but RTLD_NEXT
+            also applies to variable symbols.
+    Michael Kerrisk
+        dlclose() recursively closes dependent libraries
+            Note that dlclose() recursively closes dependent libraries
+            that were loaded by dlopen()
+    Michael Kerrisk
+        Rename second dlopen() argument from "flag" to "flags"
+            This is more consistent with other such arguments
+    Michael Kerrisk
+        Reformat text on RTLD_DEFAULT and RTLD_NEXT
+
+fmemopen.3
+    Ma Shimiao
+        ATTRIBUTES: Note functions that are thread-safe
+            The markings match glibc markings.
+
+fpathconf.3
+    Ma Shimiao
+        ATTRIBUTES: Note functions that are thread-safe
+            The marking matches glibc marking.
+
+fputwc.3
+    Ma Shimiao
+        ATTRIBUTES: Note functions that are thread-safe
+            The marking matches glibc marking.
+
+fputws.3
+    Ma Shimiao
+        ATTRIBUTES: Note function that is thread-safe
+            The marking matches glibc marking.
+
+fseek.3
+    Ma Shimiao
+        ATTRIBUTES: Note functions that are thread-safe
+            The markings match glibc markings.
+
+fseeko.3
+    Ma Shimiao
+        ATTRIBUTES: Note functions that are thread-safe
+            The markings match glibc markings.
+
+gcvt.3
+    Ma Shimiao
+        ATTRIBUTES: Note function that is thread-safe
+            The marking matches glibc marking.
+
+getline.3
+    Ma Shimiao
+        ATTRIBUTES: Note functions that are thread-safe
+            The marking matches glibc marking.
+
+getwchar.3
+    Ma Shimiao
+        ATTRIBUTES: Note function that is thread-safe
+            The marking matches glibc marking.
+
+hypot.3
+    Ma Shimiao
+        ATTRIBUTES: Note functions that are thread-safe
+            The markings match glibc markings.
+
+iconv_open.3
+    Ma Shimiao
+        ATTRIBUTES: Note function that is thread-safe
+            The marking matches glibc marking.
+
+if_nameindex.3
+    Ma Shimiao
+        ATTRIBUTES: Note functions that are thread-safe
+            The markings match glibc markings.
+
+initgroups.3
+    Ma Shimiao
+        ATTRIBUTES: Note function that is thread-safe
+            The markings match glibc markings.
+
+mq_open.3
+    Torvald Riegel
+        Add EINVAL error case for invalid name
+            This behavior is implementation-defined by POSIX.  If the name
+            doesn't start with a '/', glibc returns EINVAL without attempting
+            the syscall.
+
+popen.3
+    Ma Shimiao
+        ATTRIBUTES: Note functions that are thread-safe
+            The marking matches glibc marking.
+
+pthread_kill.3
+    Michael Kerrisk
+        Note treatment of signals used internally by NPTL
+            The glibc pthread_kill() function gives an error on attempts
+            to send either of the real-time signals used by NPTL.
+
+pthread_sigmask.3
+    Michael Kerrisk
+        Note treatment of signals used internally by NPTL
+            The glibc implementation silently ignores attempts to block the two
+            real-time signals used by NPTL.
+
+pthread_sigqueue.3
+    Michael Kerrisk
+        Note treatment of signals used internally by NPTL
+            The glibc pthread_sigqueue() function gives an error on attempts
+            to send either of the real-time signals used by NPTL.
+
+resolver.3
+    Stéphane Aulery  [Jakub Wilk]
+        Document missing options used by _res structure indicate defaults
+            Missing options: RES_INSECURE1, RES_INSECURE2, RES_NOALIASES,
+            USE_INET6, ROTATE, NOCHECKNAME, RES_KEEPTSIG, BLAST, USEBSTRING,
+            NOIP6DOTINT, USE_EDNS0, SNGLKUP, SNGLKUPREOP, RES_USE_DNSSEC,
+            NOTLDQUERY, DEFAULT
+
+            Written from the glibc source and resolv.conf.5.
+
+            See https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=527136
+    Stéphane Aulery
+        RES_IGNTC is implemented
+
+rint.3
+    Matt Turner
+        Document that halfway cases are rounded to even
+            Per IEEE-754 rounding rules.
+
+            The round(3) page describes the behavior of rint and nearbyint
+            in the halfway cases by saying:
+
+                These functions round x to the nearest integer, but round
+                halfway cases away from zero [...], instead of to the
+                nearest even integer like rint(3)
+
+sigqueue.3
+    Michael Kerrisk
+        NOTES: add "C library/kernel ABI differences" subheading
+    Michael Kerrisk
+        Clarify version info (mention rt_sigqueueinfo())
+
+sigsetops.3
+    Michael Kerrisk
+        Note treatment of signals used internally by NPTL
+            The glibc sigfillset() function excludes the two real-time
+            signals used by NPTL.
+
+sigwait.3
+    Michael Kerrisk
+        Note treatment of signals used internally by NPTL
+            The glibc sigwait() silently ignore attempts to wait for
+            signals used by NPTL.
+
+strcoll.3
+    Ma Shimiao
+        ATTRIBUTES: Note function that is thread-safe
+            The markings match glibc markings.
+
+strdup.3
+    Ma Shimiao
+        ATTRIBUTES: Note functions that are thread-safe
+            The marking matches glibc marking.
+
+tzset.3
+    J William Piggott
+        Add 'std' quoting information
+
+ulimit.3
+    Ma Shimiao
+        ATTRIBUTES: Note function that is thread-safe
+            The marking matches glibc marking.
+
+wcstombs.3
+    Ma Shimiao
+        ATTRIBUTES: Note function that is thread-safe
+            The marking matches glibc marking.
+
+wctob.3
+    Ma Shimiao
+        ATTRIBUTES: Note function that is thread-safe
+            The marking matches glibc marking.
+
+xdr.3
+    Taisuke Yamada
+        Clarified incompatibility and correct usage of XDR API
+            See http://bugs.debian.org/628099
+
+console_codes.4
+    Scot Doyle
+        Add Console Private CSI sequence 15
+            An undocumented escape sequence in drivers/tty/vt/vt.c brings the
+            previously accessed virtual terminal to the foreground.
+            mtk: Patch misattributed to Taisuke Yamada in Git commit
+            because of a muck up on my part.
+    Michael Kerrisk
+        Add kernel version number for CSI sequence 15
+
+random.4
+    Michael Kerrisk
+        Fix permissions shown for the devices
+            These days, the devices are RW for everyone.
+
+filesystems.5
+    Michael Kerrisk
+        Remove dubious claim about comparative performance of ext2
+            Perhaps it was the best filesystem performance-wise in
+            the 20th century, when that text was written. That probably
+            ceased to be true quite a long time ago, though.
+    Stéphane Aulery
+        Add cross references for ext filesystems
+    Stéphane Aulery
+        Specifies the scope of this list and its limits.
+
+host.conf.5
+hosts.5
+resolv.conf.5
+    Stéphane Aulery  [Paul E Condon]
+        Cross references of these pages.
+            See https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=298259
+
+host.conf.5
+    Stéphane Aulery
+        Rework discussion of nospoof, spoofalert, spoof and RESOLV_SPOOF_CHECK
+            The keywords and environment variables "nospoof", "spoofalert",
+            "spoof" and RESOLV_SPOOF_CHECK were added to glibc 2.0.7 but
+            never implemented
+
+            Move descriptions to historical section and reorder it for clarity
+
+            See https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=773443
+
+hosts.5
+    Stéphane Aulery  [Vincent Lefevre]
+        Mention 127.0.1.1 for FQDN and IPv6 examples
+            See https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=562890
+
+proc.5
+    Taisuke Yamada
+        Document /proc/PID/status VmPin field
+            See https://bugs.launchpad.net/bugs/1071746
+    Michael Kerrisk
+        Document (the obsolete) /proc/PID/seccomp
+    Michael Kerrisk
+        Replace description of 'uid_map' with a reference to user_namespaces(7)
+            All of the information in proc(5) was also present in
+            user_namespaces(7), but the latter was more detailed
+            and up to date.
+    Taisuke Yamada
+        Fix SELinux /proc/pid/attr/current example
+            Since the /proc/pid/attr API was added to the kernel, there
+            have been a couple of changes to the SELinux handling of
+            /proc/pid/attr/current.  Fix the SELinux /proc/pid/attr/current
+            example text to reflect these changes and note which kernel
+            versions first included the changes.
+
+securetty.5
+    Stéphane Aulery  [Nicolas FRANCOIS]
+        Note that the pam_securetty module also uses this file
+            See https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=528015
+
+            This patch is a modified version of the one proposed without
+            parts specific to Debian.
+
+boot.7
+    Michael Witten
+        Copy edit
+            While a lot of the changes are issues of presentation,
+            there are also issues of grammar and punctuation.
+    Michael Witten
+        Mention `systemd(1)' and its related `bootup(7)'
+            It's important that the reader receive contemporary information.
+
+credentials.7
+    Michael Kerrisk
+        SEE ALSO: add pthreads(7)
+    Michael Kerrisk
+        Add reference to nptl(7)
+
+feature_test_macros.7
+    Michael Kerrisk
+        Update discussion of _FORTIFY_SOURCE
+            Since the initial implementation a lot more checks were added.
+            Describe all the checks would be too verbose (and would soon
+            fall out of date as more checks are added). So instead, describe
+            the kinds of checks that are done more generally.
+            Also a few other minor edits to the text.
+
+hier.7
+    Stéphane Aulery
+        First patch of a series to achieve compliance with FHS 2.3
+    Stéphane Aulery
+        SGML and XML directories are separated in FHS 2.3
+    Stéphane Aulery
+        Add missing directories defined by FHS 2.3
+    Stéphane Aulery
+        Identify which directories are optional
+    Stéphane Aulery
+        Document /initrd, /lost+found and /sys
+            Ubuntu Bug #70094 reported by Brian Beck
+            https://bugs.launchpad.net/ubuntu/+source/manpages/+bug/70094
+    Stéphane Aulery
+        Explain YP, which is not obvious
+
+ipv6.7
+    Stéphane Aulery  [David Madore]
+        SOL_IPV6 and other SOL_* options socket are not portable
+            See https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=472447
+
+man-pages.7
+    Michael Kerrisk  [Bill Pemberton]
+        Add indent(1) command that produces desired formatting for example code
+    Stéphane Aulery
+        Improve description of sections in accordance with intro pages
+
+packet.7
+    Michael Kerrisk
+        Rework description of fanout algorithms as list
+    Michael Kerrisk
+        Remove mention of needing UID 0 to create packet socket
+            The existing text makes no sense. The check is based
+            purely on a capability check. (Kernel function
+            net/packet/af_packet.c::packet_create()
+    Michael Kerrisk
+        Remove text about ancient glibc not defining SOL_PACKET
+            This was fixed in glibc 2.1.1, which is a long while ago.
+            And in any case, there is nothing special about this case;
+            it's just one of those times when glibc lags.
+    Michael Kerrisk
+        Rework description of 'sockaddr_ll' fields as a list
+    Michael Kerrisk
+        Various minor edits
+
+pthreads.7
+    Michael Kerrisk
+        Add references to nptl(7)
+
+raw.7
+    Michael Kerrisk
+        Rephrase "Linux 2.2" language to "Linux 2.2 or later"
+            The man page was written in the LInux 2.2 timeframe, and
+            some phrasing was not future-proof.
+
+signal.7
+    Michael Kerrisk
+        Note when Linux added realtime signals
+    Michael Kerrisk
+        Correct the range of realtime signals
+    Michael Kerrisk
+        Summarize 2.2 system call changes that resulted from larger signal sets
+    Michael Kerrisk
+        SEE ALSO: add nptl(7)
+
+tcp.7
+    Peter Adkins
+        Document removal of TCP_SYNQ_HSIZE
+            Looking over the man page for 'tcp' I came across a reference to
+            tuning the 'TCP_SYNQ_HSIZE' parameter when increasing
+            'tcp_max_syn_backlog' above 1024. However, this static sizing was
+            removed back in Linux 2.6.20 in favor of dynamic scaling - as
+            part of commit 72a3effaf633bcae9034b7e176bdbd78d64a71db.
+
+user_namespaces.7
+    Eric W. Biederman
+        Update the documentation to reflect the fixes for negative groups
+            Files with access permissions such as rwx---rwx give fewer
+            permissions to their group then they do to everyone else.  Which
+            means dropping groups with setgroups(0, NULL) actually grants a
+            process privileges.
+
+            The unprivileged setting of gid_map turned out not to be safe
+            after this change.  Privileged setting of gid_map can be
+            interpreted as meaning yes it is ok to drop groups. [ Eric
+            additionally noted: Setting of gid_map with privilege has been
+            clarified to mean that dropping groups is ok.  This allows
+            existing programs that set gid_map with privilege to work
+            without changes.  That is, newgidmap(1) continues to work
+            unchanged.]
+
+            To prevent this problem and future problems, user namespaces were
+            changed in such a way as to guarantee a user can not obtain
+            credentials without privilege that they could not obtain without
+            the help of user namespaces.
+
+            This meant testing the effective user ID and not the filesystem
+            user ID, as setresuid(2) and setregid(2) allow setting any process
+            UID or GID (except the supplementary groups) to the effective ID.
+
+            Furthermore, to preserve in some form the useful applications
+            that have been setting gid_map without privilege, the file
+            /proc/[pid]/setgroups was added to allow disabling setgroups(2).
+            With setgroups(2) permanently disabled in a user namespace, it
+            again becomes safe to allow writes to gid_map without privilege.
+    Michael Kerrisk
+        Rework some text describing permission rules for updating map files
+            No (intentional) change to the facts, but this restructuring
+            should make the meaning easier to grasp.
+    Michael Kerrisk
+        Update kernel version associated with 5-line limit for map files
+            As at Linux 3.18, the limit is still five lines, so mention the
+            more recent kernel version in the text.
+    Michael Kerrisk  [Alban Crequy]
+        Handle /proc/PID/setgroups in the example program
+    Michael Kerrisk
+        Rework text describing restrictions on updating /proc/PID/setgroups
+            No (intentional) changes to factual description, but the
+            restructured text is hopefully easier to grasp.
+    Michael Kerrisk
+        Explain why the /proc/PID/setgroups file was added
+
+ldconfig.8
+    Michael Kerrisk
+        Note use of /lib64 and /usr/lib64 on some 64-bit architectures
+
+ld.so.8
+    Michael Kerrisk
+        Note the use of /lib64 and /usr/lib64 on some 64-bit architectures
+
+
+
+==================== Changes in man-pages-3.83 ====================
+
+Released: 2015-04-19, Munich
+
+
+Contributors
+------------
+
+The following people contributed patches/fixes or (noted in brackets
+in the changelog below) reports, notes, and ideas that have been
+incorporated in changes in this release:
+
+Andreas Baak <andreas.baak@gmail.com>
+Andreas Dilger <adilger@dilger.ca>
+cdlscpmv <cdlscpmv@gmail.com>
+Cyrill Gorcunov <gorcunov@openvz.org>
+Darrick J. Wong <darrick.wong@oracle.com>
+David Rientjes <rientjes@google.com>
+Dima Tisnek <dimaqq@gmail.com>
+Eric Sandeen <sandeen@redhat.com>
+Fabien Pichot <fpichot@bouledef.eu>
+Felix Sedlmeier <sedlmeier@gmx.de>
+Gleb Fotengauer-Malinovskiy <glebfm@altlinux.org>
+Heinrich Schuchardt <xypron.glpk@gmx.de>
+Jann Horn <jann@thejh.net>
+Jon Grant <jg@jguk.org>
+Jonny Grant <jg@jguk.org>
+Kees Cook <keescook@chromium.org>
+Masanari Iida <standby24x7@gmail.com>
+Ma Shimiao <mashimiao.fnst@cn.fujitsu.com>
+Michael Kerrisk <mtk.manpages@gmail.com>
+Nikos Mavrogiannopoulos <nmav@gnutls.org>
+Omar Sandoval <osandov@osandov.com>
+Pierre Chifflier <pollux@debian.org>
+Robin H. Johnson <robbat2@gentoo.org>
+Rob Landley <rob@landley.net>
+Theodore Ts'o <tytso@mit.edu>
+Vlastimil Babka <vbabka@suse.cz>
+Walter Harms <wharms@bfs.de>
+William Woodruff <william@tuffbizz.com>
+YOSHIFUJI Hideaki <hideaki.yoshifuji@miraclelinux.com>
+Zeng Linggang <zenglg.jy@cn.fujitsu.com>
+
+Apologies if I missed anyone!
+
+
+New and rewritten pages
+-----------------------
+
+posix_madvise.3
+    Michael Kerrisk
+        New page documenting posix_madvise(3)
+
+ftw.3
+    Michael Kerrisk
+        Reorganize the page to give primacy to nftw()
+            nftw() is the better API, and POSIX.1-2008 marks ftw() obsolete.
+
+Newly documented interfaces in existing pages
+---------------------------------------------
+
+getdents.2
+    Michael Kerrisk  [Dima Tisnek]
+        Document getdents64()
+            See https://bugzilla.kernel.org/show_bug.cgi?id=14795
+
+mount.2
+    Michael Kerrisk, Theodore Ts'o  [Eric Sandeen, Andreas Dilger,
+    Omar Sandoval, Darrick J. Wong]
+        Document MS_LAZYTIME
+
+proc.5
+    Michael Kerrisk
+        Document /proc/sys/kernel/randomize_va_space
+    Michael Kerrisk
+        Document /proc/PID/fdinfo epoll format
+    Michael Kerrisk
+        Describe /proc/PID/fdinfo eventfd format
+    Michael Kerrisk
+        Document /proc/PID/fdinfo signalfd format
+
+
+New and changed links
+---------------------
+
+newfstatat.2
+    Michael Kerrisk
+        New link to fstatat64.2
+
+prlimit64.2
+    Michael Kerrisk
+        New link to getrlimit.2
+
+
+Global changes
+--------------
+
+Various section 3 math pages
+    Michael Kerrisk
+        Note that these functions are also in POSIX.1-2001 and POSIX.1-2008
+
+
+Changes to individual pages
+---------------------------
+
+getent.1
+    Robin H. Johnson
+        Document options
+            The options to getent are now documented, after being around for
+            nearly a decade without changes.
+    Michael Kerrisk
+        Document help and version options
+
+fallocate.2
+    Michael Kerrisk
+        Fix kernel version number for FALLOC_FL_ZERO_RANGE
+            FALLOC_FL_ZERO_RANGE was added in 3.15, not 3.14.
+    Michael Kerrisk
+        Note that SMB3 added FALLOC_FL_ZERO_RANGE support in Linux 3.17
+
+getrlimit.2
+    Michael Kerrisk
+        Note that the underlying system call for prlimit() is prlimit64()
+    Michael Kerrisk
+        Remove "_FILE_OFFSET_BITS == 64" from prlimit() FTM requirements
+            "_FILE_OFFSET_BITS == 64" is not needed to get the prlimit()
+            declaration.
+
+ioctl_list.2
+    Nikos Mavrogiannopoulos
+        SIOCADDRT accepts in6_rtmsg in INET6 protocol
+    Heinrich Schuchardt
+        TFD_IOC_SET_TICKS
+            timerfd_create.2 mentions TFD_IOC_SET_TICKS. We should add it to
+            ioctl_list.2, too.
+
+llseek.2
+    Michael Kerrisk
+        Advise reader to use lseek(2) instead
+    Michael Kerrisk
+        llseek() exists on 32-bit platforms to support seeking to large offsets
+
+madvise.2
+    David Rientjes
+        Specify MADV_REMOVE returns EINVAL for hugetlbfs
+            madvise(2) actually returns with error EINVAL for MADV_REMOVE
+            when used for hugetlb VMAs, not EOPNOTSUPP, and this has been
+            the case since MADV_REMOVE was introduced in commit f6b3ec238d12
+            ("madvise(MADV_REMOVE): remove pages from tmpfs shm backing
+            store"). Specify the exact behavior.
+    Michael Kerrisk
+        SEE ALSO: add posix_madvise(2)
+
+poll.2
+    Michael Kerrisk  [Andreas Baak]
+        SEE ALSO: add epoll(7)
+
+posix_fadvise.2
+    Michael Kerrisk
+        Add "C library/kernel ABI differences" subsection
+
+pread.2
+    Michael Kerrisk
+        Add "C library/kernel ABI differences" subsection
+
+seccomp.2
+    Michael Kerrisk  [Pierre Chifflier, Kees Cook]
+        Note that seccomp_data is read-only
+
+stat.2
+    Michael Kerrisk
+        Add some details on various "stat" versions
+            Three versions of "stat" appeared on 32-bit systems,
+            dealing with structures of different (increasing) sizes.
+            Explain some of the details, and also note that the
+            situation is simpler on modern 64-bit architectures.
+    Michael Kerrisk
+        Add mention of newfstatat()
+            The underlying system call for fstatat() is newfstatat()
+            on some architectures.
+
+symlink.2
+    Michael Kerrisk  [Jonny Grant]
+        ERRORS: add linkpath=="" case for ENOENT
+
+syscalls.2
+    Michael Kerrisk
+        Remove prlimit()
+            There really is only the prlimit64() system call.
+    Michael Kerrisk
+        Add some details about the "multiple versions of system calls"
+            The multiple-system-call-version phenomenon is particularly a
+            feature of older 32-bit platforms. Hint at that fact in the text.
+
+timerfd_create.2
+    Cyrill Gorcunov  [Michael Kerrisk]
+        Document TFD_IOC_SET_TICKS ioctl() operation
+    Michael Kerrisk
+        Add some details to C library/kernel ABI differences
+
+unshare.2
+    Michael Kerrisk  [Fabien Pichot]
+        Remove mention of "System V" from discussion of CLONE_NEWIPC
+            These days, CLONE_NEWIPC also affects POSIX message queues.
+
+asprintf.3
+    Zeng Linggang
+        ATTRIBUTES: Note functions that are thread-safe
+
+carg.3
+    Michael Kerrisk
+        Add introductory sentence explaining what these functions calculate
+
+ccos.3
+    Ma Shimiao
+        ATTRIBUTES: Note functions that are thread-safe
+    Michael Kerrisk
+        Add introductory sentence explaining what these functions calculate
+
+ccosh.3
+    Michael Kerrisk
+        Add introductory sentence explaining what these functions calculate
+
+cexp.3
+    Ma Shimiao
+        ATTRIBUTES: Note functions that are thread-safe
+
+clock.3
+    Ma Shimiao
+        ATTRIBUTES: Note functions that is thread-safe
+
+clog.3
+    Michael Kerrisk
+        Add introductory sentence explaining what these functions calculate
+
+csin.3
+    Ma Shimiao
+        ATTRIBUTES: Note functions that are thread-safe
+    Michael Kerrisk
+        Add introductory sentence explaining what these functions calculate
+
+csinh.3
+    Ma Shimiao
+        ATTRIBUTES: Note functions that are thread-safe
+    Michael Kerrisk
+        Add introductory sentence explaining what these functions calculate
+
+csqrt.3
+    Ma Shimiao
+        ATTRIBUTES: Note functions that are thread-safe
+    Michael Kerrisk
+        Simplify description of what  these functions calculate
+
+ctan.3
+    Ma Shimiao
+        ATTRIBUTES: Note functions that are thread-safe
+    Michael Kerrisk
+        Add introductory sentence explaining what these functions calculate
+
+ctanh.3
+    Ma Shimiao
+        ATTRIBUTES: Note functions that are thread-safe
+    Michael Kerrisk
+        Add introductory sentence explaining what these functions calculate
+
+ctime.3
+    Zeng Linggang
+        ATTRIBUTES: Note functions that aren't thread-safe
+
+exec.3
+    Michael Kerrisk
+        SYNOPSIS: Clarify calling signature for execl() and execlp()
+    Michael Kerrisk  [Andreas Baak]
+        Correct prototype for execle()
+            Make the prototype shown into correct C.
+
+ftw.3
+    Michael Kerrisk  [Felix Sedlmeier]
+        ftw() and nftw() differ for the non-stat-able symlink case
+            The POSIX specification of ftw() says that an un-stat-able
+            symlink may yield either FTW_NS or FTW_SL. The specification
+            of nftw() does not carry this statement.
+    Michael Kerrisk
+        CONFORMING TO: add POSIX.1-2008
+    Michael Kerrisk
+        Update POSIX version references in NOTES
+
+getcwd.3
+    Jann Horn  [Michael Kerrisk]
+        Note behavior for unreachable current working directory
+    Michael Kerrisk
+        Add ENOMEM error
+
+gethostbyname.3
+    Michael Kerrisk  [Jonny Grant]
+        Clarify that NO_ADDRESS and NO_DATA are synonyms
+    Michael Kerrisk
+        Add some detail for NO_DATA
+            Text consistent with POSIX and FreeBSD's gethostbyname() man page.
+    Zeng Linggang
+        ATTRIBUTES: Note functions that aren't thread-safe
+
+getnetent.3
+    Zeng Linggang
+        ATTRIBUTES: Note functions that aren't thread-safe
+
+get_nprocs_conf.3
+    Zeng Linggang
+        ATTRIBUTES: Note functions that are thread-safe
+
+getutent.3
+    Zeng Linggang
+        ATTRIBUTES: Note functions that aren't thread-safe
+
+glob.3
+    Zeng Linggang
+        ATTRIBUTES: Note functions that aren't thread-safe
+
+insque.3
+    Ma Shimiao
+        ATTRIBUTES: Note functions that are thread-safe
+
+login.3
+    Zeng Linggang
+        ATTRIBUTES: Note functions that aren't thread-safe
+
+lseek64.3
+    Michael Kerrisk
+        Clarify details with respect to 32-bit and 64-bit systems
+
+malloc.3
+    Michael Kerrisk
+        Add ENOMEM error
+
+mbsnrtowcs.3
+    Zeng Linggang
+        ATTRIBUTES: Note function that isn't thread-safe
+
+mbsrtowcs.3
+    Zeng Linggang
+        ATTRIBUTES: Note function that isn't thread-safe
+
+mq_notify.3
+    Michael Kerrisk
+        Add "C library/kernel ABI differences" subsection
+
+mq_open.3
+    Michael Kerrisk  [Fabien Pichot]
+        NOTES: explain differences from the underlying system call
+            The check for the slash at the start of a pathname is done in glibc
+
+openpty.3
+    Zeng Linggang
+        ATTRIBUTES: Note functions that aren't thread-safe
+
+perror.3
+    Zeng Linggang
+        ATTRIBUTES: Note function that is thread-safe
+
+posix_memalign.3
+    Zeng Linggang
+        ATTRIBUTES: Note functions that aren't thread-safe
+
+printf.3
+    Zeng Linggang
+        ATTRIBUTES: Note functions that are thread-safe
+    Walter Harms  [Michael Kerrisk]
+        Simplify the example code
+
+qsort.3
+    Michael Kerrisk  [Rob Landley]
+        alphasort() and versionsort() are not suitable for 'compar'
+            In glibc 2.10, the prototypes of alphasort() and versionsort()
+            were changed so that the arguments switched from 'const void *' to
+            'const struct dirent **', to match the POSIX.1-2008 specification
+            of alphasort(). As such, compiler warnings will result if
+            these functions are used as the arguments of qsort().
+
+                warning: passing argument 4 of 'qsort' from incompatible
+                pointer type
+                expected '__compar_fn_t' but argument is of type
+                'int (*)(const struct dirent **, const struct dirent **)'
+
+            Therefore, remove the ancient NOTES text suggesting that
+            alphasort() and versionsort() can be used as suitable
+            'compar' arguments for qsort().
+
+realpath.3
+    Michael Kerrisk  [Jon Grant]
+        Add ENOMEM error
+
+scandir.3
+    Michael Kerrisk
+        glibc 2.10 changed the argument types for alphasort() and versionsort()
+    Zeng Linggang
+        ATTRIBUTES: Note functions that are thread-safe
+
+scanf.3
+    Zeng Linggang
+        ATTRIBUTES: Note functions that are thread-safe
+
+setnetgrent.3
+    Zeng Linggang
+        ATTRIBUTES: Note functions that aren't thread-safe
+
+significand.3
+    Ma Shimiao
+        ATTRIBUTES: Note functions that are thread-safe
+
+strcasecmp.3
+    Michael Kerrisk  [Jonny Grant]
+        Clarify that strcasecmp() does a byte-wise comparison
+    Michael Kerrisk
+        CONFORMING TO: add POSIX.1-2008
+
+unlocked_stdio.3
+    Zeng Linggang
+        ATTRIBUTES: Note functions that aren't thread-safe
+
+updwtmp.3
+    Zeng Linggang
+        ATTRIBUTES: Note functions that aren't thread-safe
+
+wcrtomb.3
+    Zeng Linggang
+        ATTRIBUTES: Note function that isn't thread-safe
+
+wcsnrtombs.3
+    Zeng Linggang
+        ATTRIBUTES: Note function that isn't thread-safe
+
+wcsrtombs.3
+    Zeng Linggang
+        ATTRIBUTES: Note function that isn't thread-safe
+
+wordexp.3
+    Zeng Linggang
+        ATTRIBUTES: Note functions that aren't thread-safe
+
+wprintf.3
+    Zeng Linggang
+        ATTRIBUTES: Note functions that are thread-safe
+
+proc.5
+    Michael Kerrisk
+        Describe "mnt_id" field of /proc/PID/fdinfo
+    Michael Kerrisk
+        Note that abstract sockets are included in /proc/net/unix
+    Michael Kerrisk
+        Update description /proc/sys/unix 'Type' field
+            The existing text was very crufty. UNIX domain sockets
+            support more than SOCK_STREAM for a _very_ long time now.
+    Michael Kerrisk
+        Add some detail to /proc/PID/timers
+    Michael Kerrisk  [Vlastimil Babka]
+        Enhance discussion of /proc/PID/status 'VmSwap' field
+
+epoll.7
+    Michael Kerrisk
+        SEE ALSO: add poll(2) and select(2)
+
+icmp.7
+    YOSHIFUJI Hideaki/吉藤英明
+        Document net.ipv4.ping_group_range knob
+
+nptl.7
+    Michael Kerrisk
+        Add reference to timer_create(2)
+
+
+==================== Changes in man-pages-4.00 ====================
+
+Released: 2015-05-07, Munich
+
+
+Contributors
+------------
+
+The following people contributed patches/fixes or (noted in brackets
+in the changelog below) reports, notes, and ideas that have been
+incorporated in changes in this release:
+
+Advait Dixi <advaitdixit@hotmail.com>
+Alain Kalker <a.c.kalker@gmail.com>
+Andi Kleen <andi@firstfloor.org>
+Andreas Gruenbacher <agruenba@redhat.com>
+Andreas Heiduk <asheiduk@googlemail.com>
+Askar Safin <safinaskar@mail.ru>
+Brice Goglin <Brice.Goglin@inria.fr>
+Cameron Norman <camerontnorman@gmail.com>
+Carlos O'Donell <carlos@redhat.com>
+Chris Metcalf <cmetcalf@tilera.com>
+Christophe Lohr <Christophe.Lohr@telecom-bretagne.eu>
+Christopher Head <chead@chead.ca>
+Christoph Hellwig <hch@infradead.org>
+David Wilcox <davidvsthegiant@gmail.com>
+Denis Du <denisdu@ruggedcom.com>
+Egmont Koblinger <egmont@gmail.com>
+Filipe Brandenburger <filbranden@gmail.com>
+Filipus Klutiero <chealer@gmail.com>
+Florian Weimer <fweimer@redhat.com>
+Frédéric Maria <frederic.maria@free.fr>
+Gleb Fotengauer-Malinovskiy <glebfm@altlinux.org>
+Graham Shaw <gdshaw@riscpkg.org>
+Gregor Jasny <igjasny@googlemail.com>
+Guillem Jover <guillem@hadrons.org>
+Guy Harris <guy@alum.mit.edu>
+Heinrich Schuchardt <xypron.glpk@gmx.de>
+Ian Pilcher <arequipeno@gmail.com>
+Jann Horn <jann@thejh.net>
+Jason Newton <nevion@gmail.com>
+J. Bruce Fields <bfields@fieldses.org>
+Jiri Pirko <jpirko@redhat.com>
+Joachim Wuttke <j.wuttke@fz-juelich.de>
+Joern Heissler <contact@joern.heissler.de>
+Jonathan Nieder <jrnieder@gmail.com>
+Joonas Salo <salo.joonas@gmail.com>
+Jussi Lehtola <jussilehtola@fedoraproject.org>
+Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
+KOSAKI Motohiro <kosaki.motohiro@jp.fujitsu.com>
+Laurence Gonsalves <laurence@xenomachina.com>
+Magnus REFTEL <magnus.xm.reftel@stericsson.com>
+Michael Kerrisk <mtk.manpages@gmail.com>
+NeilBrown <neilb@suse.de>
+Regid Ichira <regid23@nt1.in>
+Sam Varshavchik <mrsam@courier-mta.com>
+Steinar H. Gunderson <sgunderson@bigfoot.com>
+Stéphane Aulery <saulery@free.fr>
+Stephane Fillod <fillods@users.sf.net>
+Tetsuo Handa <from-linux-kernel@i-love.sakura.ne.jp>
+Thomas Hood <jdthood@gmail.com>
+Urs Thuermann <urs@isnogud.escape.de>
+Vasiliy Kulikov <segooon@gmail.com>
+Vegard Nossum <vegard.nossum@gmail.com>
+Weijie Yang <weijie.yang@samsung.com>
+William Woodruff <william@tuffbizz.com>
+Zeng Linggang <zenglg.jy@cn.fujitsu.com>
+
+Apologies if I missed anyone!
+
+
+New and rewritten pages
+-----------------------
+
+get_phys_pages.3
+    William Woodruff
+        Document get_phys_pages() and get_avphys_pages()
+
+loop.4
+    Urs Thuermann, Michael Kerrisk
+        New page documenting the loop device
+
+xattr.7
+    Andreas Gruenbacher
+        Import attr(5) man page from the 'attr' project
+            After discussions with Andreas Gruenbacher, it makes sense to
+            move this page into man-pages, since it mostly relates to
+            kernel details. Since this is an overview page,
+            we'll move it to Section 7.
+    Michael Kerrisk
+         Rename page
+            "xattr" is a more meaningful name than "attr" (it resonates
+            with the names of the system calls), so as long as we are
+            moving the page to a new section, we'll change the name as well,
+            and retain an acl(5) link so that old references remain valid.
+
+
+Newly documented interfaces in existing pages
+---------------------------------------------
+
+mmap.2
+    Michael Kerrisk  [Andi Kleen]
+        Document MAP_HUGE_2MB, MAP_HUGE_1GB, and MAP_HUGE_SHIFT
+
+shmget.2
+    Michael Kerrisk  [Andi Kleen]
+        Document SHM_HUGE_2MB, SHM_HUGE_1GB, and SHM_HUGE_SHIFT
+
+resolver.3
+    Michael Kerrisk  [Jonathan Nieder]
+        Add descriptions of some other resolver functions
+            Add res_ninit(), res_nquery(), res_nsearch(),
+            and res_nquerydomain(), res_nmkquery(), res_nsend().
+
+tty_ioctl.4
+    Frédéric Maria  [Stephane Fillod, Andreas Heiduk]
+        Document TIOCMIWAIT and TIOCGICOUNT
+    Michael Kerrisk
+        Document TIOCGEXCL
+    Michael Kerrisk
+        Document TIOGCPKT
+    Michael Kerrisk
+        Document TIOCSPTLCK
+    Michael Kerrisk
+        Document TIOCGPTLCK
+
+
+New and changed links
+---------------------
+
+CMSG_DATA.3
+    Michael Kerrisk
+        New link to cmsg(3)
+
+CMSG_LEN.3
+    Michael Kerrisk
+        New link to cmsg(3)
+
+dprintf.3
+    Michael Kerrisk
+        Convert to a link to printf.3
+
+get_avphys_pages.3
+    William Woodruff
+        New link to new get_phys_pages.3 page
+
+res_ninit.3
+res_nmkquery.3
+res_nquery.3
+res_nquerydomain.3
+res_nsearch.3
+res_nsend.3
+    Michael Kerrisk
+        New links to resolver(3) man page
+
+loop-control.4
+    Michael Kerrisk
+        New link to loop.4
+
+attr.5
+    Michael Kerrisk
+        New link to xattr(7)
+
+
+Global changes
+--------------
+
+chown.2
+execve.2
+prctl.2
+truncate.2
+proc.5
+capabilities.7
+ld.so.8
+    Michael Kerrisk
+        Tighter wording: 'mode bit' rather than 'permission bit'
+            For sticky, set-UID, and set-GID mode bits (as used in POSIX).
+
+
+Changes to individual pages
+---------------------------
+
+add_key.2
+keyctl.2
+request_key.2
+    Michael Kerrisk
+        SEE ALSO: add keyrings(7)
+
+add_key.2
+request_key.2
+    Michael Kerrisk
+        SEE ALSO: add keyctl(3)
+
+epoll_ctl.2
+    Michael Kerrisk
+        After EPOLLHUP, EOF will be seen only after all data has been consumed
+
+epoll_wait.2
+    Michael Kerrisk
+        Clarify that signal mask treatment in epoll_pwait() is per-thread
+            s/sigprocmask()/pthread_sigmask()/
+
+fcntl.2
+    Michael Kerrisk  [Vegard Nossum]
+        Note an F_SETSIG corner case
+
+get_mempolicy.2, set_mempolicy
+    Brice Goglin
+        Policy is per thread, not per process
+
+getxattr.2
+listxattr.2
+removexattr.2
+setxattr.2
+capabilities.7
+    Michael Kerrisk
+        Adjust "attr(5)" references to "xattr(7)"
+
+ioctl.2
+    Michael Kerrisk
+        SEE ALSO: add console_ioctl(2) and tty_ioctl(2)
+
+listxattr.2
+xattr.7
+    Michael Kerrisk
+        Describe listxattr(2) E2BIG error and document it as a BUG
+
+mkdir.2
+    Michael Kerrisk
+        Wording fixes + point reader at stat(2) for explanation of file mode
+    Michael Kerrisk  [Andreas Grünbacher]
+        Further tweaks to text on S_ISVTX and 'mode' argument
+
+mknod.2
+    Michael Kerrisk
+        Rewordings + point reader at stat(2) for details of mode bits
+
+mmap.2
+    Michael Kerrisk
+        Remove text that implies that munmap() syncs MAP_SHARED mapping to file
+            The existing text in this page:
+
+                   MAP_SHARED Share  this  mapping.   Updates to the mapping
+                              are visible to other processes that  map  this
+                              file,  and are carried through to the underly‐
+                              ing  file.   The  file  may  not  actually  be
+                              updated until msync(2) or munmap() is called.
+
+            implies that munmap() will sync the mapping to the underlying
+            file. POSIX doesn't require this, and some light reading of the
+            code and some light testing (fsync() after munmap() of a large
+            file) also indicates that Linux doesn't do this.
+
+msync.2
+    Michael Kerrisk
+        Rework text of DESCRIPTION
+            Rewrite the text somewhat, for easier comprehension.
+            No (intentional) changes to factual content
+
+nfsservctl.2
+    Michael Kerrisk  [J. Bruce Fields]
+        Note that nfsservctl() was replaced by files in nfsd filesystem
+
+open.2
+    Michael Kerrisk  [Andreas Gruenbacher]
+        open() honors the S_ISVTX, S_ISUID, and S_ISGID bits in 'mode'
+    Michael Kerrisk
+        Tighten wording: use 'mode bit' rather than 'permission bit'
+    Michael Kerrisk  [NeilBrown]
+        BUGS: O_CREAT | O_DIRECTORY succeeds if pathname does not exist
+
+poll.2
+    Michael Kerrisk  [Ian Pilcher]
+        Clarify that signal mask treatment in ppoll() is per-thread
+            s/sigprocmask()/pthread_sigmask()/
+    Michael Kerrisk  [Sam Varshavchik]
+        After POLLHUP, EOF will be seen only after all data has been consumed
+    Michael Kerrisk
+        Make it clearer which bits are ignored in 'events'
+
+prctl.2
+    Michael Kerrisk  [David Wilcox, Filipe Brandenburger]
+        Note that "parent" for purposes of PR_SET_DEATHSIG is a *thread*
+            See https://bugzilla.kernel.org/show_bug.cgi?id=43300
+
+sendfile.2
+    Michael Kerrisk  [Jason Newton]
+        Note that sendfile does not support O_APPEND for 'out_fd'
+            See https://bugzilla.kernel.org/show_bug.cgi?id=82841
+    Michael Kerrisk  [Gregor Jasny]
+        RETURN VALUE: note the possibility of "short sends"
+            See https://bugzilla.kernel.org/show_bug.cgi?id=97491
+    Michael Kerrisk  [Askar Safin]
+        Clarify text on 'out_fd' and regular files in Linux 2.4
+            See https://bugzilla.kernel.org/show_bug.cgi?id=86001
+
+shutdown.2
+    Michael Kerrisk  [Stéphane Aulery]
+        BUGS: UNIX domain sockets now detect invalid 'how' values
+            Bug fixed in Linux 3.7.
+            See https://bugzilla.kernel.org/show_bug.cgi?id=47111
+
+sigaction.2
+    Michael Kerrisk
+        Refer the reader to fcntl(2) F_SETSIG for further details on si_fd
+
+stat.2
+    Jann Horn
+        Add note about stat() being racy
+    Andreas Gruenbacher
+        Improve description of some mode constants
+    Michael Kerrisk  [Andreas Grünbacher]
+        Remove excessive leading zeros on some constants
+    Michael Kerrisk
+        Add text on POSIX terms "file mode bits" and "file permission bits"
+            Recent changes to various pages employ this distinction.
+    Michael Kerrisk
+        Tighten wording: use 'mode bit' rather than 'permission bit'
+            According to POSIX, the the 9 UGO*RWX bits are permissions, and
+            'mode' is used to refer to collectively to those bits plus sticky,
+            set-UID, and set_GID bits.
+
+syslog.2
+    Michael Kerrisk
+        SEE ALSO: add dmesg(1)
+
+umask.2
+open.2
+mknod.2
+mkdir.2
+    Andreas Gruenbacher
+        Explain what default ACLs do
+            Explain the effect that default ACLs have (instead of the umask)
+            in umask.2.  Mention that default ACLs can have an affect in
+            open.2, mknod.2, and mkdir.2.
+
+unshare.2
+    Michael Kerrisk  [Florian Weimer]
+        Give the reader a hint that unshare() works on processes or threads
+            See https://bugzilla.kernel.org/show_bug.cgi?id=59281
+
+atexit.3
+    Zeng Linggang
+        ATTRIBUTES: Note function that is thread-safe
+
+bsearch.3
+    Zeng Linggang
+        ATTRIBUTES: Note function that is thread-safe
+
+cmsg.3
+    Michael Kerrisk  [Christopher Head]
+        Fix error in SCM_RIGHTS code sample
+            Remove erroneous second initialization of msg.msg_controllen
+            in the example code for SCM_RIGHTS.
+            See https://bugzilla.kernel.org/show_bug.cgi?id=15952
+
+CPU_SET.3
+    Chris Metcalf
+        Clarify language about "available" cpus
+            The CPU_SET.3 man page uses the adjective "available" when
+            explaining what the argument to CPU_SET() means.  This is
+            confusing, since "available" isn't well-defined.  The kernel
+            has a set of adjectives (possible, present, online, and active)
+            that qualify cpus, but normally none of these are what the
+            cpu_set_t bit index means: it's just "which cpu", using the
+            kernel's internal numbering system, even if that cpu isn't
+            possible or present.
+
+            This change removes the word "available" and adds a sentence
+            warning that cpu sets may not be contiguous due to dynamic
+            cpu hotplug, etc.
+
+err.3
+    Zeng Linggang
+        ATTRIBUTES: Note functions that are thread-safe
+
+ftw.3
+    Zeng Linggang
+        ATTRIBUTES: Note functions that are thread-safe
+
+gethostbyname.3
+    Carlos O'Donell
+        NSS plugins searched first
+    Carlos O'Donell
+        "order" is obsolete
+
+gethostid.3
+    Zeng Linggang
+        ATTRIBUTES: Note functions that are/aren't thread-safe
+
+getmntent.3
+    Zeng Linggang
+        ATTRIBUTES: Note functions that are/aren't thread-safe
+
+get_nprocs_conf.3
+    Michael Kerrisk
+        Use exit() rather than return in main()
+
+getopt.3
+    Michael Kerrisk  [Guy Harris]
+        Remove crufty BUGS section
+            See https://bugzilla.kernel.org/show_bug.cgi?id=90261
+
+iconv_close.3
+    Zeng Linggang
+        ATTRIBUTES: Note function that is thread-safe
+
+inet_ntop.3
+    Zeng Linggang
+        ATTRIBUTES: Note function that is thread-safe
+
+longjmp.3
+    Zeng Linggang
+        ATTRIBUTES: Note functions that are thread-safe
+
+lsearch.3
+    Zeng Linggang
+        ATTRIBUTES: Note functions that are thread-safe
+
+mcheck.3
+    Zeng Linggang
+        ATTRIBUTES: Note functions that aren't thread-safe
+
+on_exit.3
+    Zeng Linggang
+        ATTRIBUTES: Note function that is thread-safe
+
+printf.3
+    Michael Kerrisk  [Egmont Koblinger]
+        Merge dprintf() and vdprintf() discussion into this page
+    Michael Kerrisk
+        SEE ALSO: add puts(3)
+    Michael Kerrisk
+        Move return value discussion to proper RETURN VALUE section
+
+putpwent.3
+    Zeng Linggang
+        ATTRIBUTES: Note function that is thread-safe
+
+qsort.3
+    Zeng Linggang
+        ATTRIBUTES: Note functions that are thread-safe
+
+regex.3
+    Michael Kerrisk  [Laurence Gonsalves]
+        Fix error in description of 'cflags'
+            'cflags' is a bit mask of *zero* (not one) or more flags.
+
+resolver.3
+    Stéphane Aulery
+        Add info about RES_INSECURE1 and RES_INSECURE2 option in debug mode
+
+scanf.3
+    Joern Heissler
+        Improve description of %n specifier
+
+setjmp.3
+    Zeng Linggang
+        ATTRIBUTES: Note functions that are thread-safe
+
+setlocale.3
+    Zeng Linggang
+        ATTRIBUTES: Note function that isn't thread-safe
+
+setlogmask.3
+    Zeng Linggang
+        ATTRIBUTES: Note function that isn't thread-safe
+
+sleep.3
+    Zeng Linggang
+        ATTRIBUTES: Note function that isn't thread-safe
+
+strsignal.3
+    Zeng Linggang
+        ATTRIBUTES: Note function that isn't thread-safe
+
+sysconf.3
+    Zeng Linggang
+        ATTRIBUTES: Note function that is thread-safe
+
+undocumented.3
+    William Woodruff
+        Remove documented functions
+
+tty_ioctl.4
+    Michael Kerrisk  [Denis Du]
+        Fix error in code example
+
+proc.5
+    Michael Kerrisk  [Cameron Norman, Vasiliy Kulikov]
+        Document /proc mount options
+            Document the 'hidepid' and 'gid' mount options that were added in
+            Linux 3.3.  See https://bugzilla.kernel.org/show_bug.cgi?id=90641
+            Based on text by Vasiliy Kulikov in
+            Documentation/filesystems/proc.txt.
+    Michael Kerrisk  [Kirill A. Shutemov]
+        Improve description of /proc/PID/status
+    Guillem Jover
+        Document /proc/PID/exe behaviour on unlinked pathnames
+    Michael Kerrisk  [Weijie Yang]
+        Document /proc/PID/status VmPMD
+
+resolv.conf.5
+    Stéphane Aulery  [Thomas Hood]
+        Document use-vc option added to glibc 2.14
+            Fix Ubuntu bug #1110781:
+            https://bugs.launchpad.net/ubuntu/+source/manpages/+bug/1110781
+    Stéphane Aulery  [Thomas Hood]
+        Document RES_SNGLKUPREOP
+            Fix Ubuntu bug #1110781:
+            https://bugs.launchpad.net/ubuntu/+source/manpages/+bug/1110781
+
+tzfile.5
+    Sam Varshavchik
+        Add various details on version 2 format
+
+aio.7
+    Michael Kerrisk
+        Add details and update URL for OLS 2003 paper on AIO
+
+bootparam.7
+    Michael Kerrisk  [Alain Kalker]
+        Update discussion of 'debug' option
+            See https://bugzilla.kernel.org/show_bug.cgi?id=97161
+    Michael Kerrisk
+        Summary of multiple changes: remove cruft from this page.
+            Much of the detail on hardware specifics in this page dates
+            from the 20th century. (The last major update to this page was in
+            man-pages-1.14!) It's hugely out of date now (many of these
+            devices disappeared from the kernel years ago.) So, I've taken
+            a large scythe to the page to remove anything that looks
+            seriously dated. In the process, the page has shrunk to less
+            than 50% of its previous size.
+    Michael Kerrisk
+        Remove "buff=" details
+            This seems to have gone away in Linux 2.2.
+    Michael Kerrisk
+        Remove crufty "Mouse drivers" options
+    Michael Kerrisk
+        Remove crufty "General non-device-specific boot arguments" options
+    Michael Kerrisk
+        Remove crufty "Hard disks" options
+    Michael Kerrisk
+        Remove crufty "mem=" details
+    Michael Kerrisk
+        Remove crufty details on IBM MCA bus devices
+    Michael Kerrisk
+        Remove 'swap=" details
+            This seems to have gone away in Linux 2.2,
+    Michael Kerrisk
+        Remove crufty floppy disk driver options
+            In the specific case of floppy drives: the drivers still
+            exist, but it's been a while since most of saw these devices
+            in the wild. So, just refer the reader to the kernel source
+            file for details. (The detail in this man page was after all
+            originally drawn from that file.)
+        Remove crufty "ISDN drivers" options
+    Michael Kerrisk
+        Remove crufty "line printer driver" options
+    Michael Kerrisk
+        Remove crufty "Serial port drivers" options
+    Michael Kerrisk
+        Remove crufty reference to CONFIG_BUGi386
+            That option disappeared in Linux 2.4.
+    Michael Kerrisk
+        Remove crufty text
+            "bootsetups array" dates from Linux 2.0.
+    Michael Kerrisk
+        Remove crufty "Video hardware" options
+    Michael Kerrisk
+        Remove crufty SCSI device driver options
+
+fanotify.7
+    Michael Kerrisk  [Heinrich Schuchardt]
+        Since Linux 3.19, fallocate(2) generates FAN_MODIFY events
+
+inotify.7
+    Michael Kerrisk  [Heinrich Schuchardt]
+        Since Linux 3.19, fallocate(2) generates IN_MODIFY events
+
+ip.7
+    Michael Kerrisk
+        Explain how IP_ADD_MEMBERSHIP determines its argument type
+    Michael Kerrisk  [Jiri Pirko, Magnus REFTEL]
+        Clarify details of the IP_MULTICAST_IF socket option
+    Michael Kerrisk  [Advait Dixi]
+        Remove dubious text that says that SO_PRIORITY sets IP TOS
+            See https://bugzilla.kernel.org/show_bug.cgi?id=35852
+    Michael Kerrisk
+        Relocate misplaced text describing ENOPROTOOPT error
+
+packet.7
+    Graham Shaw
+        Add sll_protocol to list of required fields for outbound packets
+
+pthreads.7
+    Michael Kerrisk  [KOSAKI Motohiro]
+        Using thread IDs whose lifetime has expired gives undefined behavior
+            See https://bugzilla.kernel.org/show_bug.cgi?id=53061
+
+raw.7
+    Michael Kerrisk  [Tetsuo Handa]
+        For incoming datagrams, sin_port is set to zero
+    Michael Kerrisk
+        Mention sendto(), recvfrom(), and so on when discussing address format
+            This gives the reader a little context for the following
+            discussion of 'sin_port'.
+    Michael Kerrisk
+        Remove crufty reference to <netinet/in.h>
+    Michael Kerrisk
+        Replace reference to RFC 1700 with pointer to IANA protocol number list
+
+signal.7
+    Michael Kerrisk  [Steinar H. Gunderson]
+        Clarify that I/O operations on disks are not interrupted by signals
+            See https://bugzilla.kernel.org/show_bug.cgi?id=97721
+
+unix.7
+    Michael Kerrisk  [Christophe Lohr]
+        Remove mention of UNIX_PATH_MAX
+            This kernel constant is not exposed to user space.
+    Michael Kerrisk
+        Note the 108 bytes for sun_path is how things are done on Linux
+            And refer the reader to NOTES for discussion of portability.
+
+xattr.7
+    Michael Kerrisk
+        Document EA limits for Btrfs
+    Michael Kerrisk
+        Document VFS-imposed limits on EAs
+            VFS imposes a 255-byte limit on EA names, and a 64kB limit on
+            EA values.
+    Michael Kerrisk
+        The ext[234] block limitation applies to sum of all EAs
+            It is not a per-EA limit.
+    Michael Kerrisk
+        Clarify permissions required to work with 'user' EAs
+    Michael Kerrisk
+        ext2 and ext3 no longer need mounting with 'user_xattr' for user EAs
+    Michael Kerrisk
+        Add various relevant pages to SEE ALSO
+    Michael Kerrisk
+        Add CONFORMING TO section
+    Michael Kerrisk
+        Modify headings to man-pages norms
+    Michael Kerrisk
+        Btrfs also supports extended attributes
+    Michael Kerrisk
+        File capabilities are implemented using *security* attributes
+            Not *system* attributes
+    Michael Kerrisk
+        Describe limit on EA values for JFS, XFS, and Reiserfs
+    Michael Kerrisk
+        Explicitly mention some of the xattr system calls in DESCRIPTION
+            Naming the system calls helps to orient the reader
+
+nscd.8
+    Michael Kerrisk
+        Add mention of 'services' and 'netgroup' databases
+            This makes the page consistent with nscd.conf(5).

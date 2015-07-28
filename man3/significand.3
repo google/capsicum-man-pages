@@ -6,7 +6,7 @@
 .\"
 .\" heavily based on glibc infopages, copyright Free Software Foundation
 .\"
-.TH SIGNIFICAND 3 2009-02-04 "GNU" "Linux Programmer's Manual"
+.TH SIGNIFICAND 3 2015-04-19 "GNU" "Linux Programmer's Manual"
 .SH NAME
 significand, significandf, significandl \-
 get mantissa of floating-point number
@@ -35,12 +35,10 @@ _SVID_SOURCE || _BSD_SOURCE
 .RE
 .ad b
 .SH DESCRIPTION
-The
-.BR significand ()
-function returns the mantissa of
+These functions return the mantissa of
 .I x
 scaled to the range [1,2).
-It is equivalent to
+They are equivalent to
 .sp
 .in +4n
 scalb(x, (double) \-ilogb(x))
@@ -48,6 +46,23 @@ scalb(x, (double) \-ilogb(x))
 .PP
 This function exists mainly for use in certain standardized tests
 for IEEE 754 conformance.
+.SH ATTRIBUTES
+For an explanation of the terms used in this section, see
+.BR attributes (7).
+.TS
+allbox;
+lb lb lb
+l l l.
+Interface	Attribute	Value
+T{
+.BR significand (),
+.br
+.BR significandf (),
+.br
+.BR significandl ()
+T}	Thread safety	MT-Safe
+.TE
+
 .SH CONFORMING TO
 These functions are nonstandard; the
 .I double

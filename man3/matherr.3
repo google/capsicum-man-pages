@@ -24,7 +24,7 @@
 .\" the source, must acknowledge the copyright and authors of this work.
 .\" %%%LICENSE_END
 .\"
-.TH MATHERR 3 2014-06-13 "Linux" "Linux Programmer's Manual"
+.TH MATHERR 3 2015-03-02 "Linux" "Linux Programmer's Manual"
 .SH NAME
 matherr \- SVID math library exception handling
 .SH SYNOPSIS
@@ -273,10 +273,17 @@ fmod(x,0)	DOMAIN	x	y	EDOM
 remainder(x,0)	DOMAIN	NAN	y	EDOM	\" retval is 0.0/0.0
 .TE
 .SH ATTRIBUTES
-.SS Multithreading (see pthreads(7))
-The
+For an explanation of the terms used in this section, see
+.BR attributes (7).
+.TS
+allbox;
+lb lb lb
+l l l.
+Interface	Attribute	Value
+T{
 .BR matherr ()
-function is thread-safe.
+T}	Thread safety	MT-Safe
+.TE
 .SH EXAMPLE
 The example program demonstrates the use of
 .BR matherr ()

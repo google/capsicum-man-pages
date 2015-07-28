@@ -23,7 +23,7 @@
 .\" the source, must acknowledge the copyright and authors of this work.
 .\" %%%LICENSE_END
 .\"
-.TH GNU_GET_LIBC_VERSION 3 2012-08-26 "Linux" "Linux Programmer's Manual"
+.TH GNU_GET_LIBC_VERSION 3 2015-03-02 "Linux" "Linux Programmer's Manual"
 .SH NAME
 gnu_get_libc_version, gnu_get_libc_release \- get glibc version and release
 .SH SYNOPSIS
@@ -46,6 +46,19 @@ This will be a string such as
 .IR "stable" .
 .SH VERSIONS
 These functions first appeared in glibc in version 2.1.
+.SH ATTRIBUTES
+For an explanation of the terms used in this section, see
+.BR attributes (7).
+.TS
+allbox;
+lbw23 lb lb
+l l l.
+Interface	Attribute	Value
+T{
+.BR gnu_get_libc_version (),
+.BR gnu_get_libc_release ()
+T}	Thread safety	MT-Safe
+.TE
 .SH CONFORMING TO
 These functions are glibc-specific.
 .SH EXAMPLE

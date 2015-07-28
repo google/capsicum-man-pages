@@ -26,7 +26,7 @@
 .\" Modified Fri Sep  8 15:48:13 1995 by Andries Brouwer (aeb@cwi.nl)
 .\" Modified 2013-12-31, David Malcolm <dmalcolm@redhat.com>
 .\"     Split gets(3) into its own page; fgetc() et al. move to fgetc(3)
-.TH GETS 3  2014-01-24 "GNU" "Linux Programmer's Manual"
+.TH GETS 3  2015-03-02 "GNU" "Linux Programmer's Manual"
 .SH NAME
 gets \- get a string from standard input (DEPRECATED)
 .SH SYNOPSIS
@@ -55,6 +55,19 @@ on success, and NULL
 on error or when end of file occurs while no characters have been read.
 However, given the lack of buffer overrun checking, there can be no
 guarantees that the function will even return.
+.SH ATTRIBUTES
+For an explanation of the terms used in this section, see
+.BR attributes (7).
+.TS
+allbox;
+lb lb lb
+l l l.
+Interface	Attribute	Value
+T{
+.BR gets ()
+T}	Thread safety	MT-Safe
+.TE
+
 .SH CONFORMING TO
 C89, C99, POSIX.1-2001.
 

@@ -33,7 +33,7 @@
 .\"     Rework discussion of nonstandard structure fields.
 .\" 2008-09-11, mtk, Document readdir_r().
 .\"
-.TH READDIR 3  2013-06-21 "" "Linux Programmer's Manual"
+.TH READDIR 3  2015-03-02 "" "Linux Programmer's Manual"
 .SH NAME
 readdir, readdir_r \- read a directory
 .SH SYNOPSIS
@@ -145,14 +145,20 @@ returns 0, and returns NULL in
 .B EBADF
 Invalid directory stream descriptor \fIdirp\fP.
 .SH ATTRIBUTES
-.SS Multithreading (see pthreads(7))
-The
+For an explanation of the terms used in this section, see
+.BR attributes (7).
+.TS
+allbox;
+lb lb lb
+l l l.
+Interface	Attribute	Value
+T{
 .BR readdir ()
-function is not thread-safe.
-.LP
-The
+T}	Thread safety	MT-Unsafe race:dirstream
+T{
 .BR readdir_r ()
-function is thread-safe.
+T}	Thread safety	MT-Safe
+.TE
 .SH CONFORMING TO
 SVr4, 4.3BSD, POSIX.1-2001.
 .SH NOTES

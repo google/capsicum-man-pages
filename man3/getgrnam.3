@@ -30,7 +30,7 @@
 .\" Modified 1993-07-24 by Rik Faith (faith@cs.unc.edu)
 .\" Modified 2003-11-15 by aeb
 .\"
-.TH GETGRNAM 3 2014-08-19 "" "Linux Programmer's Manual"
+.TH GETGRNAM 3 2015-03-02 "" "Linux Programmer's Manual"
 .SH NAME
 getgrnam, getgrnam_r, getgrgid, getgrgid_r \- get group file entry
 .SH SYNOPSIS
@@ -209,18 +209,25 @@ Insufficient buffer space supplied.
 .I /etc/group
 local group database file
 .SH ATTRIBUTES
-.SS Multithreading (see pthreads(7))
-The
+For an explanation of the terms used in this section, see
+.BR attributes (7).
+.TS
+allbox;
+lb lb lb
+l l l.
+Interface	Attribute	Value
+T{
 .BR getgrnam ()
-and
+T}	Thread safety	MT-Unsafe race:grnam locale
+T{
 .BR getgrgid ()
-functions are not thread-safe.
-.LP
-The
-.BR getgrnam_r ()
-and
+T}	Thread safety	MT-Unsafe race:grgid locale
+T{
+.BR getgrnam_r (),
+.br
 .BR getgrgid_r ()
-functions are thread-safe.
+T}	Thread safety	MT-Safe locale
+.TE
 .SH CONFORMING TO
 SVr4, 4.3BSD, POSIX.1-2001.
 .SH NOTES

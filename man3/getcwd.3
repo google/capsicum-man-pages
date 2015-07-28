@@ -29,7 +29,7 @@
 .\" Modified Mon Dec 11 13:32:51 MET 2000 by aeb
 .\" Modified Thu Apr 22 03:49:15 CEST 2002 by Roger Luethi <rl@hellgate.ch>
 .\"
-.TH GETCWD 3 2014-08-19 "GNU" "Linux Programmer's Manual"
+.TH GETCWD 3 2015-04-19 "GNU" "Linux Programmer's Manual"
 .SH NAME
 getcwd, getwd, get_current_dir_name \- get current working directory
 .SH SYNOPSIS
@@ -79,6 +79,20 @@ the calling process.
 The pathname is returned as the function result and via the argument
 .IR buf ,
 if present.
+
+If the current directory is not below the root directory of the current
+process (e.g., because the process set a new filesystem root using
+.BR chroot (2)
+without changing its current directory into the new root),
+then, since Linux 2.6.36,
+.\" commit 8df9d1a4142311c084ffeeacb67cd34d190eff74
+the returned path will be prefixed with the string "(unreachable)".
+Such behavior can also be caused by an unprivileged user by changing
+the current directory into another mount namespace.
+When dealing with paths from untrusted sources, callers of these
+functions should consider checking whether the returned path starts
+with '/' or '(' to avoid misinterpreting an unreachable path
+as a relative path.
 
 The
 .BR getcwd ()
@@ -185,16 +199,19 @@ argument is zero and
 .I buf
 is not a null pointer.
 .TP
-EINVAL
+.B EINVAL
 .BR getwd ():
 .I buf
 is NULL.
 .TP
-ENAMETOOLONG
+.B ENAMETOOLONG
 .BR getwd ():
 The size of the null-terminated absolute pathname string exceeds
 .B PATH_MAX
 bytes.
+.TP
+.B ENOMEM
+Out of memory.
 .TP
 .B ENOENT
 The current working directory has been unlinked.
@@ -205,6 +222,22 @@ The
 argument is less than the length of the absolute pathname of the
 working directory, including the terminating null byte.
 You need to allocate a bigger array and try again.
+.SH ATTRIBUTES
+For an explanation of the terms used in this section, see
+.BR attributes (7).
+.TS
+allbox;
+lbw22 lb lb
+l l l.
+Interface	Attribute	Value
+T{
+.BR getcwd (),
+.BR getwd ()
+T}	Thread safety	MT-Safe
+T{
+.BR get_current_dir_name ()
+T}	Thread safety	MT-Safe env
+.TE
 .SH CONFORMING TO
 .BR getcwd ()
 conforms to POSIX.1-2001.

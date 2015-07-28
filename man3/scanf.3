@@ -49,7 +49,7 @@
 .\"     Add ERRORS section.
 .\"     Document the 'a' and 'm' modifiers for dynamic string allocation.
 .\"
-.TH SCANF 3  2014-01-11 "GNU" "Linux Programmer's Manual"
+.TH SCANF 3  2015-04-19 "GNU" "Linux Programmer's Manual"
 .SH NAME
 scanf, fscanf, sscanf, vscanf, vsscanf, vfscanf \- input format conversion
 .SH SYNOPSIS
@@ -515,18 +515,16 @@ to
 .IR int .
 This is
 .I not
-a conversion, although it can be suppressed with the
+a conversion and does
+.I not
+increase the count returned by the function.
+The assignment can be suppressed with the
 .B *
-assignment-suppression character.
-The C standard says: "Execution of a
-.B %n
-directive does not increment
-the assignment count returned at the completion of execution"
-but the Corrigendum seems to contradict this.
-Probably it is wise
-not to make any assumptions on the effect of
-.B %n
-conversions on the return value.
+assignment-suppression character, but the effect on the
+return value is undefined.
+Therefore
+.B %*n
+conversions should not be used.
 .SH RETURN VALUE
 These functions return the number of input items
 successfully matched and assigned,
@@ -543,7 +541,7 @@ in which case the error indicator for the stream (see
 .BR ferror (3))
 is set, and
 .I errno
-is set indicate the error.
+is set to indicate the error.
 .SH ERRORS
 .TP
 .B EAGAIN
@@ -574,6 +572,26 @@ Out of memory.
 .B ERANGE
 The result of an integer conversion would exceed the size
 that can be stored in the corresponding integer type.
+.SH ATTRIBUTES
+For an explanation of the terms used in this section, see
+.BR attributes (7).
+.TS
+allbox;
+lbw20 lb lb
+l l l.
+Interface	Attribute	Value
+T{
+.BR scanf (),
+.BR fscanf (),
+.br
+.BR sscanf (),
+.BR vscanf (),
+.br
+.BR vsscanf (),
+.BR vfscanf ()
+T}	Thread safety	MT-Safe locale
+.TE
+
 .SH CONFORMING TO
 The functions
 .BR fscanf (),

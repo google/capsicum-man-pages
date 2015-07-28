@@ -28,7 +28,7 @@
 .\"   <jochen.hein@delphi.central.de>
 .\" Modified Thu Apr 25 00:43:19 2002 by Bruno Haible <bruno@clisp.org>
 .\"
-.TH LOCALE 7  2014-12-31 "Linux" "Linux Programmer's Manual"
+.TH LOCALE 7  2015-07-23 "Linux" "Linux Programmer's Manual"
 .SH NAME
 locale \- description of multilanguage support
 .SH SYNOPSIS
@@ -95,6 +95,11 @@ the German sharp s is sorted as "ss".
 This category determines the interpretation of byte sequences as characters
 (e.g., single versus multibyte characters), character classifications
 (e.g., alphabetic or digit), and the behavior of character classes.
+On glibc systems, this category also determines
+the character transliteration rules for
+.BR iconv (1)
+and
+.BR iconv (3).
 It changes the behavior of the character handling and
 classification functions, such as
 .BR isupper (3)
@@ -366,10 +371,12 @@ POSIX.1-2001.
 .\"
 .\" The GNU gettext functions are specified in LI18NUX2000.
 .SH SEE ALSO
+.BR iconv (1),
 .BR locale (1),
 .BR localedef (1),
 .BR catopen (3),
 .BR gettext (3),
+.BR iconv (3),
 .BR localeconv (3),
 .BR mbstowcs (3),
 .BR newlocale (3),

@@ -31,7 +31,7 @@
 .\"  <nick@debian.com> with Lars Wirzenius <liw@iki.fi> suggestion
 .\" 2006-05-13, mtk, substantial rewrite of description of 'mask'
 .\" 2008-01-09, mtk, a few rewrites and additions.
-.TH UMASK 2 2008-01-09 "Linux" "Linux Programmer's Manual"
+.TH UMASK 2 2015-05-07 "Linux" "Linux Programmer's Manual"
 .SH NAME
 umask \- set file mode creation mask
 .SH SYNOPSIS
@@ -62,6 +62,22 @@ argument to
 .BR open (2)
 and
 .BR mkdir (2).
+
+Alternatively, if the parent directory has a default ACL (see
+.BR acl (5)),
+the umask is ignored, the default ACL is inherited,
+the permission bits are set based on the inherited ACL,
+and permission bits absent in the
+.I mode
+argument are turned off.
+For example, the following default ACL is equivalent to a umask of 022:
+
+    u::rwx,g::r-x,o::r-x
+
+Combining the effect of this default ACL with a
+.I mode
+argument of 0666 (rw-rw-rw-), the resulting file permissions would be 0644
+(rw-r--r--).
 
 The constants that should be used to specify
 .I mask

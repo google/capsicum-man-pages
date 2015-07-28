@@ -37,7 +37,7 @@
 .\"     Enhanced the discussion of "raw" mode for cfmakeraw().
 .\"     Document CMSPAR.
 .\"
-.TH TERMIOS 3 2015-02-01 "Linux" "Linux Programmer's Manual"
+.TH TERMIOS 3 2015-03-02 "Linux" "Linux Programmer's Manual"
 .SH NAME
 termios, tcgetattr, tcsetattr, tcsendbreak, tcdrain, tcflush, tcflow,
 cfmakeraw, cfgetospeed, cfgetispeed, cfsetispeed, cfsetospeed, cfsetspeed \-
@@ -972,22 +972,32 @@ it may be necessary to follow this call with a further call to
 .BR tcgetattr ()
 to check that all changes have been performed successfully.
 .SH ATTRIBUTES
-.SS Multithreading (see pthreads(7))
-The
+For an explanation of the terms used in this section, see
+.BR attributes (7).
+.nh
+.ad l
+.TS
+allbox;
+lbw36 lb lb
+l l l.
+Interface	Attribute	Value
+T{
 .BR tcgetattr (),
 .BR tcsetattr (),
-.BR tcsendbreak (),
 .BR tcdrain (),
 .BR tcflush (),
 .BR tcflow (),
+.BR tcsendbreak (),
 .BR cfmakeraw (),
 .BR cfgetispeed (),
 .BR cfgetospeed (),
 .BR cfsetispeed (),
 .BR cfsetospeed (),
-and
 .BR cfsetspeed ()
-functions are thread-safe.
+T}	Thread safety	MT-Safe
+.TE
+.ad
+.hy
 .SH CONFORMING TO
 .BR tcgetattr (),
 .BR tcsetattr (),

@@ -20,7 +20,7 @@
 .\"
 .\" 2006-05-27, Several corrections - Thomas E. Dickey
 .\"
-.TH CONSOLE_CODES 4 2012-08-05 "Linux" "Linux Programmer's Manual"
+.TH CONSOLE_CODES 4 2015-07-23 "Linux" "Linux Programmer's Manual"
 .SH NAME
 console_codes \- Linux console escape and control sequences
 .SH DESCRIPTION
@@ -373,6 +373,15 @@ ESC [ 11 ; \fIn\fP ]	Set bell duration in msec.
 ESC [ 12 ; \fIn\fP ]	Bring specified console to the front.
 ESC [ 13 ]      	Unblank the screen.
 ESC [ 14 ; \fIn\fP ]   	Set the VESA powerdown interval in minutes.
+ESC [ 15 ]      	T{
+Bring the previous console to the front
+(since Linux 2.6.0).
+T}
+ESC [ 16 ; \fIn\fP ]   	T{
+Set the cursor blink interval in milliseconds
+(since Linux 4.2)
+T}
+.\" commit bd63364caa8df38bad2b25b11b2a1b849475cce5
 .TE
 .SS Character sets
 The kernel knows about 4 translations of bytes into console-screen

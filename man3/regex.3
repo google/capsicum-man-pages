@@ -27,7 +27,7 @@
 .\" Modified 8 May 1998 by Joseph S. Myers (jsm28@cam.ac.uk)
 .\"
 .\" show the synopsis section nicely
-.TH REGEX 3 2013-02-11 "GNU" "Linux Programmer's Manual"
+.TH REGEX 3 2015-05-07 "GNU" "Linux Programmer's Manual"
 .SH NAME
 regcomp, regexec, regerror, regfree \- POSIX regex functions
 .SH SYNOPSIS
@@ -73,7 +73,7 @@ initialized pattern buffer.
 .I cflags
 may be the
 .RB bitwise- or
-of one or more of the following:
+of zero or more of the following:
 .TP
 .B REG_EXTENDED
 Use
@@ -301,6 +301,25 @@ The regex routines ran out of memory.
 .TP
 .B REG_ESUBREG
 Invalid back reference to a subexpression.
+.SH ATTRIBUTES
+For an explanation of the terms used in this section, see
+.BR attributes (7).
+.TS
+allbox;
+lbw20 lb lb
+l l l.
+Interface	Attribute	Value
+T{
+.BR regcomp (),
+.BR regexec ()
+T}	Thread safety	MT-Safe locale
+T{
+.BR regerror ()
+T}	Thread safety	MT-Safe env
+T{
+.BR regfree ()
+T}	Thread safety	MT-Safe
+.TE
 .SH CONFORMING TO
 POSIX.1-2001.
 .SH SEE ALSO

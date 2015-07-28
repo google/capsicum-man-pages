@@ -51,7 +51,7 @@
 .\" 2014-11-10 Dave Hansen, document PR_MPX_{EN,DIS}ABLE_MANAGEMENT
 .\"
 .\"
-.TH PRCTL 2 2015-02-01 "Linux" "Linux Programmer's Manual"
+.TH PRCTL 2 2015-05-07 "Linux" "Linux Programmer's Manual"
 .SH NAME
 prctl \- operations on a process
 .SH SYNOPSIS
@@ -234,8 +234,11 @@ in the location pointed to by
 .TP
 .BR PR_SET_FPEMU " (since Linux 2.4.18, 2.5.9, only on ia64)"
 Set floating-point emulation control bits to \fIarg2\fP.
-Pass \fBPR_FPEMU_NOPRINT\fP to silently emulate fp operations accesses, or
-\fBPR_FPEMU_SIGFPE\fP to not emulate fp operations and send
+Pass
+.B PR_FPEMU_NOPRINT
+to silently emulate floating-point operation accesses, or
+.B PR_FPEMU_SIGFPE
+to not emulate floating-point operations and send
 .B SIGFPE
 instead.
 .TP
@@ -323,7 +326,7 @@ promises not to grant privileges to do anything
 that could not have been done without the
 .BR execve (2)
 call (for example,
-rendering the set-user-ID and set-group-ID permission bits,
+rendering the set-user-ID and set-group-ID mode bits,
 and file capabilities non-functional).
 Once set, this bit cannot be unset.
 The setting of this bit is inherited by children created by
@@ -383,7 +386,7 @@ will operate in the implicit
 mode described above.
 .TP
 .BR PR_SET_PDEATHSIG " (since Linux 2.1.57)"
-Set the parent process death signal
+Set the parent death signal
 of the calling process to \fIarg2\fP (either a signal value
 in the range 1..maxsig, or 0 to clear).
 This is the signal that the calling process will get when its
@@ -396,6 +399,16 @@ or a binary that has associated capabilities (see
 .BR capabilities (7)).
 This value is preserved across
 .BR execve (2).
+
+.IR Warning :
+.\" https://bugzilla.kernel.org/show_bug.cgi?id=43300
+the "parent" in this case is considered to be the
+.I thread
+that created this process.
+In other words, the signal will be sent when that thread terminates
+(via, for example,
+.BR pthread_exit (3)),
+rather than after all of the threads in the parent process terminate.
 .TP
 .BR PR_GET_PDEATHSIG " (since Linux 2.3.15)"
 Return the current value of the parent process death signal,
@@ -453,7 +466,9 @@ set to
 the only system calls that the thread is permitted to make are
 .BR read (2),
 .BR write (2),
-.BR _exit (2),
+.BR _exit (2)
+(but not
+.BR exit_group (2)),
 and
 .BR sigreturn (2).
 Other system calls result in the delivery of a

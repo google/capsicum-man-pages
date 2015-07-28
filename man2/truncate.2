@@ -40,7 +40,7 @@
 .\" Modified 2002-04-06 by Andries Brouwer <aeb@cwi.nl>
 .\" Modified 2004-06-23 by Michael Kerrisk <mtk.manpages@gmail.com>
 .\"
-.TH TRUNCATE 2 2015-01-22 "Linux" "Linux Programmer's Manual"
+.TH TRUNCATE 2 2015-05-07 "Linux" "Linux Programmer's Manual"
 .SH NAME
 truncate, ftruncate \- truncate a file to a specified length
 .SH SYNOPSIS
@@ -100,7 +100,7 @@ If the size changed, then the st_ctime and st_mtime fields
 time of last modification; see
 .BR stat (2))
 for the file are updated,
-and the set-user-ID and set-group-ID permission bits may be cleared.
+and the set-user-ID and set-group-ID mode bits may be cleared.
 .LP
 With
 .BR ftruncate (),
@@ -197,6 +197,15 @@ is not open for writing.
 .B EINVAL
 .I fd
 does not reference a regular file.
+.TP
+.BR EINVAL " or " EBADF
+The file descriptor
+.I fd
+is not open for writing.
+POSIX permits, and portable applications should handle,
+either error for this case.
+(Linux produces
+.BR EINVAL .)
 .SH CONFORMING TO
 4.4BSD, SVr4, POSIX.1-2001 (these calls first appeared in 4.2BSD).
 .\" POSIX.1-1996 has

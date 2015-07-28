@@ -22,7 +22,7 @@
 .\" the source, must acknowledge the copyright and authors of this work.
 .\" %%%LICENSE_END
 .\"
-.TH FEATURE_TEST_MACROS 7 2014-03-20 "Linux" "Linux Programmer's Manual"
+.TH FEATURE_TEST_MACROS 7 2015-03-29 "Linux" "Linux Programmer's Manual"
 .SH NAME
 feature_test_macros \- feature test macros
 .SH SYNOPSIS
@@ -289,7 +289,7 @@ This macro was historically used to expose certain functions (specifically
 and
 .BR ftello (3))
 that address limitations of earlier APIs
-.RB ( feek (3)
+.RB ( fseek (3)
 and
 .BR ftell (3))
 that use
@@ -448,14 +448,8 @@ provided for compatibility with some other implementations.
 .\" * Date: Tue, 21 Sep 2004 04:16:40 -0400
 Defining this macro causes some lightweight checks to be performed
 to detect some buffer overflow errors when employing
-various string and memory manipulation functions.
-Not all buffer overflows are detected, just some common cases.
-
-In the current implementation, checks are added for
-calls to
+various string and memory manipulation functions (for example,
 .BR memcpy (3),
-.BR mempcpy (3),
-.BR memmove (3),
 .BR memset (3),
 .BR stpcpy (3),
 .BR strcpy (3),
@@ -466,8 +460,17 @@ calls to
 .BR snprintf (3),
 .BR vsprintf (3),
 .BR vsnprintf (3),
-and
-.BR gets (3).
+.BR gets (3),
+and wide character variants thereof).
+For some functions, argument consistency is checked;
+for example, a check is made that
+.BR open (2)
+has been supplied with a
+.I mode
+argument when the specified flags include
+.BR O_CREAT .
+Not all problems are detected, just some common cases.
+.\" Look for __USE_FORTIFY_LEVEL in the header files
 
 If
 .B _FORTIFY_SOURCE
@@ -477,9 +480,23 @@ and above, checks that shouldn't change the behavior of
 conforming programs are performed.
 With
 .B _FORTIFY_SOURCE
-set to 2 some more checking is added, but
+set to 2, some more checking is added, but
 some conforming programs might fail.
-Some of the checks can be performed at compile time,
+.\" For example, given the following code
+.\"        int d;
+.\"        char buf[1000], buf[1000];
+.\"        strcpy(fmt, "Hello world\n%n");
+.\"        snprintf(buf, sizeof(buf), fmt, &d);
+.\"
+.\" Compiling with "gcc -D_FORTIFY_SOURCE=2 -O1" and then running will
+.\" cause the following diagnostic at runtime at the snprintf() call
+.\"
+.\"        *** %n in writable segment detected ***
+.\"        Aborted (core dumped)
+.\"
+
+Some of the checks can be performed at compile time
+(via macros logic implemented in header files),
 and result in compiler warnings;
 other checks take place at run time,
 and result in a run-time error if the check fails.

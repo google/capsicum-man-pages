@@ -10,7 +10,7 @@
 .\" Modified 2004-11-15, fixed error noted by Fabian Kreutz
 .\"	 <kreutz@dbs.uni-hannover.de>
 .\"
-.TH TGAMMA 3 2014-12-31 "GNU" "Linux Programmer's Manual"
+.TH TGAMMA 3 2015-04-19 "GNU" "Linux Programmer's Manual"
 .SH NAME
 tgamma, tgammaf, tgammal \- true gamma function
 .SH SYNOPSIS
@@ -42,6 +42,9 @@ or
 .RE
 .ad
 .SH DESCRIPTION
+These functions calculate the Gamma function of
+.IR x .
+
 The Gamma function is defined by
 .sp
     Gamma(x) = integral from 0 to infinity of t^(x\-1) e^\-t dt
@@ -157,8 +160,22 @@ is not set for this case.
 .\" exception for various cases.
 .SH VERSIONS
 These functions first appeared in glibc in version 2.1.
+.SH ATTRIBUTES
+For an explanation of the terms used in this section, see
+.BR attributes (7).
+.TS
+allbox;
+lbw30 lb lb
+l l l.
+Interface	Attribute	Value
+T{
+.BR tgamma (),
+.BR tgammaf (),
+.BR tgammal ()
+T}	Thread safety	MT-Safe
+.TE
 .SH CONFORMING TO
-C99, POSIX.1-2001.
+C99, POSIX.1-2001, POSIX.1-2008.
 .SH NOTES
 This function had to be called "true gamma function"
 since there is already a function

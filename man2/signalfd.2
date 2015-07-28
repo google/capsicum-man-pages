@@ -17,7 +17,7 @@
 .\" <http://www.gnu.org/licenses/>.
 .\" %%%LICENSE_END
 .\"
-.TH SIGNALFD 2 2014-07-08 Linux "Linux Programmer's Manual"
+.TH SIGNALFD 2 2015-07-23 Linux "Linux Programmer's Manual"
 .SH NAME
 signalfd \- create a file descriptor for accepting signals
 .SH SYNOPSIS
@@ -323,7 +323,7 @@ If a signal appears in the
 .I mask
 of more than one of the file descriptors, then occurrences
 of that signal can be read (once) from any one of the descriptors.
-.SS C library/kernel ABI differences
+.SS C library/kernel differences
 The underlying Linux system call requires an additional argument,
 .IR "size_t sizemask" ,
 which specifies the size of the

@@ -36,7 +36,7 @@
 .\"     document ru_maxrss
 .\" 2010-05-24, mtk, enhanced description of various fields
 .\"
-.TH GETRUSAGE 2 2014-05-10 "Linux" "Linux Programmer's Manual"
+.TH GETRUSAGE 2 2015-07-23 "Linux" "Linux Programmer's Manual"
 .SH NAME
 getrusage \- get resource usage
 .SH SYNOPSIS
@@ -199,6 +199,19 @@ points outside the accessible address space.
 .B EINVAL
 .I who
 is invalid.
+.SH ATTRIBUTES
+For an explanation of the terms used in this section, see
+.BR attributes (7).
+.TS
+allbox;
+lb lb lb
+l l l.
+Interface	Attribute	Value
+T{
+.BR getrusage ()
+T}	Thread safety	MT-Safe
+.TE
+
 .SH CONFORMING TO
 SVr4, 4.3BSD.
 POSIX.1-2001 specifies

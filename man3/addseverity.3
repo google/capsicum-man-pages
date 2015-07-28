@@ -6,7 +6,7 @@
 .\"  adapted glibc info page
 .\"
 .\"  polished a little, aeb
-.TH ADDSEVERITY 3 2008-06-14 "GNU" "Linux Programmer's Manual"
+.TH ADDSEVERITY 3 2015-03-02 "GNU" "Linux Programmer's Manual"
 .SH NAME
 addseverity \- introduce new severity classes
 .SH SYNOPSIS
@@ -57,6 +57,18 @@ nonexistent or default severity class.
 .SH VERSIONS
 .BR addseverity ()
 is provided in glibc since version 2.1.
+.SH ATTRIBUTES
+For an explanation of the terms used in this section, see
+.BR attributes (7).
+.TS
+allbox;
+lb lb lb
+l l l.
+Interface	Attribute	Value
+T{
+.BR addseverity ()
+T}	Thread safety	MT-Safe
+.TE
 .SH CONFORMING TO
 This function is not specified in the X/Open Portability Guide
 although the

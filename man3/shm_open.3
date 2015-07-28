@@ -23,7 +23,7 @@
 .\" %%%LICENSE_END
 .\"
 .\" FIXME . Add an example to this page
-.TH SHM_OPEN 3 2015-01-22 "Linux" "Linux Programmer's Manual"
+.TH SHM_OPEN 3 2015-07-23 "Linux" "Linux Programmer's Manual"
 .SH NAME
 shm_open, shm_unlink \- create/open or unlink POSIX shared memory objects
 .SH SYNOPSIS
@@ -248,6 +248,20 @@ a
 that does not exist.
 .SH VERSIONS
 These functions are provided in glibc 2.2 and later.
+.SH ATTRIBUTES
+For an explanation of the terms used in this section, see
+.BR attributes (7).
+.TS
+allbox;
+lbw24 lb lb
+l l l.
+Interface	Attribute	Value
+T{
+.BR shm_open (),
+.BR shm_unlink ()
+T}	Thread safety	MT-Safe locale
+.TE
+
 .SH CONFORMING TO
 POSIX.1-2001.
 .LP

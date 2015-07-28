@@ -22,7 +22,7 @@
 .\" the source, must acknowledge the copyright and authors of this work.
 .\" %%%LICENSE_END
 .\"
-.TH MALLOC_USABLE_SIZE 3  2014-06-13 "GNU" "Linux Programmer's Manual"
+.TH MALLOC_USABLE_SIZE 3  2015-03-02 "GNU" "Linux Programmer's Manual"
 .SH NAME
 malloc_usable_size \- obtain size of block of memory allocated from heap
 .SH SYNOPSIS
@@ -46,10 +46,17 @@ If
 .I ptr
 is NULL, 0 is returned.
 .SH ATTRIBUTES
-.SS Multithreading (see pthreads(7))
-The
+For an explanation of the terms used in this section, see
+.BR attributes (7).
+.TS
+allbox;
+lbw20 lb lb
+l l l.
+Interface	Attribute	Value
+T{
 .BR malloc_usable_size ()
-function is thread-safe.
+T}	Thread safety	MT-Safe
+.TE
 .SH CONFORMING TO
 This function is a GNU extension.
 .SH NOTES

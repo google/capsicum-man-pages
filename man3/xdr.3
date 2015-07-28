@@ -8,7 +8,7 @@
 .\"
 .\" 2007-12-30, mtk, Convert function prototypes to modern C syntax
 .\"
-.TH XDR 3 2007-12-30 "" "Linux Programmer's Manual"
+.TH XDR 3 2015-07-23 "" "Linux Programmer's Manual"
 .SH NAME
 xdr \- library routines for external data representation
 .SH SYNOPSIS AND DESCRIPTION
@@ -291,9 +291,15 @@ Note: the XDR stream's
 .I op
 field must be set by the caller.
 .IP
-Warning: this XDR stream implements an intermediate record stream.
-Therefore there are additional bytes in the stream
-to provide record boundary information.
+Warning: To read from an XDR stream created by this API,
+you'll need to call
+.BR xdrrec_skiprecord (3)
+first before calling any other XDR APIs.
+This inserts additional bytes in the stream to provide
+record boundary information.
+Also, XDR streams created with different
+.BR xdr*_create
+APIs are not compatible for the same reason.
 .LP
 .nf
 .BI "bool_t xdrrec_endofrecord(XDR *" xdrs ", int " sendnow );
@@ -539,6 +545,68 @@ routines as arguments, and
 .BR xdr_string (),
 one of the most frequently used primitives, requires three.
 Returns one if it succeeds, zero otherwise.
+.SH ATTRIBUTES
+For an explanation of the terms used in this section, see
+.BR attributes (7).
+.TS
+allbox;
+lbw31 lb lb
+l l l.
+Interface	Attribute	Value
+T{
+.BR xdr_array (),
+.BR xdr_bool (),
+.br
+.BR xdr_bytes (),
+.BR xdr_char (),
+.br
+.BR xdr_destroy (),
+.BR xdr_double (),
+.br
+.BR xdr_enum (),
+.BR xdr_float (),
+.br
+.BR xdr_free (),
+.BR xdr_getpos (),
+.br
+.BR xdr_inline (),
+.BR xdr_int (),
+.br
+.BR xdr_long (),
+.BR xdrmem_create (),
+.br
+.BR xdr_opaque (),
+.BR xdr_pointer (),
+.br
+.BR xdrrec_create (),
+.BR xdrrec_eof (),
+.br
+.BR xdrrec_endofrecord (),
+.br
+.BR xdrrec_skiprecord (),
+.br
+.BR xdr_reference (),
+.BR xdr_setpos (),
+.br
+.BR xdr_short (),
+.BR xdrstdio_create (),
+.br
+.BR xdr_string (),
+.BR xdr_u_char (),
+.br
+.BR xdr_u_int (),
+.BR xdr_u_long (),
+.br
+.BR xdr_u_short (),
+.BR xdr_union (),
+.br
+.BR xdr_vector (),
+.BR xdr_void (),
+.br
+.BR xdr_wrapstring ()
+T}	Thread safety	MT-Safe
+.TE
+
 .SH SEE ALSO
 .BR rpc (3)
 .LP

@@ -17,7 +17,7 @@
 .\" <http://www.gnu.org/licenses/>.
 .\" %%%LICENSE_END
 .\"
-.TH EPOLL_CTL 2 2014-12-31 "Linux" "Linux Programmer's Manual"
+.TH EPOLL_CTL 2 2015-05-07 "Linux" "Linux Programmer's Manual"
 .SH NAME
 epoll_ctl \- control interface for an epoll descriptor
 .SH SYNOPSIS
@@ -130,6 +130,10 @@ Hang up happened on the associated file descriptor.
 .BR epoll_wait (2)
 will always wait for this event; it is not necessary to set it in
 .IR events .
+Note that when reading from a channel such as a pipe or a stream socket,
+this event merely indicates that the peer closed its end of the channel.
+Subsequent reads from the channel will return 0 (end of file)
+only after all outstanding data in the channel has been consumed.
 .TP
 .B EPOLLET
 Sets the Edge Triggered behavior for the associated file descriptor.

@@ -24,7 +24,7 @@
 .\"
 .\" Inspired by a page written by Walter Harms.
 .\"
-.TH GETFSENT 3 2002-02-28 "GNU" "Linux Programmer's Manual"
+.TH GETFSENT 3 2015-03-02 "GNU" "Linux Programmer's Manual"
 .SH NAME
 getfsent, getfsspec, getfsfile, setfsent, endfsent \- handle fstab entries
 .SH SYNOPSIS
@@ -112,6 +112,27 @@ Upon failure or end-of-file, these functions return NULL and 0, respectively.
 .\" The
 .\" .BR getfsent ()
 .\" function appeared in 4.0BSD; the other four functions appeared in 4.3BSD.
+.SH ATTRIBUTES
+For an explanation of the terms used in this section, see
+.BR attributes (7).
+.TS
+allbox;
+lb lb lbw24
+l l l.
+Interface	Attribute	Value
+T{
+.BR endfsent (),
+.br
+.BR setfsent ()
+T}	Thread safety	MT-Unsafe race:fsent
+T{
+.BR getfsent (),
+.br
+.BR getfsspec (),
+.br
+.BR getfsfile ()
+T}	Thread safety	MT-Unsafe race:fsent locale
+.TE
 .SH CONFORMING TO
 These functions are not in POSIX.1-2001.
 Several operating systems have them, for example,

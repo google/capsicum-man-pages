@@ -24,7 +24,7 @@
 .\"
 .\" Modified Sat Jul 24 21:42:42 1993 by Rik Faith <faith@cs.unc.edu>
 .\" Modified Tue Oct 22 23:44:11 1996 by Eric S. Raymond <esr@thyrsus.com>
-.TH ASSERT 3  2013-09-26 "GNU" "Linux Programmer's Manual"
+.TH ASSERT 3  2015-03-02 "GNU" "Linux Programmer's Manual"
 .SH NAME
 assert \- abort the program if assertion is false
 .SH SYNOPSIS
@@ -56,6 +56,19 @@ The message "assertion failed in file foo.c, function
 do_bar(), line 1287" is of no help at all to a user.
 .SH RETURN VALUE
 No value is returned.
+.SH ATTRIBUTES
+For an explanation of the terms used in this section, see
+.BR attributes (7).
+.TS
+allbox;
+lb lb lb
+l l l.
+Interface	Attribute	Value
+T{
+.BR assert ()
+T}	Thread safety	MT-Safe
+.TE
+
 .SH CONFORMING TO
 POSIX.1-2001, C89, C99.
 In C89,

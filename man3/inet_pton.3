@@ -24,7 +24,7 @@
 .\" %%%LICENSE_END
 .\"
 .\" References: RFC 2553
-.TH INET_PTON 3 2008-06-18 "Linux" "Linux Programmer's Manual"
+.TH INET_PTON 3 2015-03-02 "Linux" "Linux Programmer's Manual"
 .SH NAME
 inet_pton \- convert IPv4 and IPv6 addresses from text to binary form
 .SH SYNOPSIS
@@ -126,6 +126,18 @@ does not contain a valid address family, \-1 is returned and
 .I errno
 is set to
 .BR EAFNOSUPPORT .
+.SH ATTRIBUTES
+For an explanation of the terms used in this section, see
+.BR attributes (7).
+.TS
+allbox;
+lb lb lb
+l l l.
+Interface	Attribute	Value
+T{
+.BR inet_pton ()
+T}	Thread safety	MT-Safe locale
+.TE
 .SH CONFORMING TO
 POSIX.1-2001.
 .SH NOTES

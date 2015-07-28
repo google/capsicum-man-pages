@@ -24,7 +24,7 @@
 .\" the source, must acknowledge the copyright and authors of this work.
 .\" %%%LICENSE_END
 .\"
-.TH LROUND 3  2013-08-26 "" "Linux Programmer's Manual"
+.TH LROUND 3  2015-04-19 "" "Linux Programmer's Manual"
 .SH NAME
 lround, lroundf, lroundl, llround, llroundf, llroundl \- round to
 nearest integer, away from zero
@@ -111,18 +111,25 @@ These functions do not set
 .SH VERSIONS
 These functions first appeared in glibc in version 2.1.
 .SH ATTRIBUTES
-.SS Multithreading (see pthreads(7))
-The
+For an explanation of the terms used in this section, see
+.BR attributes (7).
+.TS
+allbox;
+lbw33 lb lb
+l l l.
+Interface	Attribute	Value
+T{
 .BR lround (),
 .BR lroundf (),
 .BR lroundl (),
+.br
 .BR llround (),
 .BR llroundf (),
-and
 .BR llroundl ()
-functions are thread-safe.
+T}	Thread safety	MT-Safe
+.TE
 .SH CONFORMING TO
-C99, POSIX.1-2001.
+C99, POSIX.1-2001, POSIX.1-2008.
 .SH SEE ALSO
 .BR ceil (3),
 .BR floor (3),

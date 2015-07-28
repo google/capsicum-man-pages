@@ -23,7 +23,7 @@
 .\" the source, must acknowledge the copyright and authors of this work.
 .\" %%%LICENSE_END
 .\"
-.TH IF_NAMEINDEX 3 2012-11-21 "GNU" "Linux Programmer's Manual"
+.TH IF_NAMEINDEX 3 2015-03-29 "GNU" "Linux Programmer's Manual"
 .SH NAME
 if_nameindex, if_freenameindex \- get network interface names and indexes
 .SH SYNOPSIS
@@ -101,6 +101,21 @@ function first appeared in glibc 2.1, but before glibc 2.3.4,
 the implementation supported only interfaces with IPv4 addresses.
 Support of interfaces that don't have IPv4 addresses is available only
 on kernels that support netlink.
+.SH ATTRIBUTES
+For an explanation of the terms used in this section, see
+.BR attributes (7).
+.TS
+allbox;
+lb lb lb
+l l l.
+Interface	Attribute	Value
+T{
+.BR if_nameindex (),
+.br
+.BR if_freenameindex ()
+T}	Thread safety	MT-Safe
+.TE
+
 .SH CONFORMING TO
 RFC\ 3493, POSIX.1-2001.
 

@@ -38,7 +38,7 @@
 .\"     _PC_SYMLINK_MAX,
 .\"     _PC_2_SYMLINKS
 .\"
-.TH FPATHCONF 3  2014-05-28 "GNU" "Linux Programmer's Manual"
+.TH FPATHCONF 3  2015-03-29 "GNU" "Linux Programmer's Manual"
 .SH NAME
 fpathconf, pathconf \- get configuration values for files
 .SH SYNOPSIS
@@ -166,6 +166,20 @@ is unchanged.
 If there is an error, \-1 is returned, and
 .I errno
 is set to reflect the nature of the error.
+.SH ATTRIBUTES
+For an explanation of the terms used in this section, see
+.BR attributes (7).
+.TS
+allbox;
+lbw23 lb lb
+l l l.
+Interface	Attribute	Value
+T{
+.BR fpathconf (),
+.BR pathconf ()
+T}	Thread safety	MT-Safe
+.TE
+
 .SH CONFORMING TO
 POSIX.1-2001.
 .SH NOTES

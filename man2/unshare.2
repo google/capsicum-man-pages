@@ -17,7 +17,7 @@
 .\" by clone, which would require porting and maintaining all commands
 .\" such as login, and su, that establish a user session.
 .\"
-.TH UNSHARE 2 2014-09-21 "Linux" "Linux Programmer's Manual"
+.TH UNSHARE 2 2015-04-19 "Linux" "Linux Programmer's Manual"
 .SH NAME
 unshare \- disassociate parts of the process execution context
 .SH SYNOPSIS
@@ -49,15 +49,15 @@ _BSD_SOURCE || _SVID_SOURCE
 .ad b
 .SH DESCRIPTION
 .BR unshare ()
-allows a process to disassociate parts of its execution
-context that are currently being shared with other processes.
+allows a process (or thread) to disassociate parts of its execution
+context that are currently being shared with other processes or threads).
 Part of the execution context, such as the mount namespace, is shared
 implicitly when a new process is created using
 .BR fork (2)
 or
 .BR vfork (2),
 while other parts, such as virtual memory, may be
-shared by explicit request when creating a process using
+shared by explicit request when creating a process or thread using
 .BR clone (2).
 
 The main use of
@@ -99,9 +99,9 @@ This flag has the same effect as the
 .BR clone (2)
 .B CLONE_NEWIPC
 flag.
-Unshare the System\ V IPC namespace,
+Unshare the IPC namespace,
 so that the calling process has a private copy of the
-System\ V IPC namespace which is not shared with any other process.
+IPC namespace which is not shared with any other process.
 Specifying this flag automatically implies
 .BR CLONE_SYSVSEM
 as well.

@@ -34,7 +34,7 @@
 .\"	(walter.harms@informatik.uni-oldenburg.de)
 .\" Modified 2003-11-18, 2004-10-05 aeb
 .\"
-.TH REMAINDER 3 2010-09-20 "" "Linux Programmer's Manual"
+.TH REMAINDER 3 2015-04-19 "" "Linux Programmer's Manual"
 .SH NAME
 drem, dremf, dreml, remainder, remainderf, remainderl \- \
 floating-point remainder function
@@ -90,9 +90,8 @@ _SVID_SOURCE || _BSD_SOURCE
 .RE
 .ad b
 .SH DESCRIPTION
-The
-.BR remainder ()
-function computes the remainder of dividing
+These
+functions compute the remainder of dividing
 .I x
 by
 .IR y .
@@ -177,6 +176,25 @@ is set to
 An invalid floating-point exception
 .RB ( FE_INVALID )
 is raised.
+.SH ATTRIBUTES
+For an explanation of the terms used in this section, see
+.BR attributes (7).
+.TS
+allbox;
+lbw26 lb lb
+l l l.
+Interface	Attribute	Value
+T{
+.BR drem (),
+.BR dremf (),
+.BR dreml (),
+.br
+.BR remainder (),
+.BR remainderf (),
+.br
+.BR remainderl ()
+T}	Thread safety	MT-Safe
+.TE
 .SH CONFORMING TO
 .\" IEC 60559.
 The functions
@@ -184,7 +202,7 @@ The functions
 .BR remainderf (),
 and
 .BR remainderl ()
-are specified in C99 and POSIX.1-2001.
+are specified in C99, POSIX.1-2001, and POSIX.1-2008.
 
 The function
 .BR drem ()

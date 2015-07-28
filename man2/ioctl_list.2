@@ -27,7 +27,8 @@
 .\" 2007-12-29 Alain Portal <aportal@univ-montp2.fr> and Michael Kerrisk
 .\"     <mtk.manpages@gmail.com>:
 .\"          Various formatting improvements
-.TH IOCTL_LIST 2 2013-09-17 "Linux" "Linux Programmer's Manual"
+.\"
+.TH IOCTL_LIST 2 2015-03-29 "Linux" "Linux Programmer's Manual"
 .SH NAME
 ioctl_list \- list of ioctl calls in Linux/i386 kernel
 .SH DESCRIPTION
@@ -270,15 +271,6 @@ l l l.
 0x00435909	CYSETDEFTIMEOUT	int
 .TE
 
-// <include/linux/ext2_fs.h>
-.TS
-l l l.
-0x80046601	EXT2_IOC_GETFLAGS	int *
-0x40046602	EXT2_IOC_SETFLAGS	const int *
-0x80047601	EXT2_IOC_GETVERSION	int *
-0x40047602	EXT2_IOC_SETVERSION	const int *
-.TE
-
 // <include/linux/fd.h>
 .TS
 l l l.
@@ -323,6 +315,15 @@ l l l l.
 0x00001263	BLKRAGET	int *
 0x00000001	FIBMAP	int *	// I-O
 0x00000002	FIGETBSZ	int *
+0x80086601	FS_IOC_GETFLAGS	int *
+0x40086602	FS_IOC_SETFLAGS	int *
+0x80087601	FS_IOC_GETVERSION	int *
+0x40087602	FS_IOC_SETVERSION	int *
+0xC020660B	FS_IOC_FIEMAP	struct fiemap *
+0x40086602	FS_IOC32_SETFLAGS	int *
+0x40086602	FS_IOC32_SETFLAGS	int *
+0x80047601	FS_IOC32_GETVERSION	int *
+0x40047602	FS_IOC32_SETVERSION	int *
 .TE
 
 // <include/linux/hdreg.h>
@@ -474,13 +475,15 @@ l l l l.
 0x000089E1	SIOCGETSGCNT	struct sioc_sg_req *	// I-O
 .TE
 
-// <include/linux/msdos_fs.h>
+// <include/linux/msdos_fs.h> see
+.BR ioctl_fat (2)
 .TS
 l l l l.
 0x82307201	VFAT_IOCTL_READDIR_BOTH	struct dirent [2]
 0x82307202	VFAT_IOCTL_READDIR_SHORT	struct dirent [2]
 0x80047210	FAT_IOCTL_GET_ATTRIBUTES	__u32 *
 0x40047211	FAT_IOCTL_SET_ATTRIBUTES	const __u32 *
+0x80047213	FAT_IOCTL_GET_VOLUME_ID	__u32 *
 .TE
 
 // <include/linux/mtio.h>
@@ -522,9 +525,9 @@ l l l l.
 // <include/linux/scsi.h>
 .TS
 l l l.
-0x00005382	SCSI_IOCTL_GET_IDLUN	struct { int [2]; } *
-0x00005383	SCSI_IOCTL_TAGGED_ENABLE	void
-0x00005384	SCSI_IOCTL_TAGGED_DISABLE	void
+0x00005382	SCSI_IOCTL_GET_IDLUN       struct { int [2]; } *
+0x00005383	SCSI_IOCTL_TAGGED_ENABLE   void
+0x00005384	SCSI_IOCTL_TAGGED_DISABLE  void
 .TE
 .TS
 l l l l.
@@ -735,6 +738,13 @@ l l l l.
 0xC0044DFF	SOUND_MIXER_WRITE_RECSRC	int *	// I-O
 .TE
 
+// <include/linux/timerfd.h> see
+.BR timerfd_create (2)
+.TS
+l l l l.
+0x40085400	TFD_IOC_SET_TICKS	uint64_t *
+.TE
+
 // <include/linux/umsdos_fs.h>
 .TS
 l l l l.
@@ -901,6 +911,7 @@ the protocol:
     Most protocols      const struct rtentry *
     AX.25               const struct ax25_route *
     NET/ROM             const struct nr_route_struct *
+    INET6               const struct in6_rtmsg *
 
 .fi
 .B SIOCGIFCONF
@@ -961,4 +972,5 @@ l l l.
 0x00005404	SNDCTL_TMR_CONTINUE	TCSETSF
 .TE
 .SH SEE ALSO
-.BR ioctl (2)
+.BR ioctl (2),
+.BR ioctl_fat (2)

@@ -30,7 +30,7 @@
 .\" Modified 2001-11-13, aeb
 .\" Modified 2004-12-01 mtk and Martin Schulze <joey@infodrom.org>
 .\"
-.TH TZSET 3  2015-02-21 "" "Linux Programmer's Manual"
+.TH TZSET 3  2015-03-29 "" "Linux Programmer's Manual"
 .SH NAME
 tzset, tzname, timezone, daylight \- initialize time conversion information
 .SH SYNOPSIS
@@ -99,8 +99,11 @@ timezone to be used:
 .RE
 .sp
 There are no spaces in the specification.
-The \fIstd\fP string specifies the name of the timezone and must be
+The \fIstd\fP string specifies an abbreviation for the timezone and must be
 three or more alphabetic characters.
+When enclosed between the less-than (<) and greater-than (>) signs, the
+characters set is expanded to include the plus (+) sign, the minus (-)
+sign, and digits.
 The \fIoffset\fP string immediately
 follows \fIstd\fP and specifies the time value to be added to the local
 time to get Coordinated Universal Time (UTC).
@@ -169,7 +172,8 @@ If \fIfilespec\fP is given, it specifies another
 .BR tzfile (5)-format
 file to read the timezone information from.
 If \fIfilespec\fP does not begin with a \(aq/\(aq, the file specification is
-relative to the system timezone directory.  If the colon is omitted each
+relative to the system timezone directory.
+If the colon is omitted each
 of the above \fBTZ\fP formats will be tried.
 .PP
 Here's an example, once more for New Zealand:
@@ -204,6 +208,18 @@ By default, the zoneinfo Makefile hard links it to the
 .PP
 Above are the current standard file locations, but they are
 configurable when glibc is compiled.
+.SH ATTRIBUTES
+For an explanation of the terms used in this section, see
+.BR attributes (7).
+.TS
+allbox;
+lb lb lb
+l l l.
+Interface	Attribute	Value
+T{
+.BR tzset ()
+T}	Thread safety	MT-Safe env locale
+.TE
 .SH CONFORMING TO
 SVr4, POSIX.1-2001, 4.3BSD.
 .SH NOTES

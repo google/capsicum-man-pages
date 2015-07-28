@@ -30,7 +30,7 @@
 .\" Modified 1997-01-31 by Eric S. Raymond <esr@thyrsus.com>
 .\" Modified 2004-06-23 by Michael Kerrisk <mtk.manpages@gmail.com>
 .\"
-.TH SYMLINK 2 2014-08-19 "Linux" "Linux Programmer's Manual"
+.TH SYMLINK 2 2015-04-19 "Linux" "Linux Programmer's Manual"
 .SH NAME
 symlink, symlinkat \- make a new name for a file
 .SH SYNOPSIS
@@ -180,7 +180,9 @@ A directory component in
 .I linkpath
 does not exist or is a dangling symbolic link, or
 .I target
-is the empty string.
+or
+.I linkpath
+is an empty string.
 .TP
 .B ENOMEM
 Insufficient kernel memory was available.

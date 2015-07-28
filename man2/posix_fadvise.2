@@ -25,7 +25,7 @@
 .\" 2005-04-08 mtk, noted kernel version and added BUGS
 .\" 2010-10-09, mtk, document arm_fadvise64_64()
 .\"
-.TH POSIX_FADVISE 2 2014-12-31 "Linux" "Linux Programmer's Manual"
+.TH POSIX_FADVISE 2 2015-07-23 "Linux" "Linux Programmer's Manual"
 .SH NAME
 posix_fadvise \- predeclare an access pattern for file data
 .SH SYNOPSIS
@@ -169,6 +169,13 @@ call
 or
 .BR fdatasync (2)
 first.
+.SS C library/kernel differences
+The name of the wrapper function in the C library is
+.BR posix_fadvise ().
+The underlying system call is called
+.BR fadvise64 ()
+(or, on some architectures,
+.BR fadvise64_64 ()).
 .SS Architecture-specific variants
 Some architectures require
 64-bit arguments to be aligned in a suitable pair of registers (see
@@ -184,7 +191,7 @@ and
 arguments.
 Therefore, these architectures define a version of the
 system call that orders the arguments suitably,
-but otherwise is otherwise exactly the same as
+but is otherwise exactly the same as
 .BR posix_fadvise ().
 
 For example, since Linux 2.6.14, ARM has the following system call:
@@ -211,4 +218,3 @@ rather than as meaning "all bytes through to the end of the file".
 .BR sync_file_range (2),
 .BR posix_fallocate (3),
 .BR posix_madvise (3)
-.\" FIXME . Write a posix_fadvise(3) page.

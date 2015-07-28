@@ -5,7 +5,7 @@
 .\" Distributed under GPL
 .\" %%%LICENSE_END
 .\"
-.TH TTY_IOCTL 4 2013-11-12 "Linux" "Linux Programmer's Manual"
+.TH TTY_IOCTL 4 2015-05-07 "Linux" "Linux Programmer's Manual"
 .SH NAME
 tty_ioctl \- ioctls for terminals and serial lines
 .SH SYNOPSIS
@@ -299,6 +299,14 @@ except for a process with the
 .BR CAP_SYS_ADMIN
 capability.)
 .TP
+.BI "TIOCGEXCL	int *" argp
+If the terminal is currently in exclusive mode,
+place a nonzero value in the location pointed to by
+.IR argp ;
+otherwise, place zero in
+.IR *argp
+(since Linux 3.8).
+.TP
 .B "TIOCNXCL	void"
 Disable exclusive mode.
 .SS Line discipline
@@ -348,7 +356,27 @@ and
 .BR rlogind (8)
 to implement a remote-echoed,
 locally \fB^S\fP/\fB^Q\fP flow-controlled remote login.
-
+.TP
+.BI "TIOGCPKT	const int *" argp
+Return the current packet mode setting in the integer pointed to by
+.IR argp
+(since Linux 3.8).
+.TP
+.BI "TIOCSPTLCK	int *" argp
+Set (if
+.IR *argp
+is nonzero) or remove (if
+.IR *argp
+is zero) the pseudoterminal slave device.
+(See also
+.BR unlockpt (3).)
+.TP
+.BI "TIOCGPTLCK	int *" argp
+Place the current lock state of the pseudoterminal slave device
+in the location pointed to by
+.IR argp
+(since Linux 3.8).
+.PP
 The BSD ioctls
 .BR TIOCSTOP ,
 .BR TIOCSTART ,
@@ -358,18 +386,18 @@ have not been implemented under Linux.
 .SS Modem control
 .TP
 .BI "TIOCMGET	int *" argp
-get the status of modem bits.
+Get the status of modem bits.
 .TP
 .BI "TIOCMSET	const int *" argp
-set the status of modem bits.
+Set the status of modem bits.
 .TP
 .BI "TIOCMBIC	const int *" argp
-clear the indicated modem bits.
+Clear the indicated modem bits.
 .TP
 .BI "TIOCMBIS	const int *" argp
-set the indicated modem bits.
+Set the indicated modem bits.
 .LP
-Bits used by these four ioctls:
+The following bits are used by the above ioctls:
 
 .nf
 TIOCM_LE        DSR (data set ready/line enable)
@@ -384,6 +412,30 @@ TIOCM_RNG       RNG (ring)
 TIOCM_RI         see TIOCM_RNG
 TIOCM_DSR       DSR (data set ready)
 .fi
+.TP
+.BI "TIOCMIWAIT	int " arg
+Wait for any of the 4 modem bits (DCD, RI, DSR, CTS) to change.
+The bits of interest are specified as a bit mask in
+.IR arg ,
+by ORing together any of the bit values,
+.BR TIOCM_RNG ,
+.BR TIOCM_DSR ,
+.BR TIOCM_CD ,
+and
+.BR TIOCM_CTS .
+The caller should use
+.B TIOCGICOUNT
+to see which bit has changed.
+.TP
+.BI "TIOCGICOUNT	struct serial_icounter_struct *" argp
+Get counts of input serial line interrupts (DCD, RI, DSR, CTS).
+The counts are written to the
+.I serial_icounter_struct
+structure pointed to by
+.IR argp .
+
+Note: both 1->0 and 0->1 transitions are counted, except for
+RI, where only 0->1 transitions are counted.
 .SS Marking a line as local
 .TP
 .BI "TIOCGSOFTCAR	int *" argp
@@ -428,7 +480,7 @@ Get the
 corresponding to
 .IR fd .
 .\"
-.\" .SS "Serial info"
+.\" .SS Serial info
 .\" .BR "#include <linux/serial.h>"
 .\" .sp
 .\" .TP
@@ -474,9 +526,9 @@ main(void)
     fd = open("/dev/ttyS0", O_RDONLY);
     ioctl(fd, TIOCMGET, &serial);
     if (serial & TIOCM_DTR)
-        puts("TIOCM_DTR is not set");
-    else
         puts("TIOCM_DTR is set");
+    else
+        puts("TIOCM_DTR is not set");
     close(fd);
 }
 .fi

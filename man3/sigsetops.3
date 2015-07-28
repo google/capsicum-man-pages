@@ -28,7 +28,7 @@
 .\" 2007-10-26 mdw   added wording that a sigset_t must be initialized
 .\"                  prior to use
 .\"
-.TH SIGSETOPS 3 2014-04-14 "Linux" "Linux Programmer's Manual"
+.TH SIGSETOPS 3 2015-03-02 "Linux" "Linux Programmer's Manual"
 .SH NAME
 sigemptyset, sigfillset, sigaddset, sigdelset, sigismember \- POSIX
 signal set operations
@@ -130,22 +130,39 @@ to indicate the cause of the error.
 .I sig
 is not a valid signal.
 .SH ATTRIBUTES
-.SS Multithreading (see pthreads(7))
-The
+For an explanation of the terms used in this section, see
+.BR attributes (7).
+.TS
+allbox;
+lbw31 lb lb
+l l l.
+Interface	Attribute	Value
+T{
 .BR sigemptyset (),
 .BR sigfillset (),
+.br
 .BR sigaddset (),
 .BR sigdelset (),
+.br
 .BR sigismember (),
 .BR sigisemptyset (),
+.br
 .BR sigorset (),
-and
 .BR sigandset ()
-functions are thread-safe.
+T}	Thread safety	MT-Safe
+.TE
 .SH CONFORMING TO
 POSIX.1-2001.
 .SH NOTES
-.SS Glibc notes
+When creating a filled signal set, the glibc
+.BR sigfillset ()
+function does not include the two real-time signals used internally
+by the NPTL threading implementation.
+See
+.BR nptl (7)
+for details.
+
+.SS Glibc extensions
 If the
 .B _GNU_SOURCE
 feature test macro is defined, then \fI<signal.h>\fP

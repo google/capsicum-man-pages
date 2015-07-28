@@ -27,7 +27,7 @@
 .\" Modified, 2001-12-26, aeb
 .\" 2008-09-07, mtk, Various rewrites; added an example program.
 .\"
-.TH GETDATE 3 2014-06-13 "" "Linux Programmer's Manual"
+.TH GETDATE 3 2015-03-02 "" "Linux Programmer's Manual"
 .SH NAME
 getdate, getdate_r \- convert a date-plus-time string to broken-down time
 .SH SYNOPSIS
@@ -194,14 +194,20 @@ File containing format patterns.
 Variables used by
 .BR strptime (3).
 .SH ATTRIBUTES
-.SS Multithreading (see pthreads(7))
-The
+For an explanation of the terms used in this section, see
+.BR attributes (7).
+.TS
+allbox;
+lb lb lb
+l l l.
+Interface	Attribute	Value
+T{
 .BR getdate ()
-function is not thread-safe.
-.LP
-The
+T}	Thread safety	MT-Unsafe race:getdate env locale
+T{
 .BR getdate_r ()
-function is thread-safe.
+T}	Thread safety	MT-Safe env locale
+.TE
 .SH CONFORMING TO
 POSIX.1-2001.
 .SH NOTES

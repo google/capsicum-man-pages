@@ -23,7 +23,7 @@
 .\" %%%LICENSE_END
 .\"
 .\" Corrected prototype and include, aeb, 990927
-.TH LSEARCH 3  1999-09-27 "GNU" "Linux Programmer's Manual"
+.TH LSEARCH 3  2015-05-07 "GNU" "Linux Programmer's Manual"
 .SH NAME
 lfind, lsearch \- linear search of an array
 .SH SYNOPSIS
@@ -77,6 +77,20 @@ NULL if no match is found.
 returns a pointer to
 a matching member of the array, or to the newly added member if no
 match is found.
+.SH ATTRIBUTES
+For an explanation of the terms used in this section, see
+.BR attributes (7).
+.TS
+allbox;
+lbw18 lb lb
+l l l.
+Interface	Attribute	Value
+T{
+.BR lfind (),
+.BR lsearch ()
+T}	Thread safety	MT-Safe
+.TE
+
 .SH CONFORMING TO
 SVr4, 4.3BSD, POSIX.1-2001.
 Present in libc since libc-4.6.27.

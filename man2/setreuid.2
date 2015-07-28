@@ -1,4 +1,5 @@
 .\" Copyright (c) 1983, 1991 The Regents of the University of California.
+.\" and Copyright (C) 2009, 2010, 2014, 2015, Michael Kerrisk <mtk.manpages@gmail.com>
 .\" All rights reserved.
 .\"
 .\" %%%LICENSE_START(BSD_4_CLAUSE_UCB)
@@ -42,7 +43,7 @@
 .\"          2004-07-04 by aeb
 .\"          2004-05-27 by Michael Kerrisk
 .\"
-.TH SETREUID 2 2014-09-21 "Linux" "Linux Programmer's Manual"
+.TH SETREUID 2 2015-07-23 "Linux" "Linux Programmer's Manual"
 .SH NAME
 setreuid, setregid \- set real and/or effective user or group ID
 .SH SYNOPSIS
@@ -156,12 +157,12 @@ Setting the effective user (group) ID to the
 saved set-user-ID (saved set-group-ID) is
 possible since Linux 1.1.37 (1.1.38).
 
-POSIX.1 does not specify all of possible ID changes that are permitted
-on Linux for an unprivileged process.
+POSIX.1 does not specify all of the UID changes that Linux permits
+for an unprivileged process.
 For
 .BR setreuid (),
 the effective user ID can be made the same as the
-real user ID or the save set-user-ID,
+real user ID or the saved set-user-ID,
 and it is unspecified whether unprivileged processes may set the
 real user ID to the real user ID, the effective user ID, or the
 saved set-user-ID.
@@ -191,6 +192,23 @@ The glibc
 and
 .BR setregid ()
 wrapper functions transparently deal with the variations across kernel versions.
+.\"
+.SS C library/kernel differences
+At the kernel level, user IDs and group IDs are a per-thread attribute.
+However, POSIX requires that all threads in a process
+share the same credentials.
+The NPTL threading implementation handles the POSIX requirements by
+providing wrapper functions for
+the various system calls that change process UIDs and GIDs.
+These wrapper functions (including those for
+.BR setreuid ()
+and
+.BR setregid ())
+employ a signal-based technique to ensure
+that when one thread changes credentials,
+all of the other threads in the process also change their credentials.
+For details, see
+.BR nptl (7).
 .SH SEE ALSO
 .BR getgid (2),
 .BR getuid (2),
@@ -199,4 +217,5 @@ wrapper functions transparently deal with the variations across kernel versions.
 .BR setresuid (2),
 .BR setuid (2),
 .BR capabilities (7),
+.BR credentials (7),
 .BR user_namespaces (7)

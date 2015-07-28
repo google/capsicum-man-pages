@@ -59,7 +59,7 @@
 .\" <http://www.gnu.org/licenses/>.
 .\" %%%LICENSE_END
 .\"
-.TH SCANDIR 3  2014-05-28 "GNU" "Linux Programmer's Manual"
+.TH SCANDIR 3  2015-04-19 "GNU" "Linux Programmer's Manual"
 .SH NAME
 scandir, scandirat, alphasort, versionsort \- scan
 a directory for matching entries
@@ -226,6 +226,24 @@ was added to glibc in version 2.1.
 
 .BR scandirat ()
 was added to glibc in version 2.15.
+.SH ATTRIBUTES
+For an explanation of the terms used in this section, see
+.BR attributes (7).
+.TS
+allbox;
+lbw26 lb lb
+l l l.
+Interface	Attribute	Value
+T{
+.BR scandir (),
+.BR scandirat ()
+T}	Thread safety	MT-Safe
+T{
+.BR alphasort (),
+.BR versionsort ()
+T}	Thread safety	MT-Safe locale
+.TE
+
 .SH CONFORMING TO
 .BR alphasort (),
 .BR scandir ():
@@ -256,6 +274,23 @@ calls
 .BR strcoll (3);
 earlier it used
 .BR strcmp (3).
+
+Before glibc 2.10, the two arguments of
+.BR alphasort ()
+and
+.BR versionsort ()
+were typed as
+.IR "const void\ *" .
+When
+.BR alphasort ()
+was standardized in POSIX.1-2008,
+the argument type was specified as the type-safe
+.IR "const struct dirent\ **",
+and glibc 2.10 changed the definition of
+.BR alphasort ()
+(and the nonstandard
+.BR versionsort ())
+to match the standard.
 .SH EXAMPLE
 .nf
 #define _SVID_SOURCE

@@ -30,7 +30,7 @@
 .\" Modified 2002-07-27 by Walter Harms
 .\" 	(walter.harms@informatik.uni-oldenburg.de)
 .\"
-.TH FREXP 3 2013-08-06 "" "Linux Programmer's Manual"
+.TH FREXP 3 2015-04-19 "" "Linux Programmer's Manual"
 .SH NAME
 frexp, frexpf, frexpl \- convert floating-point number to fractional
 and integral components
@@ -64,17 +64,13 @@ or
 .RE
 .ad
 .SH DESCRIPTION
-The
-.BR frexp ()
-function is used to split the number
+These functions are used to split the number
 .I x
 into a
 normalized fraction and an exponent which is stored in
 .IR exp .
 .SH RETURN VALUE
-The
-.BR frexp ()
-function returns the normalized fraction.
+These functions return the normalized fraction.
 If the argument
 .I x
 is not zero,
@@ -106,15 +102,22 @@ is unspecified.
 .SH ERRORS
 No errors occur.
 .SH ATTRIBUTES
-.SS Multithreading (see pthreads(7))
-The
+For an explanation of the terms used in this section, see
+.BR attributes (7).
+.TS
+allbox;
+lbw27 lb lb
+l l l.
+Interface	Attribute	Value
+T{
 .BR frexp (),
 .BR frexpf (),
-and
 .BR frexpl ()
-functions are thread-safe.
+T}	Thread safety	MT-Safe
+.TE
 .SH CONFORMING TO
-C99, POSIX.1-2001.
+C99, POSIX.1-2001, POSIX.1-2008.
+
 The variant returning
 .I double
 also conforms to

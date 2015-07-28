@@ -37,7 +37,7 @@
 .\" 2007-07-10, mtk, Added an example program.
 .\" 2008-11-18, mtk, document MAP_STACK
 .\"
-.TH MMAP 2 2015-01-22 "Linux" "Linux Programmer's Manual"
+.TH MMAP 2 2015-05-07 "Linux" "Linux Programmer's Manual"
 .SH NAME
 mmap, munmap \- map or unmap files or devices into memory
 .SH SYNOPSIS
@@ -120,11 +120,9 @@ of the following values in
 Share this mapping.
 Updates to the mapping are visible to other processes that map this file,
 and are carried through to the underlying file.
-The file may not actually be updated until
-.BR msync (2)
-or
-.BR munmap ()
-is called.
+(To precisely control when updates are carried through
+to the underlying file requires the use of
+.BR msync (2).)
 .TP
 .B MAP_PRIVATE
 Create a private copy-on-write mapping.
@@ -234,10 +232,52 @@ See the Linux kernel source file
 .I Documentation/vm/hugetlbpage.txt
 for further information.
 .TP
+.BR MAP_HUGE_2MB ", " MAP_HUGE_1GB " (since Linux 3.8)"
+.\" See https://lwn.net/Articles/533499/
+Used in conjunction with
+.B MAP_HUGETLB
+to select alternative hugetlb page sizes (respectively, 2 MB and 1 GB)
+on systems that support multiple hugetlb page sizes.
+
+More generally, the desired huge page size can be configured by encoding
+the base-2 logarithm of the desired page size in the six bits at the offset
+.BR MAP_HUGE_SHIFT .
+(A value of zero in this bit field provides the default huge page size;
+the default huge page size can be discovered vie the
+.I Hugepagesize
+field exposed by
+.IR /proc/meminfo .)
+Thus, the above two constants are defined as:
+
+.nf
+.in +4n
+#define MAP_HUGE_2MB    (21 << MAP_HUGE_SHIFT)
+#define MAP_HUGE_1GB    (30 << MAP_HUGE_SHIFT)
+.in
+.fi
+
+The range of huge page sizes that are supported by the system
+can be discovered by listing the subdirectories in
+.IR /sys/kernel/mm/hugepages .
+.TP
 .BR MAP_LOCKED " (since Linux 2.5.37)"
-Lock the pages of the mapped region into memory in the manner of
+Mark the mmaped region to be locked in the same way as
 .BR mlock (2).
-This flag is ignored in older kernels.
+This implementation will try to populate (prefault) the whole range but
+the mmap call doesn't fail with
+.B ENOMEM
+if this fails.
+Therefore major faults might happen later on.
+So the semantic is not as strong as
+.BR mlock (2).
+One should use
+.BR mmap (2)
+plus
+.BR mlock (2)
+when major faults are not acceptable after the initialization of the mapping.
+The
+.BR MAP_LOCKED
+flag is ignored in older kernels.
 .\" If set, the mapped pages will not be swapped out.
 .TP
 .BR MAP_NONBLOCK " (since Linux 2.5.46)"
@@ -273,7 +313,7 @@ private writable mappings.
 .BR MAP_POPULATE " (since Linux 2.5.46)"
 Populate (prefault) page tables for a mapping.
 For a file mapping, this causes read-ahead on the file.
-Later accesses to the mapping will not be blocked by page faults.
+This will help to reduce blocking on page faults later.
 .BR MAP_POPULATE
 is supported for private mappings only since Linux 2.6.23.
 .TP
@@ -382,12 +422,14 @@ On error, the value
 .IR "(void\ *)\ \-1" )
 is returned, and
 .I errno
-is set appropriately.
+is set to indicate the cause of the error.
+
 On success,
 .BR munmap ()
-returns 0, on failure \-1, and
+returns 0.
+On failure, it returns \-1, and
 .I errno
-is set (probably to
+is set to indicate the cause of the error (probably to
 .BR EINVAL ).
 .SH ERRORS
 .TP
@@ -453,8 +495,15 @@ The underlying filesystem of the specified file does not support
 memory mapping.
 .TP
 .B ENOMEM
-No memory is available, or the process's maximum number of mappings would
-have been exceeded.
+No memory is available.
+.TP
+.B ENOMEM
+The process's maximum number of mappings would have been exceeded.
+This error can also occur for
+.BR munmap (2),
+when unmapping a region in the middle of an existing mapping,
+since this results in two smaller mappings on either side of
+the region being unmapped.
 .TP
 .B EPERM
 The
@@ -496,6 +545,19 @@ Attempted write into a region mapped as read-only.
 Attempted access to a portion of the buffer that does not correspond
 to the file (for example, beyond the end of the file, including the
 case where another process has truncated the file).
+.SH ATTRIBUTES
+For an explanation of the terms used in this section, see
+.BR attributes (7).
+.TS
+allbox;
+lbw18 lb lb
+l l l.
+Interface	Attribute	Value
+T{
+.BR mmap (),
+.BR munmap ()
+T}	Thread safety	MT-Safe
+.TE
 .SH CONFORMING TO
 SVr4, 4.4BSD, POSIX.1-2001.
 .\" SVr4 documents additional error codes ENXIO and ENODEV.
@@ -572,7 +634,7 @@ The relevant flags are:
 and
 .BR MAP_STACK .
 .\"
-.SS C library/kernel ABI differences
+.SS C library/kernel differences
 This page describes the interface provided by the glibc
 .BR mmap ()
 wrapper function.

@@ -20,7 +20,7 @@
 .\" 2008-12-05 Petr Baudis <pasky@suse.cz>
 .\"	Rewrite the NOTES section to reflect modern reality
 .\"
-.TH NSCD 8 2012-05-10 "GNU" "Linux Programmer's Manual"
+.TH NSCD 8 2015-05-07 "GNU" "Linux Programmer's Manual"
 .SH NAME
 nscd \- name service cache daemon
 .SH DESCRIPTION
@@ -35,8 +35,10 @@ See
 Nscd provides caching for accesses of the
 .BR passwd (5),
 .BR group (5),
-and
 .BR hosts (5)
+.BR service (5)
+and
+.I netgroup
 databases through standard libc interfaces, such as
 .BR getpwnam (3),
 .BR getpwuid (3),

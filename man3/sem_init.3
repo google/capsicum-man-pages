@@ -23,7 +23,7 @@
 .\" the source, must acknowledge the copyright and authors of this work.
 .\" %%%LICENSE_END
 .\"
-.TH SEM_INIT 3 2014-03-10 "Linux" "Linux Programmer's Manual"
+.TH SEM_INIT 3 2015-03-02 "Linux" "Linux Programmer's Manual"
 .SH NAME
 sem_init \- initialize an unnamed semaphore
 .SH SYNOPSIS
@@ -93,10 +93,17 @@ is nonzero,
 but the system does not support process-shared semaphores (see
 .BR sem_overview (7)).
 .SH ATTRIBUTES
-.SS Multithreading (see pthreads(7))
-The
+For an explanation of the terms used in this section, see
+.BR attributes (7).
+.TS
+allbox;
+lb lb lb
+l l l.
+Interface	Attribute	Value
+T{
 .BR sem_init ()
-function is thread-safe.
+T}	Thread safety	MT-Safe
+.TE
 .SH CONFORMING TO
 POSIX.1-2001.
 .SH NOTES

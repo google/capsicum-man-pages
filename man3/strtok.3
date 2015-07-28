@@ -29,7 +29,7 @@
 .\" 2005-11-17, mtk: Substantial parts rewritten
 .\" 2013-05-19, mtk: added much further detail on the operation of strtok()
 .\"
-.TH STRTOK 3  2013-05-19 "GNU" "Linux Programmer's Manual"
+.TH STRTOK 3  2015-03-02 "GNU" "Linux Programmer's Manual"
 .SH NAME
 strtok, strtok_r \- extract tokens from strings
 .SH SYNOPSIS
@@ -167,14 +167,20 @@ and
 functions return a pointer to
 the next token, or NULL if there are no more tokens.
 .SH ATTRIBUTES
-.SS Multithreading (see pthreads(7))
-The
+For an explanation of the terms used in this section, see
+.BR attributes (7).
+.TS
+allbox;
+lb lb lb
+l l l.
+Interface	Attribute	Value
+T{
 .BR strtok ()
-function is not thread-safe.
-.LP
-The
+T}	Thread safety	MT-Unsafe race:strtok
+T{
 .BR strtok_r ()
-function is thread-safe.
+T}	Thread safety	MT-Safe
+.TE
 .SH CONFORMING TO
 .TP
 .BR strtok ()

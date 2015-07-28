@@ -43,7 +43,7 @@
 .\" 2015-01, Kees Cook <keescook@chromium.org>
 .\"    Added PTRACE_O_TRACESECCOMP, PTRACE_EVENT_SECCOMP
 .\"
-.TH PTRACE 2 2015-02-21 "Linux" "Linux Programmer's Manual"
+.TH PTRACE 2 2015-07-23 "Linux" "Linux Programmer's Manual"
 .SH NAME
 ptrace \- process trace
 .SH SYNOPSIS
@@ -873,7 +873,8 @@ This applies to exits via
 .BR exit (2),
 .BR exit_group (2),
 and signal deaths (except
-.BR SIGKILL ),
+.BR SIGKILL ,
+depending on the kernel version; see BUGS below),
 and when threads are torn down on
 .BR execve (2)
 in a multithreaded process.
@@ -1811,7 +1812,7 @@ returns.
 In this stop, the tracer can use
 .B PTRACE_GETEVENTMSG
 to retrieve the tracee's former thread ID.
-(This feature was introduced in Linux 3.0).
+(This feature was introduced in Linux 3.0.)
 Second, the
 .B PTRACE_O_TRACEEXEC
 option disables legacy
@@ -2019,7 +2020,7 @@ Its behavior differs significantly on other flavors of UNIX.
 In any case, use of
 .BR ptrace ()
 is highly specific to the operating system and architecture.
-.SS C library/kernel ABI differences
+.SS C library/kernel differences
 At the system call level, the
 .BR PTRACE_PEEKTEXT ,
 .BR PTRACE_PEEKDATA ,
@@ -2085,7 +2086,7 @@ stop before actual signal death.
 This may be changed in the future;
 .B SIGKILL
 is meant to always immediately kill tasks even under ptrace.
-Last confirmed on 2.6.38.6.
+Last confirmed on Linux 3.13.
 .LP
 Some system calls return with
 .B EINTR

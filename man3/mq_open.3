@@ -23,7 +23,7 @@
 .\" the source, must acknowledge the copyright and authors of this work.
 .\" %%%LICENSE_END
 .\"
-.TH MQ_OPEN 3 2014-12-31 "Linux" "Linux Programmer's Manual"
+.TH MQ_OPEN 3 2015-07-23 "Linux" "Linux Programmer's Manual"
 .SH NAME
 mq_open \- open a message queue
 .SH SYNOPSIS
@@ -168,6 +168,13 @@ but a queue with this
 already exists.
 .TP
 .B EINVAL
+.\" glibc checks whether the name starts with a "/" and if not,
+.\" gives this error
+.I name
+doesn't follow the format in
+.BR mq_overview (7).
+.TP
+.B EINVAL
 .B O_CREAT
 was specified in
 .IR oflag ,
@@ -235,12 +242,37 @@ This probably occurred because the
 limit was encountered; see
 .BR mq_overview (7).
 .SH ATTRIBUTES
-.SS Multithreading (see pthreads(7))
-The
+For an explanation of the terms used in this section, see
+.BR attributes (7).
+.TS
+allbox;
+lb lb lb
+l l l.
+Interface	Attribute	Value
+T{
 .BR mq_open ()
-function is thread-safe.
+T}	Thread safety	MT-Safe
+.TE
 .SH CONFORMING TO
 POSIX.1-2001.
+.SH NOTES
+.SS C library/kernel differences
+The
+.BR mq_open ()
+library function is implemented on top of a system call of the same name.
+The library function performs the check that the
+.I name
+starts with a slash (/), giving the
+.B EINVAL
+error if it does not.
+The kernel system call expects
+.I name
+to contain no preceding slash,
+so the C library function passes
+.I name
+without the preceding slash (i.e.,
+.IR name+1 )
+to the system call.
 .SH BUGS
 In kernels before 2.6.14,
 the process umask was not applied to the permissions specified in

@@ -23,7 +23,7 @@
 .\" the source, must acknowledge the copyright and authors of this work.
 .\" %%%LICENSE_END
 .\"
-.TH SCHED_SETATTR 2 2015-02-21 "Linux" "Linux Programmer's Manual"
+.TH SCHED_SETATTR 2 2015-07-23 "Linux" "Linux Programmer's Manual"
 .SH NAME
 sched_setattr, sched_getattr \-
 set and get scheduling policy and attributes
@@ -31,7 +31,7 @@ set and get scheduling policy and attributes
 .nf
 .B #include <sched.h>
 
-.BI "int sched_setattr(pid_t " pid ", const struct sched_attr *" attr ,
+.BI "int sched_setattr(pid_t " pid ", struct sched_attr *" attr ,
 .BI "                  unsigned int " flags );
 
 .BI "int sched_getattr(pid_t " pid ", struct sched_attr *" attr ,

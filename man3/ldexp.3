@@ -31,7 +31,7 @@
 .\" Modified 1993-07-24 by Rik Faith (faith@cs.unc.edu)
 .\" Modified 2004-10-31 by aeb
 .\"
-.TH LDEXP 3 2013-08-19 "" "Linux Programmer's Manual"
+.TH LDEXP 3 2015-04-19 "" "Linux Programmer's Manual"
 .SH NAME
 ldexp, ldexpf, ldexpl \- multiply floating-point number by integral power of 2
 .SH SYNOPSIS
@@ -64,9 +64,7 @@ or
 .RE
 .ad
 .SH DESCRIPTION
-The
-.BR ldexp ()
-function returns the result of multiplying the floating-point number
+These functions return the result of multiplying the floating-point number
 .I x
 by 2 raised to the power
 .IR exp .
@@ -127,15 +125,22 @@ An underflow floating-point exception
 .RB ( FE_UNDERFLOW )
 is raised.
 .SH ATTRIBUTES
-.SS Multithreading (see pthreads(7))
-The
+For an explanation of the terms used in this section, see
+.BR attributes (7).
+.TS
+allbox;
+lbw27 lb lb
+l l l.
+Interface	Attribute	Value
+T{
 .BR ldexp (),
 .BR ldexpf (),
-and
 .BR ldexpl ()
-functions are thread-safe.
+T}	Thread safety	MT-Safe
+.TE
 .SH CONFORMING TO
-C99, POSIX.1-2001.
+C99, POSIX.1-2001, POSIX.1-2008.
+
 The variant returning
 .I double
 also conforms to

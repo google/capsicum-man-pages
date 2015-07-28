@@ -5,7 +5,7 @@
 .\" FIXME . The description of nfsservctl() on this page
 .\" is woefully thin.
 .\"
-.TH NFSSERVCTL 2 2013-09-17 "Linux" "Linux Programmer's Manual"
+.TH NFSSERVCTL 2 2015-05-07 "Linux" "Linux Programmer's Manual"
 .SH NAME
 nfsservctl \- syscall interface to kernel nfs daemon
 .SH SYNOPSIS
@@ -18,6 +18,10 @@ nfsservctl \- syscall interface to kernel nfs daemon
 .SH DESCRIPTION
 .IR Note :
 Since Linux 3.1, this system call no longer exists.
+It has been replaced by a set of files in the
+.I nfsd
+filesystem; see
+.BR nfsd (7).
 
 .nf
 /*

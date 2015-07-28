@@ -12,7 +12,7 @@
 .\"   Dinkumware C library reference http://www.dinkumware.com/
 .\"   OpenGroup's Single UNIX specification http://www.UNIX-systems.org/online.html
 .\"
-.TH WCSNLEN 3  2013-11-25 "GNU" "Linux Programmer's Manual"
+.TH WCSNLEN 3  2015-03-02 "GNU" "Linux Programmer's Manual"
 .SH NAME
 wcsnlen \- determine the length of a fixed-size wide-character string
 .SH SYNOPSIS
@@ -80,10 +80,17 @@ The
 .BR wcsnlen ()
 function is provided in glibc since version 2.1.
 .SH ATTRIBUTES
-.SS Multithreading (see pthreads(7))
-The
+For an explanation of the terms used in this section, see
+.BR attributes (7).
+.TS
+allbox;
+lb lb lb
+l l l.
+Interface	Attribute	Value
+T{
 .BR wcsnlen ()
-function is thread-safe.
+T}	Thread safety	MT-Safe
+.TE
 .SH CONFORMING TO
 POSIX.1-2008.
 .SH SEE ALSO

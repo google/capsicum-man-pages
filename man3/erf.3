@@ -32,7 +32,7 @@
 .\" Modified 2002-07-27 by Walter Harms
 .\" 	(walter.harms@informatik.uni-oldenburg.de)
 .\"
-.TH ERF 3  2013-10-29 "GNU" "Linux Programmer's Manual"
+.TH ERF 3  2015-04-19 "GNU" "Linux Programmer's Manual"
 .SH NAME
 erf, erff, erfl, \- error function
 .SH SYNOPSIS
@@ -72,12 +72,9 @@ or
 .RE
 .ad b
 .SH DESCRIPTION
-The
-.BR erf ()
-function returns the error function of
+These functions return the error function of
 .IR x ,
-defined
-as
+defined as
 .TP
     erf(x) = 2/sqrt(pi)* integral from 0 to x of exp(\-t*t) dt
 .SH RETURN VALUE
@@ -124,15 +121,22 @@ These functions do not set
 .\" FIXME . Is it intentional that these functions do not set errno?
 .\" Bug raised: http://sources.redhat.com/bugzilla/show_bug.cgi?id=6785
 .SH ATTRIBUTES
-.SS Multithreading (see pthreads(7))
-The
+For an explanation of the terms used in this section, see
+.BR attributes (7).
+.TS
+allbox;
+lbw21 lb lb
+l l l.
+Interface	Attribute	Value
+T{
 .BR erf (),
 .BR erff (),
-and
 .BR erfl ()
-functions are thread-safe.
+T}	Thread safety	MT-Safe
+.TE
 .SH CONFORMING TO
-C99, POSIX.1-2001.
+C99, POSIX.1-2001, POSIX.1-2008.
+
 The variant returning
 .I double
 also conforms to

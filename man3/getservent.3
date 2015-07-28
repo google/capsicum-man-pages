@@ -31,7 +31,7 @@
 .\" Modified Mon Apr 22 01:50:54 1996 by Martin Schulze <joey@infodrom.north.de>
 .\" 2001-07-25 added a clause about NULL proto (Martin Michlmayr or David N. Welton)
 .\"
-.TH GETSERVENT 3  2008-08-19 "GNU" "Linux Programmer's Manual"
+.TH GETSERVENT 3  2015-07-23 "GNU" "Linux Programmer's Manual"
 .SH NAME
 getservent, getservbyname, getservbyport, setservent, endservent \-
 get service entry
@@ -154,6 +154,57 @@ error occurs or the end of the file is reached.
 .TP
 .I /etc/services
 services database file
+.SH ATTRIBUTES
+For an explanation of the terms used in this section, see
+.BR attributes (7).
+.TS
+allbox;
+lbw15 lb lbw25
+l l l.
+Interface	Attribute	Value
+T{
+.BR getservent ()
+T}	Thread safety	T{
+MT-Unsafe race:servent
+.br
+race:serventbuf locale
+T}
+T{
+.BR getservbyname ()
+T}	Thread safety	T{
+MT-Unsafe race:servbyname
+.br
+locale
+T}
+T{
+.BR getservbyport ()
+T}	Thread safety	T{
+MT-Unsafe race:servbyport
+.br
+locale
+T}
+T{
+.BR setservent (),
+.br
+.BR endservent ()
+T}	Thread safety	T{
+MT-Unsafe race:servent
+.br
+locale
+T}
+.TE
+
+In the above table,
+.I servent
+in
+.I race:servent
+signifies that if any of the functions
+.BR setservent (3),
+.BR getservent (3),
+or
+.BR endservent (3)
+are used in parallel in different threads of a program,
+then data races could occur.
 .SH CONFORMING TO
 4.3BSD, POSIX.1-2001.
 .SH SEE ALSO

@@ -12,7 +12,7 @@
 .\" Modified 2003-04-23 by Michael Kerrisk
 .\" Modified 2004-06-23 by Michael Kerrisk <mtk.manpages@gmail.com>
 .\"
-.TH MKNOD 2 2014-02-21 "Linux" "Linux Programmer's Manual"
+.TH MKNOD 2 2015-05-07 "Linux" "Linux Programmer's Manual"
 .SH NAME
 mknod, mknodat \- create a special or ordinary file
 .SH SYNOPSIS
@@ -56,15 +56,17 @@ and
 
 The
 .I mode
-argument specifies both the permissions to use and the type of node
+argument specifies both the file mode to use and the type of node
 to be created.
 It should be a combination (using bitwise OR) of one of the file types
-listed below and the permissions for the new node.
+listed below and zero or more of the file mode bits listed in
+.BR stat (2).
 
-The permissions are modified by the process's
+The file mode is modified by the process's
 .I umask
-in the usual way: the permissions of the created node are
-.IR "(mode & ~umask)" .
+in the usual way: in the absence of a default ACL, the permissions of the
+created node are
+.RI ( mode " & ~" umask ).
 
 The file type must be one of
 .BR S_IFREG ,
@@ -293,4 +295,5 @@ and
 .BR unlink (2),
 .BR makedev (3),
 .BR mkfifo (3),
+.BR acl (5)
 .BR path_resolution (7)

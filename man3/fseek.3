@@ -39,7 +39,7 @@
 .\"
 .\" Converted for Linux, Mon Nov 29 15:22:01 1993, faith@cs.unc.edu
 .\"
-.TH FSEEK 3  2014-05-28 "GNU" "Linux Programmer's Manual"
+.TH FSEEK 3  2015-03-29 "GNU" "Linux Programmer's Manual"
 .SH NAME
 fgetpos, fseek, fsetpos, ftell, rewind \- reposition a stream
 .SH SYNOPSIS
@@ -166,6 +166,24 @@ for any of the errors specified for the routines
 .BR lseek (2),
 and
 .BR malloc (3).
+.SH ATTRIBUTES
+For an explanation of the terms used in this section, see
+.BR attributes (7).
+.TS
+allbox;
+lbw27 lb lb
+l l l.
+Interface	Attribute	Value
+T{
+.BR fseek (),
+.BR ftell (),
+.BR rewind (),
+.br
+.BR fgetpos (),
+.BR fsetpos ()
+T}	Thread safety	MT-Safe
+.TE
+
 .SH CONFORMING TO
 C89, C99.
 .SH SEE ALSO

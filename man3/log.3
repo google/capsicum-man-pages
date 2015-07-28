@@ -33,7 +33,7 @@
 .\" Modified 2002-07-27 by Walter Harms
 .\" 	(walter.harms@informatik.uni-oldenburg.de)
 .\"
-.TH LOG 3  2010-09-20  "" "Linux Programmer's Manual"
+.TH LOG 3  2015-04-19  "" "Linux Programmer's Manual"
 .SH NAME
 log, logf, logl \- natural logarithmic function
 .SH SYNOPSIS
@@ -66,9 +66,7 @@ or
 .RE
 .ad
 .SH DESCRIPTION
-The
-.BR log ()
-function returns the natural logarithm of
+These functions return the natural logarithm of
 .IR x .
 .SH RETURN VALUE
 On success, these functions return the natural logarithm of
@@ -125,8 +123,23 @@ is set to
 A divide-by-zero floating-point exception
 .RB ( FE_DIVBYZERO )
 is raised.
+.SH ATTRIBUTES
+For an explanation of the terms used in this section, see
+.BR attributes (7).
+.TS
+allbox;
+lbw21 lb lb
+l l l.
+Interface	Attribute	Value
+T{
+.BR log (),
+.BR logf (),
+.BR logl ()
+T}	Thread safety	MT-Safe
+.TE
 .SH CONFORMING TO
-C99, POSIX.1-2001.
+C99, POSIX.1-2001, POSIX.1-2008.
+
 The variant returning
 .I double
 also conforms to

@@ -27,7 +27,7 @@
 .\" 2003-08-24 aeb, large parts rewritten
 .\" 2004-08-06 Christoph Lameter <clameter@sgi.com>, SMP note
 .\"
-.TH CLOCK_GETRES 2 2013-12-28 "" "Linux Programmer's Manual"
+.TH CLOCK_GETRES 2 2015-07-23 "" "Linux Programmer's Manual"
 .SH NAME
 clock_getres, clock_gettime, clock_settime \- clock and time functions
 .SH SYNOPSIS
@@ -204,6 +204,21 @@ specified is not supported on this system.
 does not have permission to set the clock indicated.
 .SH VERSIONS
 These system calls first appeared in Linux 2.6.
+.SH ATTRIBUTES
+For an explanation of the terms used in this section, see
+.BR attributes (7).
+.TS
+allbox;
+lbw16 lb lb
+l l l.
+Interface	Attribute	Value
+T{
+.BR clock_getres (),
+.BR clock_gettime (),
+.BR clock_settime ()
+T}	Thread safety	MT-Safe
+.TE
+
 .SH CONFORMING TO
 SUSv2, POSIX.1-2001.
 .SH AVAILABILITY

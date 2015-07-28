@@ -23,7 +23,7 @@
 .\" the source, must acknowledge the copyright and authors of this work.
 .\" %%%LICENSE_END
 .\"
-.TH MAKEDEV 3 2014-05-28 "Linux" "Linux Programmer's Manual"
+.TH MAKEDEV 3 2015-03-02 "Linux" "Linux Programmer's Manual"
 .SH NAME
 makedev, major, minor \- manage a device number
 .SH SYNOPSIS
@@ -59,6 +59,20 @@ they return, respectively, the major and minor components.
 These macros can be useful to, for example,
 decompose the device IDs in the structure returned by
 .BR stat (2).
+.SH ATTRIBUTES
+For an explanation of the terms used in this section, see
+.BR attributes (7).
+.TS
+allbox;
+lbw27 lb lb
+l l l.
+Interface	Attribute	Value
+T{
+.BR makedev (),
+.BR major (),
+.BR minor ()
+T}	Thread safety	MT-Safe
+.TE
 .SH CONFORMING TO
 The
 .BR makedev (),

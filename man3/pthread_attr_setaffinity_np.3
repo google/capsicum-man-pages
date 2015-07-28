@@ -23,7 +23,7 @@
 .\" the source, must acknowledge the copyright and authors of this work.
 .\" %%%LICENSE_END
 .\"
-.TH PTHREAD_ATTR_SETAFFINITY_NP 3 2014-05-28 "Linux" "Linux Programmer's Manual"
+.TH PTHREAD_ATTR_SETAFFINITY_NP 3 2015-07-23 "Linux" "Linux Programmer's Manual"
 .SH NAME
 pthread_attr_setaffinity_np, pthread_attr_getaffinity_np \- set/get
 CPU affinity attribute in thread attributes object
@@ -105,6 +105,20 @@ is too small).
 Could not allocate memory.
 .SH VERSIONS
 These functions are provided by glibc since version 2.3.4.
+.SH ATTRIBUTES
+For an explanation of the terms used in this section, see
+.BR attributes (7).
+.TS
+allbox;
+lbw30 lb lb
+l l l.
+Interface	Attribute	Value
+T{
+.BR pthread_attr_setaffinity_np (),
+.BR pthread_attr_getaffinity_np ()
+T}	Thread safety	MT-Safe
+.TE
+
 .SH CONFORMING TO
 These functions are nonstandard GNU extensions;
 hence the suffix "_np" (nonportable) in the names.

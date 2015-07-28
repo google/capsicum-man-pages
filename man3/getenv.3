@@ -30,7 +30,7 @@
 .\" Modified Sat Jul 24 19:30:29 1993 by Rik Faith (faith@cs.unc.edu)
 .\" Modified Fri Feb 14 21:47:50 1997 by Andries Brouwer (aeb@cwi.nl)
 .\"
-.TH GETENV 3  2012-08-14 "GNU" "Linux Programmer's Manual"
+.TH GETENV 3  2015-03-02 "GNU" "Linux Programmer's Manual"
 .SH NAME
 getenv, secure_getenv \- get an environment variable
 .SH SYNOPSIS
@@ -93,6 +93,19 @@ environment, or NULL if there is no match.
 .SH VERSIONS
 .BR secure_getenv ()
 first appeared in glibc 2.17.
+.SH ATTRIBUTES
+For an explanation of the terms used in this section, see
+.BR attributes (7).
+.TS
+allbox;
+lbw25 lb lb
+l l l.
+Interface	Attribute	Value
+T{
+.BR getenv (),
+.BR secure_getenv ()
+T}	Thread safety	MT-Safe env
+.TE
 .SH CONFORMING TO
 .BR getenv ():
 SVr4, POSIX.1-2001, 4.3BSD, C89, C99.

@@ -21,7 +21,7 @@
 .\" with various additions by Michael Kerrisk <mtk.manpages@gmail.com>
 .\"
 .\"
-.TH IOPRIO_SET 2 2013-02-12 "Linux" "Linux Programmer's Manual"
+.TH IOPRIO_SET 2 2015-07-23 "Linux" "Linux Programmer's Manual"
 .SH NAME
 ioprio_get, ioprio_set \- get/set I/O scheduling class and priority
 .SH SYNOPSIS
@@ -137,7 +137,10 @@ value), this macro returns its priority
 component.
 .PP
 See the NOTES section for more
-information on scheduling classes and priorities.
+information on scheduling classes and priorities,
+as well as the meaning of specifying
+.I ioprio
+as 0.
 
 I/O priorities are supported for reads and for synchronous
 .RB ( O_DIRECT ,
@@ -222,8 +225,21 @@ These system calls have an effect only when used
 in conjunction with an I/O scheduler that supports I/O priorities.
 As at kernel 2.6.17 the only such scheduler is the Completely Fair Queuing
 (CFQ) I/O scheduler.
+
+If no I/O scheduler has been set for a thread,
+then by default the I/O priority will follow the CPU nice value
+.RB ( setpriority (2)).
+In Linux kernels before version 2.6.24,
+once an I/O priority had been set using
+.BR ioprio_set (),
+there was no way to reset the I/O scheduling behavior to the default.
+Since Linux 2.6.24,
+.\" commit 8ec680e4c3ec818efd1652f15199ed1c216ab550
+specifying
+.I ioprio
+as 0 can be used to reset to the default I/O scheduling behavior.
 .SS Selecting an I/O scheduler
-I/O Schedulers are selected on a per-device basis via the special
+I/O schedulers are selected on a per-device basis via the special
 file
 .IR /sys/block/<device>/queue/scheduler .
 
@@ -235,20 +251,20 @@ displays a list of all schedulers currently loaded in the kernel:
 .sp
 .RS
 .nf
-.RB "$" " cat /sys/block/hda/queue/scheduler"
+.RB "$" " cat /sys/block/sda/queue/scheduler"
 noop anticipatory deadline [cfq]
 .fi
 .RE
 .sp
 The scheduler surrounded by brackets is the one actually
 in use for the device
-.RI ( hda
+.RI ( sda
 in the example).
 Setting another scheduler is done by writing the name of the
 new scheduler to this file.
 For example, the following command will set the
 scheduler for the
-.I hda
+.I sda
 device to
 .IR cfq :
 .sp
@@ -256,14 +272,14 @@ device to
 .nf
 .RB "$" " su"
 Password:
-.RB "#" " echo cfq > /sys/block/hda/queue/scheduler"
+.RB "#" " echo cfq > /sys/block/sda/queue/scheduler"
 .fi
 .RE
 .SS The Completely Fair Queuing (CFQ) I/O scheduler
-Since v3 (aka CFQ Time Sliced) CFQ implements
+Since version 3 (also known as CFQ Time Sliced), CFQ implements
 I/O nice levels similar to those
 of CPU scheduling.
-These nice levels are grouped in three scheduling classes
+These nice levels are grouped into three scheduling classes,
 each one containing one or more priority levels:
 .TP
 .BR IOPRIO_CLASS_RT " (1)"
@@ -272,13 +288,13 @@ This scheduling class is given
 higher priority than any other class:
 processes from this class are
 given first access to the disk every time.
-Thus this I/O class needs to be used with some
+Thus, this I/O class needs to be used with some
 care: one I/O real-time process can starve the entire system.
 Within the real-time class,
 there are 8 levels of class data (priority) that determine exactly
 how much time this process needs the disk for on each service.
 The highest real-time priority level is 0; the lowest is 7.
-In the future this might change to be more directly mappable to
+In the future, this might change to be more directly mappable to
 performance, by passing in a desired data rate instead.
 .TP
 .BR IOPRIO_CLASS_BE " (2)"
@@ -303,15 +319,15 @@ Attention is required when assigning this priority class to a process,
 since it may become starved if higher priority processes are
 constantly accessing the disk.
 .PP
-Refer to
+Refer to the kernel source file
 .I Documentation/block/ioprio.txt
 for more information on the CFQ I/O Scheduler and an example program.
 .SS Required permissions to set I/O priorities
 Permission to change a process's priority is granted or denied based
-on two assertions:
+on two criteria:
 .TP
 .B "Process ownership"
-An unprivileged process may set only the I/O priority of a process
+An unprivileged process may set the I/O priority only for a process
 whose real UID
 matches the real or effective UID of the calling process.
 A process which has the

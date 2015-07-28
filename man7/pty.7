@@ -22,7 +22,7 @@
 .\" the source, must acknowledge the copyright and authors of this work.
 .\" %%%LICENSE_END
 .\"
-.TH PTY 7 2005-10-10 "Linux" "Linux Programmer's Manual"
+.TH PTY 7 2015-07-23 "Linux" "Linux Programmer's Manual"
 .SH NAME
 pty \- pseudoterminal interfaces
 .SH DESCRIPTION
@@ -55,6 +55,13 @@ terminal emulators,
 .BR screen (1),
 and
 .BR expect (1).
+
+Data flow between master and slave is handled asynchronously,
+much like data flow with a physical terminal.
+Data written to the slave will be available at the master promptly,
+but may not be available immediately.
+Similarly, there may be a small processing delay between
+a write to the master, and the effect being visible at the slave.
 
 Historically, two pseudoterminal APIs have evolved: BSD and System V.
 SUSv1 standardized a pseudoterminal API based on the System V API,

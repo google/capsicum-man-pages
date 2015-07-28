@@ -13,7 +13,7 @@
 .\"   OpenGroup's Single UNIX specification http://www.UNIX-systems.org/online.html
 .\"   ISO/IEC 9899:1999
 .\"
-.TH WCSTOMBS 3  2014-03-18 "GNU" "Linux Programmer's Manual"
+.TH WCSTOMBS 3  2015-03-29 "GNU" "Linux Programmer's Manual"
 .SH NAME
 wcstombs \- convert a wide-character string to a multibyte string
 .SH SYNOPSIS
@@ -86,6 +86,19 @@ If a wide character was encountered which could not be
 converted,
 .I (size_t)\ \-1
 is returned.
+.SH ATTRIBUTES
+For an explanation of the terms used in this section, see
+.BR attributes (7).
+.TS
+allbox;
+lb lb lb
+l l l.
+Interface	Attribute	Value
+T{
+.BR wcstombs ()
+T}	Thread safety	MT-Safe
+.TE
+
 .SH CONFORMING TO
 C99.
 .SH NOTES

@@ -22,7 +22,7 @@
 .\" the source, must acknowledge the copyright and authors of this work.
 .\" %%%LICENSE_END
 .\"
-.TH FLOCKFILE 3  2014-08-19 "" "Linux Programmer's Manual"
+.TH FLOCKFILE 3  2015-03-02 "" "Linux Programmer's Manual"
 .SH NAME
 flockfile, ftrylockfile, funlockfile \- lock FILE for stdio
 .SH SYNOPSIS
@@ -125,13 +125,19 @@ function returns zero for success
 .SH ERRORS
 None.
 .SH ATTRIBUTES
-.SS Multithreading (see pthreads(7))
-The
+For an explanation of the terms used in this section, see
+.BR attributes (7).
+.TS
+allbox;
+lbw29 lb lb
+l l l.
+Interface	Attribute	Value
+T{
 .BR flockfile (),
 .BR ftrylockfile (),
-and
 .BR funlockfile ()
-functions are thread-safe.
+T}	Thread safety	MT-Safe
+.TE
 .SH CONFORMING TO
 POSIX.1-2001.
 .SH AVAILABILITY

@@ -23,7 +23,7 @@
 .\" the source, must acknowledge the copyright and authors of this work.
 .\" %%%LICENSE_END
 .\"
-.TH PTHREAD_ATTR_INIT 3 2008-11-11 "Linux" "Linux Programmer's Manual"
+.TH PTHREAD_ATTR_INIT 3 2015-07-23 "Linux" "Linux Programmer's Manual"
 .SH NAME
 pthread_attr_init, pthread_attr_destroy \- initialize and destroy
 thread attributes object
@@ -76,6 +76,20 @@ error for
 on Linux these functions always succeed
 (but portable and future-proof applications should nevertheless
 handle a possible error return).
+.SH ATTRIBUTES
+For an explanation of the terms used in this section, see
+.BR attributes (7).
+.TS
+allbox;
+lbw22 lb lb
+l l l.
+Interface	Attribute	Value
+T{
+.BR pthread_attr_init (),
+.BR pthread_attr_destroy ()
+T}	Thread safety	MT-Safe
+.TE
+
 .SH CONFORMING TO
 POSIX.1-2001.
 .SH NOTES
@@ -213,7 +227,7 @@ display_pthread_attr(pthread_attr_t *attr, char *prefix)
     if (s != 0)
         handle_error_en(s, "pthread_attr_getstack");
     printf("%sStack address       = %p\\n", prefix, stkaddr);
-    printf("%sStack size          = 0x%x bytes\\n", prefix, v);
+    printf("%sStack size          = 0x%zx bytes\\n", prefix, v);
 }
 
 static void *

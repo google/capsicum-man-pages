@@ -23,7 +23,7 @@
 .\" the source, must acknowledge the copyright and authors of this work.
 .\" %%%LICENSE_END
 .\"
-.TH SEM_GETVALUE 3 2014-03-03 "Linux" "Linux Programmer's Manual"
+.TH SEM_GETVALUE 3 2015-03-02 "Linux" "Linux Programmer's Manual"
 .SH NAME
 sem_getvalue \- get the value of a semaphore
 .SH SYNOPSIS
@@ -63,10 +63,17 @@ is set to indicate the error.
 .I sem
 is not a valid semaphore.
 .SH ATTRIBUTES
-.SS Multithreading (see pthreads(7))
-The
+For an explanation of the terms used in this section, see
+.BR attributes (7).
+.TS
+allbox;
+lb lb lb
+l l l.
+Interface	Attribute	Value
+T{
 .BR sem_getvalue ()
-function is thread-safe.
+T}	Thread safety	MT-Safe
+.TE
 .SH CONFORMING TO
 POSIX.1-2001.
 .SH NOTES

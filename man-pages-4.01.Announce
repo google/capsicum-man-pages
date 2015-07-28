@@ -1,7 +1,7 @@
 RELEASE
 The Linux man page maintainer proudly announces. . .
 
-    man-pages-3.81.tar.gz - man pages for Linux
+    man-pages-4.01.tar.gz - man pages for Linux
 
 Differences from the previous manual pages release are listed in
 the file "Changes".
@@ -31,7 +31,7 @@ Here is a breakdown of what this distribution contains:
     Section 2 = system calls
     Section 3 = libc calls
     Section 4 = devices (e.g., hd, sd)
-    Section 5 = file formats and protocols (e.g., wtmp, /etc/passwd, nfs)
+    Section 5 = file formats and configuration files (e.g., wtmp, /etc/passwd)
     Section 6 = games (intro only)
     Section 7 = overviews, conventions, macro packages, etc.
     Section 8 = system administration (intro, plus a few other pages)
@@ -43,7 +43,7 @@ Here is a breakdown of what this distribution contains:
 
     Note that only Section 2 is rather complete, but Section 3 contains
     several hundred man pages.  If you want to write some man pages,
-    or suggest improvments to existing pages, please visit
+    or suggest improvements to existing pages, please visit
     http://www.kernel.org/doc/man-pages/ .
 
 

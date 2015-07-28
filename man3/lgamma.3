@@ -8,7 +8,7 @@
 .\"
 .\" based on glibc infopages
 .\"
-.TH LGAMMA 3 2014-01-18 "" "Linux Programmer's Manual"
+.TH LGAMMA 3 2015-04-19 "" "Linux Programmer's Manual"
 .SH NAME
 lgamma, lgammaf, lgammal, lgamma_r, lgammaf_r, lgammal_r, signgam \-
 log gamma function
@@ -73,8 +73,11 @@ For the definition of the Gamma function, see
 .BR tgamma (3).
 .PP
 The
-.BR lgamma ()
-function returns the natural logarithm of
+.BR lgamma (),
+.BR lgammaf (),
+and
+.BR lgammal ()
+functions return the natural logarithm of
 the absolute value of the Gamma function.
 The sign of the Gamma function is returned in the
 external integer
@@ -158,9 +161,9 @@ is raised.
 .SH CONFORMING TO
 The
 .BR lgamma ()
-functions are specified in C99 and POSIX.1-2001.
+functions are specified in C99, POSIX.1-2001, and POSIX.1-2008.
 .I signgam
-is specified in POSIX.1-2001, but not in C99.
+is specified in POSIX.1-2001 and POSIX.1-2008, but not in C99.
 The
 .BR lgamma_r ()
 functions are nonstandard, but present on several other systems.

@@ -24,7 +24,7 @@
 .\" the source, must acknowledge the copyright and authors of this work.
 .\" %%%LICENSE_END
 .\"
-.TH SECCOMP 2 2015-01-10 "Linux" "Linux Programmer's Manual"
+.TH SECCOMP 2 2015-07-23 "Linux" "Linux Programmer's Manual"
 .SH NAME
 seccomp \- operate on Secure Computing state of the process
 .SH SYNOPSIS
@@ -54,7 +54,9 @@ values:
 The only system calls that the calling thread is permitted to make are
 .BR read (2),
 .BR write (2),
-.BR _exit (2),
+.BR _exit (2)
+(but not
+.BR exit_group (2)),
 and
 .BR sigreturn (2).
 Other system calls result in the delivery of a
@@ -63,6 +65,33 @@ signal.
 Strict secure computing mode is useful for number-crunching
 applications that may need to execute untrusted byte code, perhaps
 obtained by reading from a pipe or socket.
+
+Note that although the calling thread can no longer call
+.BR sigprocmask (2),
+it can use
+.BR sigreturn (2)
+to block all signals apart from
+.BR SIGKILL
+and
+.BR SIGSTOP .
+This means that
+.BR alarm (2)
+(for example) is not sufficient for restricting the process's execution time.
+Instead, to reliably terminate the process,
+.BR SIGKILL
+must be used.
+This can be done by using
+.BR timer_create (2)
+with
+.BR SIGEV_SIGNAL
+and
+.IR sigev_signo
+set to
+.BR SIGKILL ,
+or by using
+.BR setrlimit (2)
+to set the hard limit for
+.BR RLIMIT_CPU .
 
 This operation is available only if the kernel is configured with
 .BR CONFIG_SECCOMP
@@ -209,7 +238,13 @@ struct sock_filter {            /* Filter block */
 When executing the instructions, the BPF program operates on the
 system call information made available (i.e., use the
 .BR BPF_ABS
-addressing mode) as a buffer of the following form:
+addressing mode) as a (read-only)
+.\" Quoting Kees Cook:
+.\"     If BPF even allows changing the data, it's not copied back to
+.\"     the syscall when it runs. Anything wanting to do things like
+.\"     that would need to use ptrace to catch the call an directly
+.\"     modify the registers before continuing with the call.
+buffer of the following form:
 
 .in +4n
 .nf
@@ -222,6 +257,68 @@ struct seccomp_data {
 };
 .fi
 .in
+
+Because the numbers of system calls vary between architectures and
+some architectures (e.g., x86-64) allow user-space code to use
+the calling conventions of multiple architectures, it is usually
+necessary to verify the value of the
+.IR arch
+field.
+
+It is strongly recommended to use a whitelisting approach whenever
+possible because such an approach is more robust and simple.
+A blacklist will have to be updated whenever a potentially
+dangerous system call is added (or a dangerous flag or option if those
+are blacklisted), and it is often possible to alter the
+representation of a value without altering its meaning, leading to
+a blacklist bypass.
+
+The
+.IR arch
+field is not unique for all calling conventions.
+The x86-64 ABI and the x32 ABI both use
+.BR AUDIT_ARCH_X86_64
+as
+.IR arch ,
+and they run on the same processors.
+Instead, the mask
+.BR __X32_SYSCALL_BIT
+is used on the system call number to tell the two ABIs apart.
+.\" As noted by Dave Drysdale in a note at the end of
+.\" https://lwn.net/Articles/604515/
+.\"     One additional detail to point out for the x32 ABI case:
+.\"     the syscall number gets a high bit set (__X32_SYSCALL_BIT),
+.\"     to mark it as an x32 call.
+.\"
+.\"     If x32 support is included in the kernel, then __SYSCALL_MASK
+.\"     will have a value that is not all-ones, and this will trigger
+.\"     an extra instruction in system_call to mask off the extra bit,
+.\"     so that the syscall table indexing still works.
+
+This means that in order to create a seccomp-based
+blacklist for system calls performed through the x86-64 ABI,
+it is necessary to not only check that
+.IR arch
+equals
+.BR AUDIT_ARCH_X86_64 ,
+but also to explicitly reject all system calls that contain
+.BR __X32_SYSCALL_BIT
+in
+.IR nr .
+
+When checking values from
+.IR args
+against a blacklist, keep in mind that arguments are often
+silently truncated before being processed, but after the seccomp check.
+For example, this happens if the i386 ABI is used on an
+x86-64 kernel: although the kernel will normally not look beyond
+the 32 lowest bits of the arguments, the values of the full
+64-bit registers will be present in the seccomp data.
+A less surprising example is that if the x86-64 ABI is used to perform
+a system call that takes an argument of type
+.IR int ,
+the more-significant half of the argument register is ignored by
+the system call, but visible in the seccomp data.
 
 A seccomp filter returns a 32-bit value consisting of two parts:
 the most significant 16 bits
@@ -409,7 +506,6 @@ but the filter program pointed to by
 was not valid or the length of the filter program was zero or exceeded
 .B BPF_MAXINSNS
 (4096) instructions.
-.BR EINVAL
 .TP
 .BR ENOMEM
 Out of memory.
@@ -437,6 +533,11 @@ The
 .BR seccomp ()
 system call is a nonstandard Linux extension.
 .SH NOTES
+Rather than hand-coding seccomp filters as shown in the example below,
+you may prefer to employ the
+.I libseccomp
+library, which provides a front-end for generating seccomp filters.
+
 The
 .IR Seccomp
 field of the
@@ -492,7 +593,7 @@ being set to the specified error number.
 The remaining command-line arguments specify
 the pathname and additional arguments of a program
 that the example program should attempt to execute using
-.BR execve (3)
+.BR execv (3)
 (a library function that employs the
 .BR execve (2)
 system call).
@@ -572,7 +673,6 @@ cecilia
 .in
 .fi
 .SS Program source
-.fi
 .nf
 #include <errno.h>
 #include <stddef.h>
@@ -584,38 +684,51 @@ cecilia
 #include <linux/seccomp.h>
 #include <sys/prctl.h>
 
+#define X32_SYSCALL_BIT 0x40000000
+
 static int
 install_filter(int syscall_nr, int t_arch, int f_errno)
 {
+    unsigned int upper_nr_limit = 0xffffffff;
+
+    /* Assume that AUDIT_ARCH_X86_64 means the normal x86-64 ABI */
+    if (t_arch == AUDIT_ARCH_X86_64)
+        upper_nr_limit = X32_SYSCALL_BIT - 1;
+
     struct sock_filter filter[] = {
         /* [0] Load architecture from 'seccomp_data' buffer into
                accumulator */
         BPF_STMT(BPF_LD | BPF_W | BPF_ABS,
                  (offsetof(struct seccomp_data, arch))),
 
-        /* [1] Jump forward 4 instructions if architecture does not
+        /* [1] Jump forward 5 instructions if architecture does not
                match 't_arch' */
-        BPF_JUMP(BPF_JMP | BPF_JEQ | BPF_K, t_arch, 0, 4),
+        BPF_JUMP(BPF_JMP | BPF_JEQ | BPF_K, t_arch, 0, 5),
 
         /* [2] Load system call number from 'seccomp_data' buffer into
                accumulator */
         BPF_STMT(BPF_LD | BPF_W | BPF_ABS,
                  (offsetof(struct seccomp_data, nr))),
 
-        /* [3] Jump forward 1 instruction if system call number
+        /* [3] Check ABI - only needed for x86-64 in blacklist use
+               cases.  Use JGT instead of checking against the bit
+               mask to avoid having to reload the syscall number. */
+        BPF_JUMP(BPF_JMP | BPF_JGT | BPF_K, upper_nr_limit, 3, 0),
+
+        /* [4] Jump forward 1 instruction if system call number
                does not match 'syscall_nr' */
         BPF_JUMP(BPF_JMP | BPF_JEQ | BPF_K, syscall_nr, 0, 1),
 
-        /* [4] Matching architecture and system call: don't execute
+        /* [5] Matching architecture and system call: don't execute
 	       the system call, and return 'f_errno' in 'errno' */
         BPF_STMT(BPF_RET | BPF_K,
                  SECCOMP_RET_ERRNO | (f_errno & SECCOMP_RET_DATA)),
 
-        /* [5] Destination of system call number mismatch: allow other
+        /* [6] Destination of system call number mismatch: allow other
                system calls */
         BPF_STMT(BPF_RET | BPF_K, SECCOMP_RET_ALLOW),
 
-        /* [6] Destination of architecture mismatch: kill process */
+        /* [7] Destination of architecture mismatch: kill process */
         BPF_STMT(BPF_RET | BPF_K, SECCOMP_RET_KILL),
     };
 
@@ -660,6 +773,7 @@ main(int argc, char **argv)
 }
 .fi
 .SH SEE ALSO
+.BR bpf (2),
 .BR prctl (2),
 .BR ptrace (2),
 .BR sigaction (2),

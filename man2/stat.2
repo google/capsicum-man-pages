@@ -37,7 +37,7 @@
 .\" 2007-06-08 mtk: Added example program
 .\" 2007-07-05 mtk: Added details on underlying system call interfaces
 .\"
-.TH STAT 2 2015-02-21 "Linux" "Linux Programmer's Manual"
+.TH STAT 2 2015-07-23 "Linux" "Linux Programmer's Manual"
 .SH NAME
 stat, fstat, lstat, fstatat \- get file status
 .SH SYNOPSIS
@@ -172,8 +172,33 @@ across architectures.
 In addition,
 the definition above does not show the padding bytes
 that may be present between some fields on various architectures.
-Consult the the glibc and kernel source code
+Consult the glibc and kernel source code
 if you need to know the details.
+
+.\" Background: inode attributes are modified with i_mutex held, but
+.\" read by stat() without taking the mutex.
+.I Note:
+For performance and simplicity reasons, different fields in the
+.I stat
+structure may contain state information from different moments
+during the execution of the system call.
+For example, if
+.IR st_mode
+or
+.IR st_uid
+is changed by another process by calling
+.BR chmod (2)
+or
+.BR chown (2),
+.BR stat ()
+might return the old
+.I st_mode
+together with the new
+.IR st_uid ,
+or the old
+.I st_uid
+together with the new
+.IR st_mode .
 
 The
 .I st_dev
@@ -268,13 +293,24 @@ The field
 is changed by writing or by setting inode information
 (i.e., owner, group, link count, mode, etc.).
 .PP
-The following mask values are defined for the file type component of the
+POSIX refers to the
+.I st_mode
+bits corresponding to the mask
+.B S_IFMT
+(see below) as the
+.IR "file type" ,
+the 12 bits corresponding to the mask 07777 as the
+.IR "file mode bits"
+and the least significant 9 bits (0777) as the
+.IR "file permission bits" .
+.PP
+The following mask values are defined for the file type of the
 .I st_mode
 field:
 .in +4n
 .TS
 lB l l.
-S_IFMT	0170000	bit mask for the file type bit fields
+S_IFMT	0170000	bit mask for the file type bit field
 
 S_IFSOCK	0140000	socket
 S_IFLNK	0120000	symbolic link
@@ -371,28 +407,28 @@ with a value of 500 or greater, or
 with a value of 200112L or greater.
 .PP
 The following mask values are defined for
-the file permissions component of the
+the file mode component of the
 .I st_mode
 field:
 .in +4n
 .TS
 lB l l.
-S_ISUID	0004000	set-user-ID bit
-S_ISGID	0002000	set-group-ID bit (see below)
-S_ISVTX	0001000	sticky bit (see below)
+S_ISUID	  04000	set-user-ID bit
+S_ISGID	  02000	set-group-ID bit (see below)
+S_ISVTX	  01000	sticky bit (see below)
 
-S_IRWXU	  00700	mask for file owner permissions
+S_IRWXU	  00700	owner has read, write, and execute permission
 S_IRUSR	  00400	owner has read permission
 S_IWUSR	  00200	owner has write permission
 S_IXUSR	  00100	owner has execute permission
 
-S_IRWXG	  00070	mask for group permissions
+S_IRWXG	  00070	group has read, write, and execute permission
 S_IRGRP	  00040	group has read permission
 S_IWGRP	  00020	group has write permission
 S_IXGRP	  00010	group has execute permission
 
 S_IRWXO	  00007	T{
-mask for permissions for others (not in group)
+others (not in group) have read, write, and execute permission
 T}
 S_IROTH	  00004	others have read permission
 S_IWOTH	  00002	others have write permission
@@ -617,14 +653,14 @@ According to POSIX.1-2001,
 .BR lstat ()
 on a symbolic link need return valid information only in the
 .I st_size
-field and the file-type component of the
+field and the file type of the
 .IR st_mode
 field of the
 .IR stat
 structure.
 POSIX.1-2008 tightens the specification, requiring
 .BR lstat ()
-to return valid information in all fields except the permission bits in
+to return valid information in all fields except the mode bits in
 .IR st_mode .
 
 Use of the
@@ -795,8 +831,7 @@ ext4 (since Linux 2.6.23).
 Nanosecond timestamps are not supported in ext2, ext3, and Reiserfs.
 On filesystems that do not support subsecond timestamps,
 the nanosecond fields are returned with the value 0.
-.SS Underlying kernel interface
-.SS C library/kernel ABI differences
+.SS C library/kernel differences
 Over time, increases in the size of the
 .I stat
 structure have led to three successive versions of
@@ -809,17 +844,53 @@ structure have led to three successive versions of
 .IR __NR_stat ),
 and
 .I sys_stat64()
-(new in kernel 2.4; slot
-.IR __NR_stat64 ).
+(slot
+.IR __NR_stat64 )
+on 32-bit platforms such as i386.
+The first two versions were already present in Linux 1.0
+(albeit with different names);
+.\" See include/asm-i386/stat.h in the Linux 2.4 source code for the
+.\" various versions of the structure definitions
+the last was added in Linux 2.4.
+Similar remarks apply for
+.BR fstat ()
+and
+.BR lstat ().
+
+The kernel-internal versions of the
+.I stat
+structure dealt with by the different versions are, respectively:
+.RS
+.TP
+.IR __old_kernel_stat
+The original structure, with rather narrow fields, and no padding.
+.TP
+.IR stat
+Larger
+.I st_ino
+field and padding added to various parts of the structure to
+allow for future expansion.
+.TP
+.IR stat64
+Even larger
+.I st_ino
+field,
+larger
+.I st_uid
+and
+.I st_gid
+fields to accommodate the Linux-2.4 expansion of UIDs and GIDs to 32 bits,
+and various other enlarged fields and further padding in the structure.
+(Various padding bytes were eventually consumed in Linux 2.6,
+with the advent of 32-bit device IDs and nanosecond components
+for the timestamp fields.)
+.RE
+.PP
 The glibc
 .BR stat ()
 wrapper function hides these details from applications,
 invoking the most recent version of the system call provided by the kernel,
 and repacking the returned information if required for old binaries.
-Similar remarks apply for
-.BR fstat ()
-and
-.BR lstat ().
 .\"
 .\" A note from Andries Brouwer, July 2007
 .\"
@@ -849,10 +920,19 @@ and
 .\"
 .\" (Note that the details depend on gcc being used as c compiler.)
 
+On modern 64-bit systems, life is simpler: there is a single
+.BR stat ()
+system call and the kernel deals with a
+.I stat
+structure that contains fields of a sufficient size.
+
 The underlying system call employed by the glibc
 .BR fstatat ()
 wrapper function is actually called
-.BR fstatat64 ().
+.BR fstatat64 ()
+or, on some architectures,
+.\" strace(1) shows the name "newfstatat" on x86-64
+.BR newfstatat ().
 .SH EXAMPLE
 The following program calls
 .BR stat ()

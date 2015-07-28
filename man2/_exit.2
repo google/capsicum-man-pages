@@ -26,7 +26,7 @@
 .\" Modified Wed Jul 21 23:02:38 1993 by Rik Faith <faith@cs.unc.edu>
 .\" Modified 2001-11-17, aeb
 .\"
-.TH _EXIT 2 2015-01-22 "Linux" "Linux Programmer's Manual"
+.TH _EXIT 2 2015-07-23 "Linux" "Linux Programmer's Manual"
 .SH NAME
 _exit, _Exit \- terminate the calling process
 .SH SYNOPSIS
@@ -97,10 +97,9 @@ functions registered with
 .BR atexit (3)
 or
 .BR on_exit (3).
-Whether it flushes
-standard I/O buffers and removes temporary files created with
-.BR tmpfile (3)
-is implementation-dependent.
+Open
+.BR stdio (3)
+streams are not flushed.
 On the other hand,
 .BR _exit ()
 does close open file descriptors, and this may cause an unknown delay,
@@ -114,7 +113,7 @@ Whether any pending I/O is canceled, and which pending I/O may be
 canceled upon
 .BR _exit (),
 is implementation-dependent.
-.SS C library/kernel ABI differences
+.SS C library/kernel differences
 In glibc up to version 2.3, the
 .BR _exit ()
 wrapper function invoked the kernel system call of the same name.

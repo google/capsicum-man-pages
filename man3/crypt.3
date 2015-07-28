@@ -33,7 +33,7 @@
 .\" added _XOPEN_SOURCE, aeb, 970705
 .\" added GNU MD5 stuff, aeb, 011223
 .\"
-.TH CRYPT 3 2014-02-26 "" "Linux Programmer's Manual"
+.TH CRYPT 3 2015-03-02 "" "Linux Programmer's Manual"
 .SH NAME
 crypt, crypt_r \- password and data encryption
 .SH SYNOPSIS
@@ -172,14 +172,20 @@ function was not implemented, probably because of U.S.A. export restrictions.
 has a nonzero value,
 and an attempt was made to use a weak encryption type, such as DES.
 .SH ATTRIBUTES
-.SS Multithreading (see pthreads(7))
-The
+For an explanation of the terms used in this section, see
+.BR attributes (7).
+.TS
+allbox;
+lb lb lb
+l l l.
+Interface	Attribute	Value
+T{
 .BR crypt ()
-function is not thread-safe.
-.LP
-The
+T}	Thread safety	MT-Unsafe race:crypt
+T{
 .BR crypt_r ()
-function is thread-safe.
+T}	Thread safety	MT-Safe
+.TE
 .SH CONFORMING TO
 .BR crypt ():
 SVr4, 4.3BSD, POSIX.1-2001.

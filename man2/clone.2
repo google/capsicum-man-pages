@@ -39,7 +39,7 @@
 .\" 2008-11-19, mtk, document CLONE_NEWIPC
 .\" 2008-11-19, Jens Axboe, mtk, document CLONE_IO
 .\"
-.TH CLONE 2 2015-02-21 "Linux" "Linux Programmer's Manual"
+.TH CLONE 2 2015-07-23 "Linux" "Linux Programmer's Manual"
 .SH NAME
 clone, __clone2 \- create a child process
 .SH SYNOPSIS
@@ -104,7 +104,7 @@ But see the description of
 .B CLONE_PARENT
 below.)
 
-The main use of
+One use of
 .BR clone ()
 is to implement threads: multiple threads of control in a program that
 run concurrently in a shared memory space.
@@ -177,7 +177,7 @@ in order to specify what is shared between the calling process
 and the child process:
 .TP
 .BR CLONE_CHILD_CLEARTID " (since Linux 2.5.49)"
-Erase child thread ID at location
+Erase the child thread ID at the location
 .I ctid
 in child memory when the child exits, and do a wakeup on the futex
 at that address.
@@ -187,9 +187,9 @@ system call.
 This is used by threading libraries.
 .TP
 .BR CLONE_CHILD_SETTID " (since Linux 2.5.49)"
-Store child thread ID at location
+Store the child thread ID at the location
 .I ctid
-in child memory.
+in the child's memory.
 .TP
 .BR CLONE_FILES " (since Linux 2.0)"
 If
@@ -518,9 +518,9 @@ is set, then the parent of the calling process, rather than the
 calling process itself, will be signaled.
 .TP
 .BR CLONE_PARENT_SETTID " (since Linux 2.5.49)"
-Store child thread ID at location
+Store the child thread ID at the location
 .I ptid
-in parent memory.
+in the parent's memory.
 (In Linux 2.5.32-2.5.48 there was a flag
 .B CLONE_SETTID
 that did this.)
@@ -535,6 +535,7 @@ of not much use.
 Since 2.3.21 this flag can be
 specified only by the system boot process (PID 0).
 It disappeared in Linux 2.5.16.
+Since then, the kernel silently ignores it without error.
 .TP
 .BR CLONE_PTRACE " (since Linux 2.2)"
 If
@@ -600,6 +601,7 @@ from Linux 2.6.25 onward,
 and was
 .I removed
 altogether in Linux 2.6.38.
+Since then, the kernel silently ignores it without error.
 .\" glibc 2.8 removed this defn from bits/sched.h
 .TP
 .BR CLONE_SYSVSEM " (since Linux 2.5.10)"
@@ -788,7 +790,7 @@ space of the calling process at the time of
 Memory writes or file mappings/unmappings performed by one of the
 processes do not affect the other, as with
 .BR fork (2).
-.SS C library/kernel ABI differences
+.SS C library/kernel differences
 The raw
 .BR clone ()
 system call corresponds more closely to

@@ -29,7 +29,7 @@
 .\"     add more details.
 .\" 2010-11-16, mtk, Added documentation of preadv() and pwritev()
 .\"
-.TH READV 2  2015-01-22 "Linux" "Linux Programmer's Manual"
+.TH READV 2  2015-07-23 "Linux" "Linux Programmer's Manual"
 .SH NAME
 readv, writev, preadv, pwritev \- read or write data into multiple buffers
 .SH SYNOPSIS
@@ -184,6 +184,13 @@ return the number of bytes read;
 and
 .BR pwritev ()
 return the number of bytes written.
+
+Note that is not an error for a successful call to transfer fewer bytes
+than requested (see
+.BR read (2)
+and
+.BR write (2)).
+
 On error, \-1 is returned, and \fIerrno\fP is set appropriately.
 .SH ERRORS
 The errors are as given for
@@ -239,7 +246,7 @@ On modern Linux systems, the limit is 1024.
 Back in Linux 2.0 days, this limit was 16.
 \"
 \"
-.SS C library/kernel ABI differences
+.SS C library/kernel differences
 The raw
 .BR preadv ()
 and
@@ -254,7 +261,7 @@ is unpacked by the wrapper functions into two arguments in the system calls:
 
 These arguments contain, respectively, the low order and high order 32 bits of
 .IR offset .
-.SS Historical C library/kernel ABI differences
+.SS Historical C library/kernel differences
 To deal with the fact that
 .B IOV_MAX
 was so low on early versions of Linux,
@@ -291,7 +298,7 @@ that the system is running a Linux kernel older than version 2.6.18
 And since glibc 2.20
 (which requires a minimum Linux kernel version of 2.6.32),
 the glibc wrapper functions always just directly invoke the system calls.
-.SH BUGS
+
 It is not advisable to mix calls to
 .BR readv ()
 or

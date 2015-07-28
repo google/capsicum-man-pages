@@ -11,7 +11,7 @@
 .\"   GNU glibc-2 source code and manual
 .\"   OpenGroup's Single UNIX specification http://www.UNIX-systems.org/online.html
 .\"
-.TH ICONV_CLOSE 3  2008-08-11 "GNU" "Linux Programmer's Manual"
+.TH ICONV_CLOSE 3  2015-05-07 "GNU" "Linux Programmer's Manual"
 .SH NAME
 iconv_close \- deallocate descriptor for character set conversion
 .SH SYNOPSIS
@@ -36,6 +36,19 @@ In case of error, it sets
 and returns \-1.
 .SH VERSIONS
 This function is available in glibc since version 2.1.
+.SH ATTRIBUTES
+For an explanation of the terms used in this section, see
+.BR attributes (7).
+.TS
+allbox;
+lb lb lb
+l l l.
+Interface	Attribute	Value
+T{
+.BR iconv_close ()
+T}	Thread safety	MT-Safe
+.TE
+
 .SH CONFORMING TO
 UNIX98, POSIX.1-2001.
 .SH SEE ALSO

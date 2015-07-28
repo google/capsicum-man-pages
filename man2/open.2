@@ -48,7 +48,7 @@
 .\" FIXME . Apr 08: The next POSIX revision has O_EXEC, O_SEARCH, and
 .\" O_TTYINIT.  Eventually these may need to be documented.  --mtk
 .\"
-.TH OPEN 2 2015-01-22 "Linux" "Linux Programmer's Manual"
+.TH OPEN 2 2015-05-07 "Linux" "Linux Programmer's Manual"
 .SH NAME
 open, openat, creat \- open and possibly create a file
 .SH SYNOPSIS
@@ -295,7 +295,7 @@ described in
 .RS
 .PP
 .I mode
-specifies the permissions to use in case a new file is created.
+specifies the mode to use in case a new file is created.
 This argument must be supplied when
 .B O_CREAT
 or
@@ -309,10 +309,10 @@ nor
 is specified, then
 .I mode
 is ignored.
-The effective permissions are modified by
-the process's
+The effective mode is modified by the process's
 .I umask
-in the usual way: The permissions of the created file are
+in the usual way: in the absence of a default ACL, the mode of the
+created file is
 .IR "(mode\ &\ ~umask)" .
 Note that this mode applies only to future accesses of the
 newly created file; the
@@ -324,7 +324,7 @@ The following symbolic constants are provided for
 .IR mode :
 .TP 9
 .B S_IRWXU
-00700 user (file owner) has read, write and execute permission
+00700 user (file owner) has read, write, and execute permission
 .TP
 .B S_IRUSR
 00400 user has read permission
@@ -336,7 +336,7 @@ The following symbolic constants are provided for
 00100 user has execute permission
 .TP
 .B S_IRWXG
-00070 group has read, write and execute permission
+00070 group has read, write, and execute permission
 .TP
 .B S_IRGRP
 00040 group has read permission
@@ -348,7 +348,7 @@ The following symbolic constants are provided for
 00010 group has execute permission
 .TP
 .B S_IRWXO
-00007 others have read, write and execute permission
+00007 others have read, write, and execute permission
 .TP
 .B S_IROTH
 00004 others have read permission
@@ -358,6 +358,25 @@ The following symbolic constants are provided for
 .TP
 .B S_IXOTH
 00001 others have execute permission
+.RE
+.IP
+According to POSIX, the effect when other bits are set in
+.I mode
+is unspecified.
+On Linux, the following bits are also honored in
+.IR mode :
+.RS
+.TP 9
+.B S_ISUID
+0004000 set-user-ID bit
+.TP
+.B S_ISGID
+0002000 set-group-ID bit (see
+.BR stat (2))
+.TP
+.B S_ISVTX
+0001000 sticky bit (see
+.BR stat (2))
 .RE
 .TP
 .BR O_DIRECT " (since Linux 2.4.10)"
@@ -528,6 +547,18 @@ Neither the
 .BR open ()
 nor any subsequent operations on the file descriptor which is
 returned will cause the calling process to wait.
+
+Note that this flag has no effect for regular files and block devices;
+that is, I/O operations will (briefly) block when device activity
+is required, regardless of whether
+.B O_NONBLOCK
+is set.
+Since
+.B O_NONBLOCK
+semantics might eventually be implemented,
+applications should not depend upon blocking behavior
+when specifying this flag for regular files and block devices.
+
 For the handling of FIFOs (named pipes), see also
 .BR fifo (7).
 For a discussion of the effect of
@@ -1151,7 +1182,11 @@ fields of the
 parent directory.
 Otherwise, if the file is modified because of the
 .B O_TRUNC
-flag, its st_ctime and st_mtime fields are set to the current time.
+flag, its
+.I st_ctime
+and
+.I st_mtime
+fields are set to the current time.
 .\"
 .\"
 .SS Open file descriptions
@@ -1294,6 +1329,14 @@ permissions, but UID mapping is performed by the server upon
 read and write requests.
 .\"
 .\"
+.SS FIFOs
+Opening the read or write end of a FIFO blocks until the other
+end is also opened (by another process or thread).
+See
+.BR fifo (7)
+for further details.
+.\"
+.\"
 .SS File access mode
 Unlike the other values that can be specified in
 .IR flags ,
@@ -1346,7 +1389,7 @@ a directory file descriptor argument
 .BR renameat (2),
 .BR symlinkat (2),
 .BR unlinkat (2),
-.BR utimensat (2)
+.BR utimensat (2),
 .BR mkfifoat (3),
 and
 .BR scandirat (3))
@@ -1544,6 +1587,20 @@ and
 when trying to determine whether the kernel supports
 .B O_TMPFILE
 functionality.
+
+When both
+.B O_CREAT
+and
+.B O_DIRECTORY
+are specified in
+.IR flags
+and the file specified by
+.I pathname
+does not exist,
+.BR open ()
+will create a regular file (i.e.,
+.B O_DIRECTORY
+is ignored).
 .SH SEE ALSO
 .BR chmod (2),
 .BR chown (2),
@@ -1563,6 +1620,7 @@ functionality.
 .BR unlink (2),
 .BR write (2),
 .BR fopen (3),
+.BR acl (5)
 .BR fifo (7),
 .BR path_resolution (7),
 .BR symlink (7)

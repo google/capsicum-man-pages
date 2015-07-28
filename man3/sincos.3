@@ -6,7 +6,7 @@
 .\" Distributed under GPL
 .\" %%%LICENSE_END
 .\"
-.TH SINCOS 3  2013-12-23 "GNU" "Linux Programmer's Manual"
+.TH SINCOS 3  2015-03-02 "GNU" "Linux Programmer's Manual"
 .SH NAME
 sincos, sincosf, sincosl \- calculate sin and cos simultaneously
 .SH SYNOPSIS
@@ -25,7 +25,7 @@ Link with \fI\-lm\fP.
 .SH DESCRIPTION
 Several applications need sine and cosine of the same angle
 .IR x .
-This function computes both at the same time, and stores the results in
+These functions compute both at the same time, and store the results in
 .I *sin
 and
 .IR *cos .
@@ -74,15 +74,21 @@ These functions do not set
 .SH VERSIONS
 These functions first appeared in glibc in version 2.1.
 .SH ATTRIBUTES
-.SS Multithreading (see pthreads(7))
-The
+For an explanation of the terms used in this section, see
+.BR attributes (7).
+.TS
+allbox;
+lbw30 lb lb
+l l l.
+Interface	Attribute	Value
+T{
 .BR sincos (),
 .BR sincosf (),
-and
 .BR sincosl ()
-functions are thread-safe.
+T}	Thread safety	MT-Safe
+.TE
 .SH CONFORMING TO
-This function is a GNU extension.
+These functions are GNU extensions.
 .SH SEE ALSO
 .BR cos (3),
 .BR sin (3),

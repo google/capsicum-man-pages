@@ -23,7 +23,7 @@
 .\" the source, must acknowledge the copyright and authors of this work.
 .\" %%%LICENSE_END
 .\"
-.TH PTHREAD_KILL_OTHER_THREADS_NP 3 2014-05-13 "Linux" "Linux Programmer's Manual"
+.TH PTHREAD_KILL_OTHER_THREADS_NP 3 2015-03-02 "Linux" "Linux Programmer's Manual"
 .SH NAME
 pthread_kill_other_threads_np \- terminate all other threads in process
 .SH SYNOPSIS
@@ -45,10 +45,17 @@ and the cleanup handlers are not called in those threads.
 .\" .SH VERSIONS
 .\" Available since glibc 2.0
 .SH ATTRIBUTES
-.SS Multithreading (see pthreads(7))
-The
+For an explanation of the terms used in this section, see
+.BR attributes (7).
+.TS
+allbox;
+lbw31 lb lb
+l l l.
+Interface	Attribute	Value
+T{
 .BR pthread_kill_other_threads_np ()
-function is thread-safe.
+T}	Thread safety	MT-Safe
+.TE
 .SH CONFORMING TO
 This function is a nonstandard GNU extension;
 hence the suffix "_np" (nonportable) in the name.

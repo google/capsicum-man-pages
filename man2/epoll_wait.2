@@ -19,7 +19,7 @@
 .\"
 .\" 2007-04-30: mtk, Added description of epoll_pwait()
 .\"
-.TH EPOLL_WAIT 2 2014-08-19 "Linux" "Linux Programmer's Manual"
+.TH EPOLL_WAIT 2 2015-05-07 "Linux" "Linux Programmer's Manual"
 .SH NAME
 epoll_wait, epoll_pwait \- wait for an I/O event on an epoll file descriptor
 .SH SYNOPSIS
@@ -136,9 +136,9 @@ executing the following calls:
 
     sigset_t origmask;
 
-    sigprocmask(SIG_SETMASK, &sigmask, &origmask);
+    pthread_sigmask(SIG_SETMASK, &sigmask, &origmask);
     ready = epoll_wait(epfd, &events, maxevents, timeout);
-    sigprocmask(SIG_SETMASK, &origmask, NULL);
+    pthread_sigmask(SIG_SETMASK, &origmask, NULL);
 .fi
 .PP
 The
@@ -226,7 +226,7 @@ is 4 and the kernel
 .I HZ
 value is 1000,
 this means that timeouts greater than 35.79 minutes are treated as infinity.
-.SS C library/kernel ABI differences
+.SS C library/kernel differences
 The raw
 .BR epoll_pwait ()
 system call has a sixth argument,

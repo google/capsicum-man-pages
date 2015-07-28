@@ -33,7 +33,7 @@
 .\" Modified 2004-11-12 as per suggestion by Fabian Kreutz/AEB
 .\" 2008-07-24, mtk, created this page, based on material from j0.3.
 .\"
-.TH Y0 3  2014-01-18 "" "Linux Programmer's Manual"
+.TH Y0 3  2015-04-19 "" "Linux Programmer's Manual"
 .SH NAME
 y0, y0f, y0l, y1, y1f, y1l, yn, ynf, ynl \-
 Bessel functions of the second kind
@@ -227,11 +227,35 @@ is not set for this case.
 An overflow floating-point exception
 .RB ( FE_OVERFLOW )
 is raised.
+.SH ATTRIBUTES
+For an explanation of the terms used in this section, see
+.BR attributes (7).
+.TS
+allbox;
+lb lb lb
+l l l.
+Interface	Attribute	Value
+T{
+.BR y0 (),
+.BR y0f (),
+.BR y0l ()
+T}	Thread safety	MT-Safe
+T{
+.BR y1 (),
+.BR y1f (),
+.BR y1l ()
+T}	Thread safety	MT-Safe
+T{
+.BR yn (),
+.BR ynf (),
+.BR ynl ()
+T}	Thread safety	MT-Safe
+.TE
 .SH CONFORMING TO
 The functions returning
 .I double
 conform to SVr4, 4.3BSD,
-POSIX.1-2001.
+POSIX.1-2001, POSIX.1-2008.
 The others are nonstandard functions that also exist on the BSDs.
 .SH BUGS
 On a pole error, these functions set

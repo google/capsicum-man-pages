@@ -13,7 +13,7 @@
 .\"   OpenGroup's Single UNIX specification http://www.UNIX-systems.org/online.html
 .\"   ISO/IEC 9899:1999
 .\"
-.TH WCSCPY 3  2013-12-02 "GNU" "Linux Programmer's Manual"
+.TH WCSCPY 3  2015-03-02 "GNU" "Linux Programmer's Manual"
 .SH NAME
 wcscpy \- copy a wide-character string
 .SH SYNOPSIS
@@ -47,10 +47,17 @@ wide characters at
 returns
 .IR dest .
 .SH ATTRIBUTES
-.SS Multithreading (see pthreads(7))
-The
+For an explanation of the terms used in this section, see
+.BR attributes (7).
+.TS
+allbox;
+lb lb lb
+l l l.
+Interface	Attribute	Value
+T{
 .BR wcscpy ()
-function is thread-safe.
+T}	Thread safety	MT-Safe
+.TE
 .SH CONFORMING TO
 C99.
 .SH SEE ALSO

@@ -32,7 +32,7 @@
 .\" Modified 990328, aeb
 .\" 2008-06-19, mtk, Added mkostemp(); various other changes
 .\"
-.TH MKSTEMP 3  2014-08-19 "GNU" "Linux Programmer's Manual"
+.TH MKSTEMP 3  2015-03-02 "GNU" "Linux Programmer's Manual"
 .SH NAME
 mkstemp, mkostemp, mkstemps, mkostemps \- create a unique temporary file
 .SH SYNOPSIS
@@ -193,14 +193,21 @@ and
 .BR mkostemps ()
 are available since glibc 2.11.
 .SH ATTRIBUTES
-.SS Multithreading (see pthreads(7))
-The
+For an explanation of the terms used in this section, see
+.BR attributes (7).
+.TS
+allbox;
+lbw23 lb lb
+l l l.
+Interface	Attribute	Value
+T{
 .BR mkstemp (),
 .BR mkostemp (),
+.br
 .BR mkstemps (),
-and
 .BR mkostemps ()
-functions are thread-safe.
+T}	Thread safety	MT-Safe
+.TE
 .SH CONFORMING TO
 .BR mkstemp ():
 4.3BSD, POSIX.1-2001.
@@ -234,7 +241,7 @@ is set appropriately before calling
 .BR mkostemp ()).
 .\"
 .\" The prototype for
-.\" .BR mktemp ()
+.\" .BR mkstemp ()
 .\" is in
 .\" .I <unistd.h>
 .\" for libc4, libc5, glibc1; glibc2 follows POSIX.1 and has the prototype in

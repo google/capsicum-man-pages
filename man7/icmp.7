@@ -9,7 +9,7 @@
 .\"
 .\" $Id: icmp.7,v 1.6 2000/08/14 08:03:45 ak Exp $
 .\"
-.TH ICMP 7 2012-05-10 "Linux" "Linux Programmer's Manual"
+.TH ICMP 7 2015-04-19 "Linux" "Linux Programmer's Manual"
 .SH NAME
 icmp \- Linux IPv4 ICMP kernel module.
 .SH DESCRIPTION
@@ -158,6 +158,12 @@ Maximum rate for sending
 packets.
 These packets are
 sent to prevent loops when a packet has crossed too many hops.
+.TP
+.IR ping_group_range " (two integers; default: see below; since Linux 2.6.39)"
+Range of the group IDs (minimum and maximum group IDs, inclusive)
+ithat are allowed to create ICMP Echo sockets.
+The default is "1 0", which
+means no group is allowed to create ICMP Echo sockets.
 .SH VERSIONS
 Support for the
 .B ICMP_ADDRESS

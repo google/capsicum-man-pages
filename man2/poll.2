@@ -28,7 +28,7 @@
 .\" 2006-07-01, mtk, Added POLLRDHUP + various other wording and
 .\"	formatting changes.
 .\"
-.TH POLL 2 2014-09-06 "Linux" "Linux Programmer's Manual"
+.TH POLL 2 2015-07-23 "Linux" "Linux Programmer's Manual"
 .SH NAME
 poll, ppoll \- wait for some event on a file descriptor
 .SH SYNOPSIS
@@ -184,15 +184,28 @@ header files)
 in order to obtain this definition.
 .TP
 .B POLLERR
-Error condition (output only).
+Error condition (only returned in
+.IR revents ;
+ignored in
+.IR events ).
 .TP
 .B POLLHUP
-Hang up (output only).
+Hang up (only returned in
+.IR revents ;
+ignored in
+.IR events ).
+Note that when reading from a channel such as a pipe or a stream socket,
+this event merely indicates that the peer closed its end of the channel.
+Subsequent reads from the channel will return 0 (end of file)
+only after all outstanding data in the channel has been consumed.
 .TP
 .B POLLNVAL
 Invalid request:
 .I fd
-not open (output only).
+not open (only returned in
+.IR revents ;
+ignored in
+.IR events ).
 .RE
 .PP
 When compiling with
@@ -254,9 +267,9 @@ executing the following calls:
 
     timeout = (timeout_ts == NULL) ? \-1 :
               (timeout_ts.tv_sec * 1000 + timeout_ts.tv_nsec / 1000000);
-    sigprocmask(SIG_SETMASK, &sigmask, &origmask);
+    pthread_sigmask(SIG_SETMASK, &sigmask, &origmask);
     ready = poll(&fds, nfds, timeout);
-    sigprocmask(SIG_SETMASK, &origmask, NULL);
+    pthread_sigmask(SIG_SETMASK, &origmask, NULL);
 .fi
 .PP
 See the description of
@@ -363,7 +376,7 @@ For a discussion of what may happen if a file descriptor being monitored by
 .BR poll ()
 is closed in another thread, see
 .BR select (2).
-.SS C library/kernel ABI differences
+.SS C library/kernel differences
 The Linux
 .BR ppoll ()
 system call modifies its
@@ -398,4 +411,5 @@ BUGS section of
 .BR restart_syscall (2),
 .BR select (2),
 .BR select_tut (2),
+.BR epoll (7),
 .BR time (7)

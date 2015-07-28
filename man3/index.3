@@ -28,7 +28,7 @@
 .\"     386BSD man pages
 .\" Modified Mon Apr 12 12:54:34 1993, David Metcalfe
 .\" Modified Sat Jul 24 19:13:52 1993, Rik Faith (faith@cs.unc.edu)
-.TH INDEX 3 2014-04-01 "GNU" "Linux Programmer's Manual"
+.TH INDEX 3 2015-03-02 "GNU" "Linux Programmer's Manual"
 .SH NAME
 index, rindex \- locate character in string
 .SH SYNOPSIS
@@ -60,12 +60,18 @@ and
 functions return a pointer to
 the matched character or NULL if the character is not found.
 .SH ATTRIBUTES
-.SS Multithreading (see pthreads(7))
-The
-.BR index ()
-and
+For an explanation of the terms used in this section, see
+.BR attributes (7).
+.TS
+allbox;
+lb lb lb
+l l l.
+Interface	Attribute	Value
+T{
+.BR index (),
 .BR rindex ()
-functions are thread-safe.
+T}	Thread safety	MT-Safe
+.TE
 .SH CONFORMING TO
 4.3BSD; marked as LEGACY in POSIX.1-2001.
 POSIX.1-2008 removes the specifications of

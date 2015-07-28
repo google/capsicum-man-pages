@@ -23,7 +23,7 @@
 .\" the source, must acknowledge the copyright and authors of this work.
 .\" %%%LICENSE_END
 .\"
-.TH PTHREAD_SIGMASK 3 2014-05-19 "Linux" "Linux Programmer's Manual"
+.TH PTHREAD_SIGMASK 3 2015-03-02 "Linux" "Linux Programmer's Manual"
 .SH NAME
 pthread_sigmask \- examine and change mask of blocked signals
 .SH SYNOPSIS
@@ -67,14 +67,29 @@ on error, it returns an error number.
 See
 .BR sigprocmask (2).
 .SH ATTRIBUTES
-.SS Multithreading (see pthreads(7))
-The
+For an explanation of the terms used in this section, see
+.BR attributes (7).
+.TS
+allbox;
+lb lb lb
+l l l.
+Interface	Attribute	Value
+T{
 .BR pthread_sigmask ()
-function is thread-safe.
+T}	Thread safety	MT-Safe
+.TE
 .SH CONFORMING TO
 POSIX.1-2001.
 .SH NOTES
 A new thread inherits a copy of its creator's signal mask.
+
+The glibc
+.BR pthread_sigmask ()
+function silently ignores attempts to block the two real-time signals that
+are used internally by the NPTL threading implementation.
+See
+.BR nptl (7)
+for details.
 .SH EXAMPLE
 The program below blocks some signals in the main thread,
 and then creates a dedicated thread to fetch those signals via

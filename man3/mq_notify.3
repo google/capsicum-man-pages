@@ -23,7 +23,7 @@
 .\" the source, must acknowledge the copyright and authors of this work.
 .\" %%%LICENSE_END
 .\"
-.TH MQ_NOTIFY 3 2014-04-06 "Linux" "Linux Programmer's Manual"
+.TH MQ_NOTIFY 3 2015-07-23 "Linux" "Linux Programmer's Manual"
 .SH NAME
 mq_notify \- register for notification when a message is available
 .SH SYNOPSIS
@@ -171,8 +171,43 @@ error if
 is NULL, and the caller is not currently registered to receive
 notifications for the queue
 .IR mqdes .
+.SH ATTRIBUTES
+For an explanation of the terms used in this section, see
+.BR attributes (7).
+.TS
+allbox;
+lb lb lb
+l l l.
+Interface	Attribute	Value
+T{
+.BR mq_notify ()
+T}	Thread safety	MT-Safe
+.TE
+
 .SH CONFORMING TO
 POSIX.1-2001.
+.SH NOTES
+.\"
+.SS C library/kernel differences
+In the glibc implementation, the
+.BR mq_notify ()
+library function is implemented on top of the system call of the same name.
+When
+.I sevp
+is NULL, or specifies a notification mechanism other than
+.BR SIGEV_THREAD ,
+the library function directly invokes the system call.
+For
+.BR SIGEV_THREAD ,
+much of the implementation resides within the library,
+rather than the kernel.
+(This is necessarily so,
+since the thread involved in handling the notification is one
+that must be managed by the C library POSIX threads implementation.)
+The implementation involves the use of a raw
+.BR netlink (7)
+socket and creates a new thread for each notification that is
+delivered to the process.
 .SH EXAMPLE
 The following program registers a notification request for the
 message queue named in its command-line argument.

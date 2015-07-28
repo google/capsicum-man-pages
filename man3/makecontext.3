@@ -25,7 +25,7 @@
 .\"
 .\" 2006-08-02, mtk, Added example program
 .\"
-.TH MAKECONTEXT 3 2014-05-28 "GNU" "Linux Programmer's Manual"
+.TH MAKECONTEXT 3 2015-03-02 "GNU" "Linux Programmer's Manual"
 .SH NAME
 makecontext, swapcontext \- manipulate user context
 .SH SYNOPSIS
@@ -103,12 +103,20 @@ and
 .BR swapcontext ()
 are provided in glibc since version 2.1.
 .SH ATTRIBUTES
-.SS Multithreading (see pthreads(7))
-The
+For an explanation of the terms used in this section, see
+.BR attributes (7).
+.TS
+allbox;
+lb lb lb
+l l l.
+Interface	Attribute	Value
+T{
 .BR makecontext ()
-and
+T}	Thread safety	MT-Safe race:ucp
+T{
 .BR swapcontext ()
-functions are thread-safe.
+T}	Thread safety	MT-Safe race:oucp race:ucp
+.TE
 .SH CONFORMING TO
 SUSv2, POSIX.1-2001.
 POSIX.1-2008 removes the specifications of

@@ -36,7 +36,7 @@
 .\"	gave some examples of why this might occur.
 .\"	Noted what happens if write() is interrupted by a signal.
 .\"
-.TH WRITE 2 2015-01-22 "Linux" "Linux Programmer's Manual"
+.TH WRITE 2 2015-07-23 "Linux" "Linux Programmer's Manual"
 .SH NAME
 write \- write to a file descriptor
 .SH SYNOPSIS
@@ -89,6 +89,10 @@ Note that not all filesystems are POSIX conforming.
 .SH RETURN VALUE
 On success, the number of bytes written is returned (zero indicates
 nothing was written).
+It is not an error if this number is smaller than the number of bytes
+requested; this may happen for example because the disk device was filled.
+See also NOTES.
+
 On error, \-1 is returned, and \fIerrno\fP is set
 appropriately.
 
@@ -112,6 +116,11 @@ The file descriptor
 refers to a file other than a socket and has been marked nonblocking
 .RB ( O_NONBLOCK ),
 and the write would block.
+See
+.BR open (2)
+for further details on the
+.BR O_NONBLOCK
+flag.
 .TP
 .BR EAGAIN " or " EWOULDBLOCK
 .\" Actually EAGAIN on Linux
@@ -212,6 +221,14 @@ then the call fails with the error
 .BR EINTR ;
 if it is interrupted after at least one byte has been written,
 the call succeeds, and returns the number of bytes written.
+
+On Linux,
+.BR write ()
+(and similar system calls) will transfer at most
+0x7ffff000 (2,147,479,552) bytes,
+returning the number of bytes actually transferred.
+.\" commit e28cc71572da38a5a12c1cfe4d7032017adccf69
+(This is true on both 32-bit and 64-bit systems.)
 .SH BUGS
 According to POSIX.1-2008/SUSv4 Section XSI 2.9.7
 ("Thread Interactions with Regular File Operations"):

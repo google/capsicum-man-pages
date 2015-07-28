@@ -24,7 +24,7 @@
 .\"
 .\" Modified Wed Jul 28 11:12:07 1993 by Rik Faith (faith@cs.unc.edu)
 .\" Modified Fri Sep  8 15:48:13 1995 by Andries Brouwer (aeb@cwi.nl)
-.TH FGETC 3  2013-12-31 "GNU" "Linux Programmer's Manual"
+.TH FGETC 3  2015-03-02 "GNU" "Linux Programmer's Manual"
 .SH NAME
 fgetc, fgets, getc, getchar, ungetc \- input of characters and strings
 .SH SYNOPSIS
@@ -121,6 +121,24 @@ returns
 on success, or
 .B EOF
 on error.
+.SH ATTRIBUTES
+For an explanation of the terms used in this section, see
+.BR attributes (7).
+.TS
+allbox;
+lbw25 lb lb
+l l l.
+Interface	Attribute	Value
+T{
+.BR fgetc (),
+.BR fgets (),
+.BR getc (),
+.br
+.BR getchar (),
+.BR ungetc ()
+T}	Thread safety	MT-Safe
+.TE
+
 .SH CONFORMING TO
 C89, C99, POSIX.1-2001.
 

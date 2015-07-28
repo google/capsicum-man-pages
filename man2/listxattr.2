@@ -23,7 +23,7 @@
 .\" <http://www.gnu.org/licenses/>.
 .\" %%%LICENSE_END
 .\"
-.TH LISTXATTR 2 2015-02-21 "Linux" "Linux Programmer's Manual"
+.TH LISTXATTR 2 2015-05-07 "Linux" "Linux Programmer's Manual"
 .SH NAME
 listxattr, llistxattr, flistxattr \- list extended attribute names
 .SH SYNOPSIS
@@ -48,7 +48,7 @@ with all inodes in the system (i.e., the
 .BR stat (2)
 data).
 A complete overview of extended attributes concepts can be found in
-.BR attr (5).
+.BR xattr (7).
 .PP
 .BR listxattr ()
 retrieves the list
@@ -134,6 +134,11 @@ On failure, \-1 is returned and
 .I errno
 is set appropriately.
 .SH ERRORS
+.TP
+.B E2BIG
+The size of the list of attribute names for this file exceeds
+the system-imposed limit.
+See BUGS.
 .TP
 .B ENOTSUP
 Extended attributes are not supported by the filesystem, or are disabled.
@@ -315,6 +320,15 @@ main(int argc, char *argv[])
     exit(EXIT_SUCCESS);
 }
 .fi
+.SH BUGS
+.\" The xattr(7) page refers to this text:
+As noted in
+.BR xattr (7),
+the VFS imposes a limit of 64 kB on the size of the extended
+attribute name list returned by
+.BR listxattr (7).
+If the total size of attribute names attached to a file exceeds this limit,
+it is no longer possible to retrieve the list of attribute names.
 .SH SEE ALSO
 .BR getfattr (1),
 .BR setfattr (1),
@@ -323,5 +337,5 @@ main(int argc, char *argv[])
 .BR removexattr (2),
 .BR setxattr (2),
 .BR stat (2),
-.BR attr (5),
-.BR symlink (7)
+.BR symlink (7),
+.BR xattr (7)

@@ -13,7 +13,7 @@
 .\"   OpenGroup's Single UNIX specification http://www.UNIX-systems.org/online.html
 .\"   ISO/IEC 9899:1999
 .\"
-.TH MBLEN 3  2013-06-21 "GNU" "Linux Programmer's Manual"
+.TH MBLEN 3  2015-03-02 "GNU" "Linux Programmer's Manual"
 .SH NAME
 mblen \- determine number of bytes in next multibyte character
 .SH SYNOPSIS
@@ -85,10 +85,17 @@ It returns \-1, if an
 invalid multibyte sequence was encountered or if it couldn't parse a complete
 multibyte character.
 .SH ATTRIBUTES
-.SS Multithreading (see pthreads(7))
-The
+For an explanation of the terms used in this section, see
+.BR attributes (7).
+.TS
+allbox;
+lb lb lb
+l l l.
+Interface	Attribute	Value
+T{
 .BR mblen ()
-function is not thread-safe.
+T}	Thread safety	MT-Unsafe race
+.TE
 .SH CONFORMING TO
 C99.
 .SH NOTES

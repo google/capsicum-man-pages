@@ -23,7 +23,7 @@
 .\" %%%LICENSE_END
 .\"
 .\" Modified Sat Jul 24 18:16:02 1993 by Rik Faith (faith@cs.unc.edu)
-.TH SLEEP 3  2010-02-03 "GNU" "Linux Programmer's Manual"
+.TH SLEEP 3  2015-05-07 "GNU" "Linux Programmer's Manual"
 .SH NAME
 sleep \- sleep for the specified number of seconds
 .SH SYNOPSIS
@@ -41,6 +41,19 @@ seconds have elapsed or a signal arrives which is not ignored.
 Zero if the requested time has elapsed,
 or the number of seconds left to sleep,
 if the call was interrupted by a signal handler.
+.SH ATTRIBUTES
+For an explanation of the terms used in this section, see
+.BR attributes (7).
+.TS
+allbox;
+lb lb lbw27
+l l l.
+Interface	Attribute	Value
+T{
+.BR sleep ()
+T}	Thread safety	MT-Unsafe sig:SIGCHLD/linux
+.TE
+
 .SH CONFORMING TO
 POSIX.1-2001.
 .SH BUGS

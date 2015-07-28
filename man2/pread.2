@@ -22,7 +22,7 @@
 .\" the source, must acknowledge the copyright and authors of this work.
 .\" %%%LICENSE_END
 .\"
-.TH PREAD 2 2013-06-21 "Linux" "Linux Programmer's Manual"
+.TH PREAD 2 2015-07-23 "Linux" "Linux Programmer's Manual"
 .SH NAME
 pread, pwrite \- read from or write to a file descriptor at a given offset
 .SH SYNOPSIS
@@ -77,15 +77,23 @@ The file referenced by
 .I fd
 must be capable of seeking.
 .SH RETURN VALUE
-On success, the number of bytes read or written is returned (zero
-indicates that nothing was written, in the case of
-.BR pwrite (),
-or
-end of file, in the case of
-.BR pread ()),
-or \-1 on error, in which case
+On success,
+.BR pread ()
+returns the number of bytes read
+(a return of zero indicates end of file)
+and
+.BR pwrite ()
+returns the number of bytes written.
+
+Note that is not an error for a successful call to transfer fewer bytes
+than requested (see
+.BR read (2)
+and
+.BR write (2)).
+
+On error, \-1 is returned and
 .I errno
-is set to indicate the error.
+is set to indicate the cause of the error.
 .SH ERRORS
 .BR pread ()
 can fail and set
@@ -122,7 +130,8 @@ and
 system calls are especially useful in multithreaded applications.
 They allow multiple threads to perform I/O on the same file descriptor
 without being affected by changes to the file offset by other threads.
-
+.\"
+.SS C library/kernel differences
 On Linux, the underlying system calls were renamed
 in kernel 2.6:
 .BR pread ()

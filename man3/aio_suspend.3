@@ -22,7 +22,7 @@
 .\" <http://www.gnu.org/licenses/>.
 .\" %%%LICENSE_END
 .\"
-.TH AIO_SUSPEND 3 2012-05-08  "" "Linux Programmer's Manual"
+.TH AIO_SUSPEND 3 2015-03-02  "" "Linux Programmer's Manual"
 .SH NAME
 aio_suspend \- wait for asynchronous I/O operation or timeout
 .SH SYNOPSIS
@@ -104,6 +104,18 @@ is not implemented.
 The
 .BR aio_suspend ()
 function is available since glibc 2.1.
+.SH ATTRIBUTES
+For an explanation of the terms used in this section, see
+.BR attributes (7).
+.TS
+allbox;
+lb lb lb
+l l l.
+Interface	Attribute	Value
+T{
+.BR aio_suspend ()
+T}	Thread safety	MT-Safe
+.TE
 .SH CONFORMING TO
 POSIX.1-2001, POSIX.1-2008.
 .SH NOTES

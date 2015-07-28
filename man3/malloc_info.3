@@ -22,7 +22,7 @@
 .\" the source, must acknowledge the copyright and authors of this work.
 .\" %%%LICENSE_END
 .\"
-.TH MALLOC_INFO 3  2015-01-22 "GNU" "Linux Programmer's Manual"
+.TH MALLOC_INFO 3  2015-07-23 "GNU" "Linux Programmer's Manual"
 .SH NAME
 malloc_info \- export malloc state to a stream
 .SH SYNOPSIS
@@ -60,6 +60,19 @@ was nonzero.
 .SH VERSIONS
 .BR malloc_info ()
 was added to glibc in version 2.10.
+.SH ATTRIBUTES
+For an explanation of the terms used in this section, see
+.BR attributes (7).
+.TS
+allbox;
+lb lb lb
+l l l.
+Interface	Attribute	Value
+T{
+.BR malloc_info ()
+T}	Thread safety	MT-Safe
+.TE
+
 .SH CONFORMING TO
 This function is a GNU extension.
 .SH NOTES

@@ -45,7 +45,7 @@
 .\" Correction,  2000-03-03, Andreas Jaeger <aj@suse.de>
 .\" Added return value for setvbuf, aeb,
 .\"
-.TH SETBUF 3  2014-08-19 "Linux" "Linux Programmer's Manual"
+.TH SETBUF 3  2015-05-07 "Linux" "Linux Programmer's Manual"
 .SH NAME
 setbuf, setbuffer, setlinebuf, setvbuf \- stream buffering operations
 .SH SYNOPSIS
@@ -83,10 +83,8 @@ The function
 may be used to force the block out early.
 (See
 .BR fclose (3).)
+
 Normally all files are block buffered.
-When the first I/O operation occurs on a file,
-.BR malloc (3)
-is called, and a buffer is obtained.
 If a stream refers to a terminal (as
 .I stdout
 normally does), it is line buffered.
@@ -162,14 +160,21 @@ on failure.
 
 The other functions do not return a value.
 .SH ATTRIBUTES
-.SS Multithreading (see pthreads(7))
-The
+For an explanation of the terms used in this section, see
+.BR attributes (7).
+.TS
+allbox;
+lbw23 lb lb
+l l l.
+Interface	Attribute	Value
+T{
 .BR setbuf (),
 .BR setbuffer (),
+.br
 .BR setlinebuf (),
-and
 .BR setvbuf ()
-functions are thread-safe.
+T}	Thread safety	MT-Safe
+.TE
 .SH CONFORMING TO
 The
 .BR setbuf ()

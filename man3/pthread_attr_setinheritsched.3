@@ -23,7 +23,7 @@
 .\" the source, must acknowledge the copyright and authors of this work.
 .\" %%%LICENSE_END
 .\"
-.TH PTHREAD_ATTR_SETINHERITSCHED 3 2014-05-21 "Linux" "Linux Programmer's Manual"
+.TH PTHREAD_ATTR_SETINHERITSCHED 3 2015-03-02 "Linux" "Linux Programmer's Manual"
 .SH NAME
 pthread_attr_setinheritsched, pthread_attr_getinheritsched \- set/get
 inherit-scheduler attribute in thread attributes object
@@ -108,12 +108,18 @@ error ("attempt was made to set the attribute to an unsupported value") for
 .\" .SH VERSIONS
 .\" Available since glibc 2.0.
 .SH ATTRIBUTES
-.SS Multithreading (see pthreads(7))
-The
-.BR pthread_attr_setinheritsched ()
-and
+For an explanation of the terms used in this section, see
+.BR attributes (7).
+.TS
+allbox;
+lbw31 lb lb
+l l l.
+Interface	Attribute	Value
+T{
+.BR pthread_attr_setinheritsched (),
 .BR pthread_attr_getinheritsched ()
-functions are thread-safe.
+T}	Thread safety	MT-Safe
+.TE
 .SH CONFORMING TO
 POSIX.1-2001.
 .SH BUGS

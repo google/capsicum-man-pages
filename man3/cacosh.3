@@ -5,7 +5,7 @@
 .\" Distributed under GPL
 .\" %%%LICENSE_END
 .\"
-.TH CACOSH 3 2011-09-15 "" "Linux Programmer's Manual"
+.TH CACOSH 3 2015-04-19 "" "Linux Programmer's Manual"
 .SH NAME
 cacosh, cacoshf, cacoshl \- complex arc hyperbolic cosine
 .SH SYNOPSIS
@@ -19,9 +19,7 @@ cacosh, cacoshf, cacoshl \- complex arc hyperbolic cosine
 .sp
 Link with \fI\-lm\fP.
 .SH DESCRIPTION
-The
-.BR cacosh ()
-function calculates the complex arc hyperbolic cosine of
+These functions calculate the complex arc hyperbolic cosine of
 .IR z .
 If \fIy\ =\ cacosh(z)\fP, then \fIz\ =\ ccosh(y)\fP.
 The imaginary part of
@@ -38,8 +36,22 @@ One has:
 .fi
 .SH VERSIONS
 These functions first appeared in glibc in version 2.1.
+.SH ATTRIBUTES
+For an explanation of the terms used in this section, see
+.BR attributes (7).
+.TS
+allbox;
+lbw30 lb lb
+l l l.
+Interface	Attribute	Value
+T{
+.BR cacosh (),
+.BR cacoshf (),
+.BR cacoshl ()
+T}	Thread safety	MT-Safe
+.TE
 .SH CONFORMING TO
-C99.
+C99, POSIX.1-2001, POSIX.1-2008.
 .SH EXAMPLE
 .nf
 /* Link with "\-lm" */

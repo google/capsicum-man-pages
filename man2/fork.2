@@ -36,7 +36,7 @@
 .\"     Greatly expanded, to describe all attributes that differ
 .\"	parent and child.
 .\"
-.TH FORK 2 2015-02-21 "Linux" "Linux Programmer's Manual"
+.TH FORK 2 2015-07-23 "Linux" "Linux Programmer's Manual"
 .SH NAME
 fork \- create a child process
 .SH SYNOPSIS
@@ -243,7 +243,7 @@ Under Linux,
 is implemented using copy-on-write pages, so the only penalty that it incurs
 is the time and memory required to duplicate the parent's page tables,
 and to create a unique task structure for the child.
-.SS C library/kernel ABI differences
+.SS C library/kernel differences
 Since version 2.3.3,
 .\" nptl/sysdeps/unix/sysv/linux/fork.c
 rather than invoking the kernel's
