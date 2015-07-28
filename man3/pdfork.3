@@ -33,9 +33,9 @@
 .\" SUCH DAMAGE.
 .\" %%%LICENSE_END
 .\"
-.TH PDFORK 2 2014-05-07 "Linux" "Linux Programmer's Manual"
+.TH PDFORK 3 2014-05-07 "Linux" "Linux Programmer's Manual"
 .SH NAME
-pdfork, pdgetpid, pdkill, pdwait4 \- system calls to manage process descriptors
+pdfork, pdgetpid, pdkill, pdwait4 \- functions to manage process descriptors
 .SH SYNOPSIS
 .nf
 .B #include <sys/capsicum.h>
@@ -47,7 +47,7 @@ pdfork, pdgetpid, pdkill, pdwait4 \- system calls to manage process descriptors
 .SH DESCRIPTION
 Process descriptors are special file descriptors that represent processes,
 and are created using
-.B pdfork (),
+.B pdfork(),
 a variant of
 .BR fork (2)
 which, if successful, returns a process descriptor in the integer pointed to
@@ -58,7 +58,7 @@ Processes created via
 will not cause
 .B SIGCHLD
 on termination.
-.B pdfork ()
+.B pdfork()
 can accept values for
 .I flags
 of:
@@ -111,7 +111,7 @@ is defined, and will be raised when the process dies.
 will close the process descriptor; if the process is still alive and this is
 the last reference to the process descriptor, the process will be terminated
 with the signal
-.B SIGKILL 
+.B SIGKILL
 unless
 .B PD_DAEMON
 is set.
@@ -142,7 +142,7 @@ The process descriptor being operated on has insufficient rights (e.g. lacks
 for
 .BR pdkill ) .
 .SH VERSION
-Process descriptor support was added to the kernel in version 3.???.
+Process descriptor support was added to the kernel in version 4.???.
 .SH SEE ALSO
 .BR close (2),
 .BR fork (2),
@@ -150,5 +150,4 @@ Process descriptor support was added to the kernel in version 3.???.
 .BR kill (2),
 .BR poll (2),
 .BR wait4 (2),
-.BR capsicum (7),
-.BR procdesc (7)
+.BR capsicum (7)
