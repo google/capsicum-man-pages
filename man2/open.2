@@ -216,7 +216,7 @@ If the
 is absolute or contains a path component of "..", the
 .BR open ()
 fails with the error
-.BR EPERM.
+.BR ENOTBENEATH.
 This occurs even if ".." path component would not actually
 escape the original directory; for example, a
 .I pathname
@@ -225,7 +225,7 @@ Path components that are symbolic links to absolute paths, or that are
 relative paths containing a ".." component, will also cause the
 .BR open ()
 operation to fail with the error
-.BR EPERM.
+.BR ENOTBENEATH.
 
 This feature allows applications to be sure that the opened file is
 within the specified directory, regardless of the original source of the
@@ -1002,6 +1002,13 @@ was to be created but the device containing
 .I pathname
 has no room for the new file.
 .TP
+.B ENOTBENEATH
+The
+.B O_BENEATH
+flag was specified and the
+.I pathname
+was not beneath the relevant directory.
+.TP
 .B ENOTDIR
 A component used as a directory in
 .I pathname
@@ -1052,13 +1059,6 @@ did not match the owner of the file and the caller was not privileged
 .B EPERM
 The operation was prevented by a file seal; see
 .BR fcntl (2).
-.TP
-.B EPERM
-The
-.B O_BENEATH
-flag was specified and the
-.I pathname
-was not beneath the relevant directory.
 .TP
 .B EROFS
 .I pathname
